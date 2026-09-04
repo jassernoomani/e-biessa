@@ -1,0 +1,44 @@
+# Secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Java
+**/target/
+**/*.class
+
+# Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
+**/test-results/
+**/playwright-report/
+**/blob-report/
+
+# Python
+**/.venv/
+**/.venv-*/
+**/__pycache__/
+**/.pytest_cache/
+**/*.pyc
+
+# AI models and generated data
+**/training/out/
+**/training/tools/
+**/data/models/
+**/data/qdrant/
+**/unsloth_compiled_cache/
+**/*.gguf
+
+# Runtime files
+**/uploads/
+tmp/
+*.log
+
+# IDE / operating system
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

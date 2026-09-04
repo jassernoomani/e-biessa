@@ -1,0 +1,4356 @@
+{
+  "metrics": {
+    "adapter": "training\\out\\e-biessa-qwen25-7b-v2\\final-adapter",
+    "examples": 120,
+    "jsonValidity": 0.9916666666666667,
+    "exactRecordAccuracy": 0.0,
+    "normalizedRecordAccuracy": 0.0,
+    "hardenedRecordAccuracy": 0.9666666666666667,
+    "exactFieldAccuracy": {
+      "brand": 0.9916666666666667,
+      "model": 0.9666666666666667,
+      "year": 0.0,
+      "fuelType": 0.9916666666666667,
+      "position": 0.9916666666666667,
+      "category": 0.9916666666666667,
+      "partType": 0.9916666666666667
+    },
+    "normalizedFieldAccuracy": {
+      "brand": 0.9916666666666667,
+      "model": 0.9666666666666667,
+      "year": 0.0,
+      "fuelType": 0.9916666666666667,
+      "position": 0.9916666666666667,
+      "category": 0.9916666666666667,
+      "partType": 0.9916666666666667
+    },
+    "byLanguage": {
+      "ar": {
+        "examples": 30,
+        "jsonValidity": 1.0,
+        "exactRecordAccuracy": 0.0
+      },
+      "en": {
+        "examples": 29,
+        "jsonValidity": 0.9655172413793104,
+        "exactRecordAccuracy": 0.0
+      },
+      "fr": {
+        "examples": 27,
+        "jsonValidity": 1.0,
+        "exactRecordAccuracy": 0.0
+      },
+      "tn": {
+        "examples": 34,
+        "jsonValidity": 1.0,
+        "exactRecordAccuracy": 0.0
+      }
+    }
+  },
+  "records": [
+    {
+      "input": "I need a front brake caliper for a 2020 Diesel Volkswagen Golf.",
+      "language": "en",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un étrier de frein avant pour une Volkswagen Golf diesel de 2020.",
+      "language": "fr",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la étrier frein avant mta3 Volkswagen Golf diesel 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مرآة باب يسار متوافقا مع Volkswagen Golf موديل 2020 ديزل.",
+      "language": "ar",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2200",
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2200\",\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مِلقط فرامل أمامي متوافقا مع Skoda Octavia موديل 2019 ديزل.",
+      "language": "ar",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2209",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2209\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد وحدة مضخة ABS لسيارة Citroën C3 بنزين لعام 2019؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "22019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"22019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2020 Seat Leon radiator for the Diesel version?",
+      "language": "en",
+      "expected": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma amortisseur avant compatible m3a Kia Sportage diesel modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": "2",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":\"2\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن علبة تروس أوتوماتيكية لسيارة Ford Fiesta بنزين سنة 2019.",
+      "language": "ar",
+      "expected": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a front brake disc pair for a 2019 Diesel Kia Sportage.",
+      "language": "en",
+      "expected": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la radiateur mta3 Volkswagen Passat diesel 2019.",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد مصباح أمامي LED لسيارة Volkswagen Passat ديزل لعام 2019؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a front shock absorber for a 2019 Petrol Ford Fiesta.",
+      "language": "en",
+      "expected": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد علبة تروس أوتوماتيكية لسيارة Seat Leon ديزل لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la phare avant LED mta3 Volkswagen Golf diesel 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma boîte auto compatible m3a Citroën C3 essence modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Citroën C3 2019 essence w n7eb boîte auto.",
+      "language": "tn",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد مولد كهربائي لسيارة Skoda Octavia ديزل لعام 2019؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a LED front headlight, compatible with my Hyundai Tucson Diesel from 2019.",
+      "language": "en",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un démarreur pour Hyundai i20 version essence, année 2020 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": "2202",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":\"2202\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma kit embrayage compatible m3a Hyundai Tucson diesel modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "2",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"2\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la boîte auto mta3 Renault Clio essence 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": "2020",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":\"2020\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد مصباح خلفي لسيارة Renault Megane ديزل لعام 2019؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la boîte auto mta3 Hyundai i20 essence 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":2,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a clutch kit, compatible with my Skoda Octavia Diesel from 2019.",
+      "language": "en",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la kit embrayage mta3 Skoda Octavia diesel 2019.",
+      "language": "tn",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a clutch kit for a 2019 Diesel Mercedes-Benz E-Class.",
+      "language": "en",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2.getFullYear()",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2.getFullYear()\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2020 Volkswagen Golf alternator for the Diesel version?",
+      "language": "en",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج وحدة مضخة ABS متوافقا مع Hyundai i20 موديل 2020 بنزين.",
+      "language": "ar",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": "2",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":\"2\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a LED front headlight for a 2020 Diesel Seat Leon.",
+      "language": "en",
+      "expected": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un boîte de vitesses automatique pour une Hyundai i20 essence de 2020.",
+      "language": "fr",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": "2200",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":\"2200\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Volkswagen Passat 2019 diesel w n7eb démarreur.",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma feu arrière compatible m3a Mercedes-Benz E-Class diesel modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a radiator for a 2019 Petrol Citroën C3.",
+      "language": "en",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {},
+      "hardened": {},
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2\\\",\\\"2\\\",\\\"1\\\",\\\"9\\\",\\\"\\\",\\\"fuelType\\\":\\\"Petrol\\\",\\\"position\\\":\\\"FRONT\\\",\\\"category\\\":\\\"Cooling & Heating\\\",\\\"partType\\\":\\\"Radiator\\\"}",
+      "validJson": false,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": false
+    },
+    {
+      "input": "Nlawwej 3la boîte auto mta3 Mercedes-Benz C-Class essence 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": "2020",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":\"2020\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a starter motor, compatible with my Mercedes-Benz E-Class Diesel from 2019.",
+      "language": "en",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Citroën C4 2020 diesel w n7eb kit embrayage.",
+      "language": "tn",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2019 Citroën C3 starter motor for the Petrol version?",
+      "language": "en",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2e15",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2e15\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la kit embrayage mta3 Mercedes-Benz C-Class essence 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": "2",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Clutch kit"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":\"2\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد مُبرّد المحرك لسيارة Ford Focus ديزل لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": "2\",\"2\",\"2\",\"0",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":\"2\\\",\\\"2\\\",\\\"2\\\",\\\"0\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن وحدة مضخة ABS لسيارة Renault Clio بنزين سنة 2020.",
+      "language": "ar",
+      "expected": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": "2",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":\"2\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un amortisseur avant pour une Mercedes-Benz C-Class essence de 2020.",
+      "language": "fr",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": "2220",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":\"2220\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2020 Toyota Corolla front brake caliper for the Petrol version?",
+      "language": "en",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "2020",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":\"2020\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un démarreur pour une Renault Megane diesel de 2019.",
+      "language": "fr",
+      "expected": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Toyota Corolla 2020 essence w n7eb rétroviseur gauche.",
+      "language": "tn",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "2220",
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":\"2220\",\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a LED front headlight, compatible with my Skoda Octavia Diesel from 2019.",
+      "language": "en",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد زوج أقراص فرامل أمامية لسيارة Citroën C4 ديزل لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un étrier de frein avant pour Kia Sportage version diesel, année 2019 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un paire de disques de frein avant, compatible avec ma Renault Clio 2020 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": "2200",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Clio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":\"2200\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un rétroviseur gauche pour Mercedes-Benz E-Class version diesel, année 2019 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un alternateur, compatible avec ma Kia Rio 2020 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": "2200",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":\"2200\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج بادئ تشغيل متوافقا مع Toyota Yaris موديل 2019 بنزين.",
+      "language": "ar",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مصباح أمامي LED متوافقا مع Citroën C3 موديل 2019 بنزين.",
+      "language": "ar",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد ممتص صدمات أمامي لسيارة Kia Rio بنزين لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": "2\",\"2020",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":\"2\\\",\\\"2020\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a radiator, compatible with my Peugeot 308 Diesel from 2020.",
+      "language": "en",
+      "expected": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": "22020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":\"22020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Kia Rio 2020 essence w n7eb bloc pompe ABS.",
+      "language": "tn",
+      "expected": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": "2020",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":\"2020\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma bloc pompe ABS compatible m3a Toyota Corolla essence modèle 2020 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "2",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":\"2\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma feu arrière compatible m3a Toyota Yaris essence modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma alternateur compatible m3a Skoda Octavia diesel modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un démarreur pour Citroën C3 version essence, année 2019 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a left door mirror, compatible with my Citroën C4 Diesel from 2020.",
+      "language": "en",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد زوج أقراص فرامل أمامية لسيارة Volkswagen Golf ديزل لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a rear tail light, compatible with my Volkswagen Golf Diesel from 2020.",
+      "language": "en",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "220",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"220\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Peugeot 208 2021 essence w n7eb amortisseur avant.",
+      "language": "tn",
+      "expected": {
+        "brand": "Peugeot",
+        "model": "208",
+        "year": 2021,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Peugeot",
+        "model": "2208",
+        "year": "2021",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Peugeot",
+        "model": "2208",
+        "year": 2021,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Peugeot\",\"model\":\"2208\",\"year\":\"2021\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": false
+    },
+    {
+      "input": "هل يوجد مصباح أمامي LED لسيارة Peugeot 308 ديزل لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": "2200",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":\"2200\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un amortisseur avant, compatible avec ma Toyota Corolla 2020 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "2202",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":\"2202\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la deux disques frein avant mta3 Volkswagen Golf diesel 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2019 Mercedes-Benz E-Class LED front headlight for the Diesel version?",
+      "language": "en",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un alternateur, compatible avec ma Ford Fiesta 2019 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": "22019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":\"22019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2019 Mercedes-Benz E-Class radiator for the Diesel version?",
+      "language": "en",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن مصباح خلفي لسيارة Hyundai Tucson ديزل سنة 2019.",
+      "language": "ar",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Looking for a radiator, compatible with my Toyota Yaris Petrol from 2019.",
+      "language": "en",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن مولد كهربائي لسيارة Hyundai Tucson ديزل سنة 2019.",
+      "language": "ar",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "22019",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"22019\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un amortisseur avant, compatible avec ma Volkswagen Golf 2020 diesel.",
+      "language": "fr",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مولد كهربائي متوافقا مع Kia Sportage موديل 2019 ديزل.",
+      "language": "ar",
+      "expected": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un feu arrière, compatible avec ma Seat Leon 2020 diesel.",
+      "language": "fr",
+      "expected": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": "2202",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":\"2202\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la bloc pompe ABS mta3 Toyota Yaris essence 2019.",
+      "language": "tn",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": "22019",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":\"22019\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد مرآة باب يسار لسيارة Ford Fiesta بنزين لعام 2019؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a front brake caliper for a 2019 Diesel Renault Megane.",
+      "language": "en",
+      "expected": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un feu arrière pour Citroën C4 version diesel, année 2020 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مرآة باب يسار متوافقا مع Ford Fiesta موديل 2019 بنزين.",
+      "language": "ar",
+      "expected": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a LED front headlight for a 2020 Diesel Ford Focus.",
+      "language": "en",
+      "expected": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma amortisseur avant compatible m3a Skoda Octavia diesel modèle 2019 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un amortisseur avant pour Ford Fiesta version essence, année 2019 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Fiesta",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Volkswagen Passat 2019 diesel w n7eb feu arrière.",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Passat",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a radiator for a 2019 Diesel Mercedes-Benz E-Class.",
+      "language": "en",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن بادئ تشغيل لسيارة Mercedes-Benz E-Class ديزل سنة 2019.",
+      "language": "ar",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un phare avant LED, compatible avec ma Toyota Yaris 2019 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": "2219",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":\"2219\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un démarreur pour Ford Focus version diesel, année 2020 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": "2202",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":\"2202\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Avez-vous un radiateur pour Skoda Octavia version diesel, année 2019 ?",
+      "language": "fr",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un radiateur, compatible avec ma Hyundai Tucson 2019 diesel.",
+      "language": "fr",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مِلقط فرامل أمامي متوافقا مع Citroën C3 موديل 2019 بنزين.",
+      "language": "ar",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2209",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2209\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un bloc pompe ABS pour une Mercedes-Benz C-Class essence de 2020.",
+      "language": "fr",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": "2",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":\"2\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "هل يوجد مصباح أمامي LED لسيارة Ford Focus ديزل لعام 2020؟",
+      "language": "ar",
+      "expected": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un bloc pompe ABS pour une Kia Rio essence de 2020.",
+      "language": "fr",
+      "expected": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": "2200",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":\"2200\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un alternateur, compatible avec ma Toyota Corolla 2020 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "22",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":\"22\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Hyundai Tucson 2019 diesel w n7eb deux disques frein avant.",
+      "language": "tn",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2019 Renault Megane alternator for the Diesel version?",
+      "language": "en",
+      "expected": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Renault",
+        "model": "Megane",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la bloc pompe ABS mta3 Seat Leon diesel 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن ممتص صدمات أمامي لسيارة Mercedes-Benz C-Class بنزين سنة 2020.",
+      "language": "ar",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": "2020",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":\"2020\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a alternator for a 2020 Diesel Peugeot 308.",
+      "language": "en",
+      "expected": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "actual": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": "22020",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "hardened": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Alternator"
+      },
+      "raw": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":\"22020\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a left door mirror for a 2020 Petrol Hyundai i20.",
+      "language": "en",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": "2202",
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":\"2202\",\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma rétroviseur gauche compatible m3a Hyundai i20 essence modèle 2020 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "i20",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "i22",
+        "year": 2,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "i22",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"i22\",\"year\":2,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": false
+    },
+    {
+      "input": "Looking for a front shock absorber, compatible with my Citroën C3 Petrol from 2019.",
+      "language": "en",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج مصباح أمامي LED متوافقا مع Citroën C4 موديل 2020 ديزل.",
+      "language": "ar",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": "2220",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Electrical Parts",
+        "partType": "LED front headlight"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":\"2220\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "I need a radiator for a 2019 Diesel Skoda Octavia.",
+      "language": "en",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Nlawwej 3la étrier frein avant mta3 Skoda Octavia diesel 2019.",
+      "language": "tn",
+      "expected": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "actual": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "hardened": {
+        "brand": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Front brake caliper"
+      },
+      "raw": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Mercedes-Benz E-Class 2019 diesel w n7eb rétroviseur gauche.",
+      "language": "tn",
+      "expected": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un rétroviseur gauche pour une Kia Sportage diesel de 2019.",
+      "language": "fr",
+      "expected": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": "2219",
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Sportage",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":\"2219\",\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Do you have a 2020 Peugeot 308 front brake disc pair for the Diesel version?",
+      "language": "en",
+      "expected": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Peugeot",
+        "model": "308",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج زوج أقراص فرامل أمامية متوافقا مع Ford Focus موديل 2020 ديزل.",
+      "language": "ar",
+      "expected": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma bloc pompe ABS compatible m3a Citroën C4 diesel modèle 2020 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C4",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Brake Systems",
+        "partType": "ABS pump module"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un rétroviseur gauche pour une Seat Leon diesel de 2020.",
+      "language": "fr",
+      "expected": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "actual": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": "220",
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "hardened": {
+        "brand": "Seat",
+        "model": "Leon",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "LEFT",
+        "category": "Body & Exterior",
+        "partType": "Left door mirror"
+      },
+      "raw": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":\"220\",\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Famma boîte auto compatible m3a Volkswagen Golf diesel modèle 2020 ?",
+      "language": "tn",
+      "expected": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "actual": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": "2020",
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "hardened": {
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2020,
+        "fuelType": "Diesel",
+        "position": "UNIVERSAL",
+        "category": "Transmission",
+        "partType": "Automatic gearbox"
+      },
+      "raw": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":\"2020\",\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أحتاج ممتص صدمات أمامي متوافقا مع Hyundai Tucson موديل 2019 ديزل.",
+      "language": "ar",
+      "expected": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "actual": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": "2019",
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "hardened": {
+        "brand": "Hyundai",
+        "model": "Tucson",
+        "year": 2019,
+        "fuelType": "Diesel",
+        "position": "FRONT",
+        "category": "Suspension",
+        "partType": "Front shock absorber"
+      },
+      "raw": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":\"2019\",\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "3andi Toyota Yaris 2019 essence w n7eb feu arrière.",
+      "language": "tn",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": "2019",
+        "fuelType": "Petrol",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Yaris",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "REAR",
+        "category": "Electrical Parts",
+        "partType": "Rear tail light"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":\"2019\",\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Je cherche un démarreur pour une Peugeot 208 essence de 2021.",
+      "language": "fr",
+      "expected": {
+        "brand": "Peugeot",
+        "model": "208",
+        "year": 2021,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Peugeot",
+        "model": "2208",
+        "year": "2021",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Peugeot",
+        "model": "2208",
+        "year": 2021,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Peugeot\",\"model\":\"2208\",\"year\":\"2021\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": false
+    },
+    {
+      "input": "Nlawwej 3la deux disques frein avant mta3 Toyota Corolla essence 2020.",
+      "language": "tn",
+      "expected": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "actual": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "2020",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "hardened": {
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Brake Systems",
+        "partType": "Brake disc pair"
+      },
+      "raw": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":\"2020\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "أبحث عن مُبرّد المحرك لسيارة Citroën C3 بنزين سنة 2019.",
+      "language": "ar",
+      "expected": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "actual": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": "2\",\"2,19",
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "hardened": {
+        "brand": "Citroën",
+        "model": "C3",
+        "year": 2019,
+        "fuelType": "Petrol",
+        "position": "FRONT",
+        "category": "Cooling & Heating",
+        "partType": "Radiator"
+      },
+      "raw": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":\"2\\\",\\\"2,19\",\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    },
+    {
+      "input": "Besoin d'un démarreur, compatible avec ma Kia Rio 2020 essence.",
+      "language": "fr",
+      "expected": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "actual": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": "2200",
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "hardened": {
+        "brand": "Kia",
+        "model": "Rio",
+        "year": 2020,
+        "fuelType": "Petrol",
+        "position": "UNIVERSAL",
+        "category": "Electrical Parts",
+        "partType": "Starter motor"
+      },
+      "raw": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":\"2200\",\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}",
+      "validJson": true,
+      "exact": false,
+      "normalized": false,
+      "hardenedExact": true
+    }
+  ]
+}

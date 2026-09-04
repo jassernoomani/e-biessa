@@ -1,0 +1,12 @@
+.env
+.venv/
+.venv-training/
+__pycache__/
+.pytest_cache/
+*.pyc
+data/qdrant/
+data/models/
+training/out/
+training/export/*.gguf
+training/export/e-biessa-qwen25-7b-v2-lora/
+training/tools/

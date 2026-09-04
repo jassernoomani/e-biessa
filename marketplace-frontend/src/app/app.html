@@ -1,0 +1,468 @@
+<div class="app-shell" [class.dark-theme]="darkMode()">
+@if (view() !== 'admin') {
+<header class="topbar">
+  <button class="brand" (click)="setView('market')" aria-label="E-biessa home">
+    <app-brand-logo variant="header" />
+  </button>
+  <nav>
+    <button [class.active]="view() === 'market'" (click)="setView('market')">Marketplace</button>
+    <button [class.active]="view() === 'favorites'" (click)="setView('favorites')">Saved</button>
+    @if (user()) {<button class="inbox-nav" [class.active]="view() === 'inbox'" (click)="setView('inbox')">Inbox @if (unreadMessages()) {<span>{{ unreadMessages() }}</span>}</button>}
+    @if (user()?.role === 'SELLER' || user()?.role === 'ADMIN') {
+      <button [class.active]="view() === 'studio'" (click)="setView('studio')">Seller studio</button>
+    }
+    @if (user()?.role === 'ADMIN') {
+      <button [class.active]="view() === 'admin'" (click)="setView('admin')">Admin</button>
+    }
+  </nav>
+  <div class="account">
+    <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'" [title]="darkMode() ? 'Light mode' : 'Dark mode'">
+      <span>{{ darkMode() ? '☀' : '☾' }}</span><b>{{ darkMode() ? 'Light' : 'Dark' }}</b>
+    </button>
+    @if (user(); as current) {
+      <button class="profile-trigger" [class.active]="view() === 'profile'" (click)="openProfile()" aria-label="Open profile page">
+        <span class="avatar">{{ initials() }}</span>
+        <span class="account-copy"><strong>{{ current.fullName }}</strong><span>{{ current.role }} · Profile</span></span>
+      </button>
+      <button class="link" (click)="logout()">Log out</button>
+    } @else {
+      <button class="ghost" (click)="openAuth(false)">Log in</button>
+      <button class="primary small" (click)="openAuth(true)">Create account</button>
+    }
+  </div>
+</header>
+}
+
+<main>
+  @if (view() === 'market') {
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Tunisia's trusted parts marketplace</span>
+        <h1>The right part.<br><em>Without the guesswork.</em></h1>
+        <p>Quality used auto parts from verified local sellers. Search, compare, and get your car back on the road.</p>
+        <div class="search-mode-toggle" role="group" aria-label="Search method">
+          <button [class.active]="searchMode() === 'keyword'" (click)="setSearchMode('keyword')">Keyword search</button>
+          <button data-testid="ai-search-mode" [class.active]="searchMode() === 'ai'" (click)="setSearchMode('ai')"><span>✦</span> AI fitment search</button>
+        </div>
+        <div class="searchbar">
+          <span>{{ searchMode() === 'ai' ? '✦' : '⌕' }}</span>
+          <input data-testid="market-search-input" [ngModel]="searchInput()" (ngModelChange)="updateSearchInput($event)" (keyup.enter)="applyFilters()" [placeholder]="searchMode() === 'ai' ? 'Try: front brake part for a diesel Golf' : 'Search by part, OEM number, or keyword'">
+          <button data-testid="market-search-submit" class="primary" (click)="applyFilters()">{{ searchMode() === 'ai' ? 'Search with AI' : 'Find parts' }}</button>
+        </div>
+        @if (searchMode() === 'ai') {<p class="ai-search-hint">Describe the vehicle, fuel, position, and part you need. Compatibility signals are checked before results are shown.</p>}
+        <div class="trust"><span>✓ Verified sellers</span><span>✓ Local inventory</span><span>✓ Direct contact</span></div>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="part-icon">⚙</div>
+        <div class="floating-card one"><b>{{ total() }}+</b><span>parts ready</span></div>
+        <div class="floating-card two"><b>24h</b><span>fast replies</span></div>
+      </div>
+    </section>
+
+    <section class="market-shell">
+      <aside class="filters">
+        <div class="section-title"><span>Refine results</span><button (click)="resetFilters()">Reset</button></div>
+        <label>Category<select [(ngModel)]="filters.categoryId" (change)="applyFilters()"><option value="">All categories</option>@for (category of categories(); track category.id) {<option [value]="category.id">{{ category.name }}</option>}</select></label>
+        <label>Year<select [(ngModel)]="filters.year" (change)="yearChanged()"><option value="">All years</option>@for (year of catalogYears(); track year) {<option [value]="year">{{ year }}</option>}</select></label>
+        <label>Make<select [(ngModel)]="filters.brand" (change)="brandChanged()"><option value="">All makes</option>@for (make of catalogMakes(); track make.id) {<option [value]="make.name">{{ make.name }}</option>}</select></label>
+        <label>Model<select [(ngModel)]="filters.model" (change)="modelChanged()" [disabled]="!filters.brand"><option value="">All models</option>@for (model of catalogModels(); track model) {<option [value]="model">{{ model }}</option>}</select></label>
+        <p class="catalog-note">Uses CarQuery vehicle data when available. Always confirm exact fitment with the seller.</p>
+        <details class="advanced-filters" [open]="advancedFilterCount() > 0">
+          <summary><span>More filters @if (advancedFilterCount()) {<b>{{ advancedFilterCount() }}</b>}</span><small>Fitment, delivery and price</small></summary>
+          <div class="advanced-filter-grid">
+            <label>Manufacturer<input [(ngModel)]="filters.manufacturer" (keyup.enter)="applyFilters()" placeholder="e.g. Bosch, Valeo"></label>
+            <label>Part brand<input [(ngModel)]="filters.partBrand" (keyup.enter)="applyFilters()" placeholder="e.g. ATE Original"></label>
+            <label>Position<select [(ngModel)]="filters.partPosition" (change)="applyFilters()"><option value="">Any position</option><option value="FRONT">Front</option><option value="REAR">Rear</option><option value="LEFT">Left</option><option value="RIGHT">Right</option><option value="FRONT_LEFT">Front left</option><option value="FRONT_RIGHT">Front right</option><option value="REAR_LEFT">Rear left</option><option value="REAR_RIGHT">Rear right</option><option value="UNIVERSAL">Universal</option></select></label>
+            <label>Engine<select [(ngModel)]="filters.engine" (change)="applyFilters()"><option value="">Any engine</option>@for (engine of engines(); track engine) {<option [value]="engine">{{ engine }}</option>}</select></label>
+            <label>Fuel<select [(ngModel)]="filters.fuelType" (change)="applyFilters()"><option value="">Any fuel type</option>@for (fuel of fuelTypes(); track fuel) {<option [value]="fuel">{{ fuel }}</option>}</select></label>
+            <label>Warranty<input [(ngModel)]="filters.warranty" (keyup.enter)="applyFilters()" placeholder="e.g. 90 days"></label>
+            <label>Delivery<select [(ngModel)]="filters.deliveryAvailable" (change)="applyFilters()"><option value="">Any</option><option value="true">Available</option></select></label>
+            <label>Collection<select [(ngModel)]="filters.collectionAvailable" (change)="applyFilters()"><option value="">Any</option><option value="true">Available</option></select></label>
+            <label>Price flexibility<select [(ngModel)]="filters.negotiable" (change)="applyFilters()"><option value="">Any price</option><option value="true">Negotiable only</option></select></label>
+            <label>Condition<select [(ngModel)]="filters.condition" (change)="applyFilters()"><option value="">Any condition</option><option>New</option><option>Like new</option><option>Used - good</option><option>Used - fair</option></select></label>
+            <label>Price range<div class="price-row"><input type="number" [(ngModel)]="filters.minPrice" placeholder="Min"><input type="number" [(ngModel)]="filters.maxPrice" placeholder="Max"></div></label>
+          </div>
+        </details>
+        <button class="dark full" (click)="applyFilters()">Apply filters</button>
+        <div class="sell-card">
+          <span class="sell-icon">↗</span><strong>Have spare parts?</strong><p>Turn your garage into cash with a free seller account.</p>
+          @if (!user()) {<button (click)="openAuth(true)">Start selling</button>}
+          @else if (user()?.role === 'BUYER' && user()?.sellerApplicationStatus === 'PENDING') {<button disabled>Application pending</button>}
+          @else if (user()?.role === 'BUYER') {<button (click)="openProfile()">Apply to become a seller</button>}
+          @else {<button (click)="setView('studio')">Open seller studio</button>}
+        </div>
+      </aside>
+
+      <section class="results">
+        <div class="results-head"><div><span class="eyebrow">{{ searchMode() === 'ai' ? 'Compatibility-aware search' : 'Fresh inventory' }}</span><h2>{{ searchMode() === 'ai' ? 'AI-ranked matches' : 'Parts worth a closer look' }}</h2></div><div class="results-tools"><span>{{ total() }} results</span>@if (searchMode() === 'keyword') {<label>Sort<select [(ngModel)]="sort" (change)="changeSort()"><option value="createdAt,desc">Newest first</option><option value="price,asc">Price: low to high</option><option value="price,desc">Price: high to low</option><option value="views,desc">Most viewed</option><option value="title,asc">Name A–Z</option></select></label>} @else if (aiSearchResponse()) {<small>{{ aiSearchResponse()!.tookMs }} ms</small>}</div></div>
+        @if (searchMode() === 'ai' && aiConstraintLabels().length) {<div class="ai-constraints"><strong>Understood:</strong>@for (label of aiConstraintLabels(); track label) {<span>{{ label }}</span>}</div>}
+        @if (searchMode() === 'ai' && aiSearchResponse()?.answer; as answer) {<section data-testid="ai-answer" class="ai-answer" aria-live="polite"><span class="ai-answer-icon">✦</span><div><div class="ai-answer-title"><strong>E-biessa AI answer</strong><small>Verified from active listings</small></div><p>{{ answer.summary }}</p>@if (answer.cautions.length) {<ul>@for (caution of answer.cautions; track caution) {<li>{{ caution }}</li>}</ul>}</div></section>}
+        @if (searchMode() === 'ai' && aiError()) {<div class="ai-error"><span>!</span><div><strong>AI search needs attention</strong><p>{{ aiError() }}</p></div><button class="ghost" (click)="setSearchMode('keyword')">Use keyword search</button></div>}
+        @if (loading()) {
+          <div class="loading-grid">@for (item of [1,2,3,4,5,6]; track item) {<div class="skeleton"></div>}</div>
+        } @else if (!parts().length) {
+          <div class="empty"><span>⌕</span><h3>No matching parts</h3><p>Try widening your search or clearing a filter.</p></div>
+        } @else {
+          <div class="parts-grid">
+            @for (part of parts(); track trackPart($index, part)) {
+              <article class="part-card" [class.sold]="part.status === 'SOLD'" (click)="openPart(part)">
+                <div class="image-wrap"><img [src]="imageUrl(part)" [alt]="part.title"><span class="condition">{{ part.condition || 'Used' }}</span>@if (part.status === 'SOLD') {<span class="sold-badge">Sold</span>}<button class="heart" [class.liked]="favoriteIds().has(part.id) || part.favorited" (click)="toggleFavorite(part, $event)" aria-label="Save listing">♥</button></div>
+                <div class="part-body"><div class="meta">{{ part.categoryName || 'Auto part' }} · {{ part.location || 'Tunisia' }} @if (aiMatch(part.id); as match) {<span class="ai-score">{{ match.score * 100 | number:'1.0-0' }}% match</span>}</div><h3>{{ part.title }}</h3><p class="fit">{{ part.compatibleVehicles?.length || 0 }} compatible vehicle{{ part.compatibleVehicles?.length === 1 ? '' : 's' }} · {{ part.partBrand || part.manufacturer || 'Brand not specified' }}</p>@if (aiMatch(part.id); as match) {<div class="match-reasons">@for (reason of match.matchReasons; track reason) {<span>✓ {{ reason }}</span>}</div>}<div class="part-foot"><strong>{{ money(part.price) }} @if (part.negotiable) {<small>Negotiable</small>}</strong><button class="seller-link" (click)="openSellerProfile(part, $event)">by {{ part.sellerName }}</button></div></div>
+              </article>
+            }
+          </div>
+          @if (searchMode() === 'keyword' && totalPages() > 1) {<nav class="pagination" aria-label="Marketplace pages"><button [disabled]="currentPage() === 0" (click)="goToPage(currentPage() - 1)">← Previous</button>@for (page of pageNumbers(); track page) {<button [class.active]="page === currentPage()" (click)="goToPage(page)">{{ page + 1 }}</button>}<button [disabled]="currentPage() >= totalPages() - 1" (click)="goToPage(currentPage() + 1)">Next →</button></nav>}
+        }
+      </section>
+    </section>
+  }
+
+  @if (view() === 'favorites') {
+    <section class="page"><div class="page-head"><div><span class="eyebrow">Your shortlist</span><h1>Saved parts</h1><p>Keep the best options together while you compare.</p></div></div>
+      @if (favorites().length) {<div class="parts-grid">@for (part of favorites(); track part.id) {<article class="part-card" (click)="openPart(part)"><div class="image-wrap"><img [src]="imageUrl(part)" [alt]="part.title"><button class="heart liked" (click)="toggleFavorite(part, $event)">♥</button></div><div class="part-body"><div class="meta">{{ part.categoryName }} · {{ part.location }}</div><h3>{{ part.title }}</h3><div class="part-foot"><strong>{{ money(part.price) }}</strong><button class="seller-link" (click)="openSellerProfile(part, $event)">{{ part.sellerName }}</button></div></div></article>}</div>} @else {<div class="empty"><span>♡</span><h3>No saved parts yet</h3><p>Tap the heart on any listing to keep it here.</p><button class="primary" (click)="setView('market')">Browse marketplace</button></div>}
+    </section>
+  }
+
+  @if (view() === 'inbox') {
+    <section class="page inbox-page">
+      <div class="page-head inbox-page-head">
+        <div><span class="eyebrow">Private marketplace messages</span><h1>Your inbox</h1><p>Ask questions, share photos, and agree on the details safely.</p></div>
+        <span class="realtime-status" [class.offline]="!realtimeConnected()"><i></i>{{ realtimeConnected() ? 'Live updates' : 'Reconnecting…' }}</span>
+      </div>
+      <div class="inbox-layout">
+        <aside class="conversation-sidebar">
+          <header class="conversation-sidebar-head">
+            <div><strong>Conversations</strong><span>{{ conversations().length }}</span></div>
+            <label class="conversation-search"><span>⌕</span><input type="search" name="conversationSearch" [ngModel]="conversationSearch()" (ngModelChange)="conversationSearch.set($event)" placeholder="Search messages" aria-label="Search conversations"></label>
+          </header>
+          <div class="conversation-list">
+            @if (inboxLoading() && !conversations().length) {
+              <div class="empty compact"><p>Loading conversations…</p></div>
+            } @else if (!conversations().length) {
+              <div class="empty compact"><span>✉</span><h3>No messages yet</h3><p>Buyers can start a conversation from any active listing.</p></div>
+            } @else if (!filteredConversations().length) {
+              <div class="empty compact"><span>⌕</span><h3>No matches</h3><p>Try a different name, listing, or message.</p></div>
+            } @else {
+              @for (conversation of filteredConversations(); track conversation.id) {
+                <button [class.active]="activeConversation()?.conversation?.id === conversation.id" [class.unread]="conversation.unreadCount" (click)="openConversation(conversation)">
+                  <span class="conversation-image">@if (conversation.partImageUrl) {<img [src]="assetUrl(conversation.partImageUrl)" [alt]="conversation.partTitle">} @else {<span class="conversation-placeholder">⚙</span>}</span>
+                  <span class="conversation-summary"><span><strong>{{ conversation.otherPartyName }}</strong>@if (conversation.lastMessageAt) {<time>{{ conversation.lastMessageAt | date:'shortTime' }}</time>}</span><small>{{ conversation.partTitle }}</small><em>{{ conversation.lastMessage || 'Conversation started' }}</em></span>
+                  @if (conversation.unreadCount) {<b>{{ conversation.unreadCount }}</b>}
+                </button>
+              }
+            }
+          </div>
+        </aside>
+        <section class="message-thread">
+          @if (activeConversation(); as thread) {
+            <header class="thread-header">
+              <div class="thread-contact"><span class="thread-avatar">{{ thread.conversation.otherPartyName.charAt(0) }}</span><div><h2>{{ thread.conversation.otherPartyName }}</h2><small>Regarding {{ thread.conversation.partTitle }}</small></div></div>
+              <button class="thread-listing-link" (click)="openListingFromConversation(thread.conversation.partId)">View listing <span>↗</span></button>
+            </header>
+            <div class="message-stream" #messageStream>
+              <div class="thread-start"><span>Conversation about</span><strong>{{ thread.conversation.partTitle }}</strong><small>Keep payment and collection details private.</small></div>
+              @for (item of thread.messages; track item.id) {
+                <article [class.own]="item.senderId === user()?.id">
+                  <div class="message-bubble">
+                    @if (item.body) {<p>{{ item.body }}</p>}
+                    @if (item.attachments; as attachments) {@if (attachments.length) {<div class="message-photos" [class.single]="attachments.length === 1">@for (photo of attachments; track photo.id) {<a [href]="assetUrl(photo.url)" target="_blank" rel="noopener" [attr.aria-label]="'Open ' + photo.originalName"><img [src]="assetUrl(photo.url)" [alt]="photo.originalName"></a>}</div>}}
+                    <time>{{ item.createdAt | date:'shortTime' }}</time>
+                  </div>
+                </article>
+              }
+            </div>
+            <form class="message-composer" (ngSubmit)="sendConversationMessage()">
+              @if (replyImagePreviews().length) {<div class="reply-photo-previews">@for (photo of replyImagePreviews(); track photo.url; let index = $index) {<div><img [src]="photo.url" [alt]="photo.name"><button type="button" (click)="removeReplyImage(index)" [attr.aria-label]="'Remove ' + photo.name">×</button></div>}</div>}
+              <div class="composer-row">
+                <label class="attach-photos" title="Add photos"><input type="file" accept="image/jpeg,image/png,image/webp" multiple (click)="$any($event.target).value = ''" (change)="selectReplyImages($event)"><span>📷</span><small>Add photos</small></label>
+                <label class="reply-field"><textarea name="reply" [(ngModel)]="replyDraft" maxlength="2000" rows="1" placeholder="Write a message…"></textarea><small>{{ replyDraft.length }}/2000</small></label>
+                <button class="primary send-message" type="submit" [disabled]="(!replyDraft.trim() && !replyImages.length) || submitting()"><span>{{ submitting() ? '…' : '➤' }}</span><em>{{ submitting() ? 'Sending' : 'Send' }}</em></button>
+              </div>
+              <small class="composer-hint">Press Send to share your message · JPG, PNG or WebP photos supported</small>
+            </form>
+          } @else {
+            <div class="empty thread-empty"><span>✉</span><h3>Your conversations</h3><p>Select a conversation to see its latest messages.</p></div>
+          }
+        </section>
+      </div>
+    </section>
+  }
+
+  @if (view() === 'studio') {
+    <section class="page"><div class="page-head"><div><span class="eyebrow">Seller workspace</span><h1>Your inventory</h1><p>Create listings, add images, and keep availability current.</p></div><button class="primary" (click)="openEditor()">+ New listing</button></div>
+      <div class="stats"><div><span>Listings</span><strong>{{ listings().length }}</strong></div><div><span>Active</span><strong>{{ listings().filter(p => p.status === 'ACTIVE').length }}</strong></div><div><span>Total views</span><strong>{{ listings().reduce((sum,p) => sum + p.views, 0) }}</strong></div></div>
+      @if (listings().length) {<div class="table-wrap"><table><thead><tr><th>Listing</th><th>Price</th><th>Status</th><th>Views</th><th>Actions</th></tr></thead><tbody>@for (part of listings(); track part.id) {<tr><td><div class="table-part"><img [src]="imageUrl(part)" [alt]="part.title"><div><strong>{{ part.title }}</strong><span>{{ part.oemNumber || 'No OEM number' }}</span></div></div></td><td>{{ money(part.price) }}</td><td><span class="status" [attr.data-status]="part.status">{{ part.status }}</span>@if (part.status === 'SOLD') {<small>Removed from marketplace</small>}</td><td>{{ part.views }}</td><td><div class="actions"><button (click)="openEditor(part)">Edit</button>@if (part.status !== 'SOLD') {<button class="mark-sold" (click)="markSold(part)">Mark sold</button>}<select [ngModel]="part.status" (ngModelChange)="updateStatus(part, $event)"><option value="ACTIVE">Active</option><option value="SOLD">Sold</option><option value="INACTIVE">Inactive</option></select><button class="danger" (click)="removePart(part)">Delete</button></div></td></tr>}</tbody></table></div>} @else {<div class="empty"><span>＋</span><h3>Your inventory is empty</h3><p>Create your first listing and reach local buyers.</p><button class="primary" (click)="openEditor()">Create listing</button></div>}
+    </section>
+  }
+
+  @if (view() === 'admin') {
+    <section class="admin-dashboard">
+      <aside class="admin-sidebar">
+        <button class="admin-brand" (click)="setAdminSection('overview')" aria-label="E-biessa administration overview"><app-brand-logo variant="header" /><span>Administration</span></button>
+        <nav aria-label="Administration sections">
+          <button [class.active]="adminSection() === 'overview'" (click)="setAdminSection('overview')"><span class="admin-nav-icon">⌂</span><span>Overview</span></button>
+          <button [class.active]="adminSection() === 'applications'" (click)="setAdminSection('applications')"><span class="admin-nav-icon">✓</span><span>Seller applications</span>@if (sellerApplications().length) {<b>{{ sellerApplications().length }}</b>}</button>
+          <button [class.active]="adminSection() === 'seller-reports'" (click)="setAdminSection('seller-reports')"><span class="admin-nav-icon">⚑</span><span>Seller reports</span>@if (adminSellerReports().length) {<b>{{ adminSellerReports().length }}</b>}</button>
+          <button [class.active]="adminSection() === 'listing-reports'" (click)="setAdminSection('listing-reports')"><span class="admin-nav-icon">!</span><span>Listing reports</span>@if (adminReports().length) {<b>{{ adminReports().length }}</b>}</button>
+          <span class="admin-nav-label">Marketplace</span>
+          <button [class.active]="adminSection() === 'users'" (click)="setAdminSection('users')"><span class="admin-nav-icon">◎</span><span>Users</span></button>
+          <button [class.active]="adminSection() === 'listings'" (click)="setAdminSection('listings')"><span class="admin-nav-icon">▤</span><span>Listings</span></button>
+          <button [class.active]="adminSection() === 'audit'" (click)="setAdminSection('audit')"><span class="admin-nav-icon">↻</span><span>Audit history</span></button>
+        </nav>
+        <div class="admin-sidebar-footer"><button (click)="setView('market')">← Back to marketplace</button><button (click)="logout()">Log out</button></div>
+      </aside>
+
+      <div class="admin-workspace">
+        <header class="admin-dashboard-header">
+          <div><span class="eyebrow">Platform operations</span><h1>Admin dashboard</h1></div>
+          <div class="admin-account"><button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'"><span>{{ darkMode() ? '☀' : '☾' }}</span><b>{{ darkMode() ? 'Light' : 'Dark' }}</b></button>@if (user(); as current) {<button class="admin-profile-button" (click)="openProfile()"><span class="avatar">{{ initials() }}</span><span><strong>{{ current.fullName }}</strong><small>Administrator</small></span></button>}</div>
+        </header>
+
+        <div class="admin-dashboard-content">
+        @if (adminSection() === 'overview') {
+          <section class="admin-overview">
+            <div class="admin-welcome"><div><span class="eyebrow">Command center</span><h2>Marketplace at a glance</h2><p>Review urgent work, monitor platform activity, and jump directly to the right management area.</p></div><button class="primary" (click)="loadAdmin()">Refresh data</button></div>
+            <div class="admin-stat-grid">
+              <article><span class="admin-stat-icon users">◎</span><div><small>Total users</small><strong>{{ adminUsers().length }}</strong><p>{{ suspendedUserCount() }} suspended</p></div></article>
+              <article><span class="admin-stat-icon sellers">◆</span><div><small>Active sellers</small><strong>{{ activeSellerCount() }}</strong><p>Approved seller accounts</p></div></article>
+              <article><span class="admin-stat-icon listings">▤</span><div><small>Active listings</small><strong>{{ activeAdminListingCount() }}</strong><p>{{ adminParts().length }} listings total</p></div></article>
+              <article class="attention"><span class="admin-stat-icon workload">!</span><div><small>Pending work</small><strong>{{ pendingAdminWork() }}</strong><p>Items need review</p></div></article>
+            </div>
+            <div class="admin-overview-grid">
+              <section class="admin-work-queue"><div class="admin-section-heading"><div><span class="eyebrow">Needs attention</span><h3>Moderation workload</h3></div></div>
+                <button (click)="setAdminSection('applications')"><span class="queue-icon application">✓</span><span><strong>Seller applications</strong><small>Review businesses requesting seller access</small></span><b>{{ sellerApplications().length }}</b><i>→</i></button>
+                <button (click)="setAdminSection('seller-reports')"><span class="queue-icon seller-report">⚑</span><span><strong>Seller reports</strong><small>Investigate reported seller behavior</small></span><b>{{ adminSellerReports().length }}</b><i>→</i></button>
+                <button (click)="setAdminSection('listing-reports')"><span class="queue-icon listing-report">!</span><span><strong>Listing reports</strong><small>Moderate inaccurate or unsafe listings</small></span><b>{{ adminReports().length }}</b><i>→</i></button>
+              </section>
+              <section class="admin-recent-activity"><div class="admin-section-heading"><div><span class="eyebrow">Accountability</span><h3>Recent activity</h3></div><button (click)="setAdminSection('audit')">View all</button></div>
+                @if (adminAuditLogs().length) {<div class="admin-mini-audit">@for (log of adminAuditLogs().slice(0, 5); track log.id) {<article><span>✓</span><div><strong>{{ auditActionLabel(log.action) }}</strong><small>{{ log.targetLabel || (log.targetType + ' #' + log.targetId) }}</small></div><time>{{ log.createdAt | date:'short' }}</time></article>}</div>} @else {<div class="admin-empty-state"><span>↻</span><p>No administrator actions have been recorded yet.</p></div>}
+              </section>
+            </div>
+          </section>
+        }
+
+        @if (adminSection() === 'applications') {
+          <section class="admin-section-page seller-application-queue"><div class="moderation-head"><div><span class="eyebrow">Seller onboarding</span><h2>Pending seller applications <span>{{ sellerApplications().length }}</span></h2><p>Review the applicant's business and contact information before granting seller access.</p></div></div>
+        @if (sellerApplications().length) {<div class="seller-application-list">@for (applicant of sellerApplications(); track applicant.id) {<article class="seller-application-card"><header><div class="reviewer-avatar">{{ applicant.fullName.slice(0, 1).toUpperCase() }}</div><div><h3>{{ applicant.businessName || applicant.fullName }}</h3><p>{{ applicant.fullName }} · {{ applicant.email }}</p></div><span class="status" data-status="PENDING">PENDING</span></header><dl><div><dt>Phone</dt><dd>{{ applicant.phone || 'Not provided' }}</dd></div><div><dt>Location</dt><dd>{{ applicant.location || 'Not provided' }}</dd></div><div><dt>Submitted</dt><dd>{{ applicant.sellerApplicationSubmittedAt | date:'medium' }}</dd></div><div><dt>Website</dt><dd>{{ applicant.website || 'Not provided' }}</dd></div></dl>@if (applicant.bio) {<p class="application-bio">{{ applicant.bio }}</p>}<label>Review note / rejection reason<textarea [name]="'sellerDecisionNote' + applicant.id" [(ngModel)]="sellerDecisionNotes[applicant.id]" maxlength="500" rows="3" placeholder="Required when rejecting; optional when approving"></textarea><small>{{ (sellerDecisionNotes[applicant.id] || '').length }}/500</small></label><div class="seller-application-actions"><button type="button" (click)="openAdminProfile(applicant)">View full profile</button><button class="danger" type="button" (click)="decideSellerApplication(applicant, false)">Reject</button><button class="primary" type="button" (click)="decideSellerApplication(applicant, true)">Approve seller</button></div></article>}</div>} @else {<div class="empty compact"><span>✓</span><h3>No applications waiting</h3><p>New seller requests will appear here for review.</p></div>}
+          </section>
+        }
+
+        @if (adminSection() === 'seller-reports') {
+          <section class="admin-section-page seller-report-queue"><div class="moderation-head"><div><span class="eyebrow">Marketplace safety</span><h2>Seller reports <span>{{ adminSellerReports().length }}</span></h2><p>Investigate behavior reports before dismissing them or suspending a seller account.</p></div><label>Status<select [(ngModel)]="adminSellerReportFilter" (change)="changeSellerReportFilter()"><option value="PENDING">Pending</option><option value="ACTIONED">Actioned</option><option value="DISMISSED">Dismissed</option><option value="">All reports</option></select></label></div>
+        @if (adminSellerReports().length) {<div class="seller-report-list">@for (report of adminSellerReports(); track report.id) {<article class="seller-report-card"><div class="report-top"><span class="status" [attr.data-status]="report.status">{{ report.status }}</span><time>{{ report.createdAt | date:'medium' }}</time></div><h3>{{ report.businessName || report.sellerName }}</h3><p class="report-reason">{{ sellerReportReasonLabel(report.reason) }}</p><p>{{ report.details }}</p><dl><div><dt>Seller</dt><dd>{{ report.sellerName }}</dd></div><div><dt>Reported by</dt><dd>{{ report.reporterName }}</dd></div></dl>@if (report.adminNote) {<small class="admin-note">{{ report.adminNote }}</small>}@if (report.status === 'PENDING') {<label>Administrator note<textarea [name]="'sellerReportAdminNote' + report.id" [(ngModel)]="sellerReportAdminNotes[report.id]" maxlength="1000" rows="3" placeholder="Required when suspending the seller"></textarea><small>{{ (sellerReportAdminNotes[report.id] || '').length }}/1000</small></label><div class="seller-report-actions"><button type="button" (click)="openAdminProfile({ id: report.sellerId, userId: report.sellerId, email: '', fullName: report.sellerName, role: 'SELLER' })">Review seller profile</button><button type="button" (click)="resolveAdminSellerReport(report, 'DISMISSED')">Dismiss report</button><button class="danger" type="button" (click)="resolveAdminSellerReport(report, 'ACTIONED')">Suspend seller</button></div>}</article>}</div>} @else {<div class="empty compact"><span>✓</span><h3>Seller report queue is clear</h3><p>No seller reports match this status.</p></div>}
+          </section>
+        }
+
+        @if (adminSection() === 'listing-reports') {
+          <section class="admin-section-page moderation-queue"><div class="moderation-head"><div><span class="eyebrow">Trust & safety</span><h2>Listing reports <span>{{ adminReports().length }}</span></h2><p>Review reports and remove listings that violate marketplace rules.</p></div><label>Status<select [(ngModel)]="adminReportFilter" (change)="changeReportFilter()"><option value="PENDING">Pending</option><option value="ACTIONED">Actioned</option><option value="DISMISSED">Dismissed</option><option value="">All reports</option></select></label></div>
+        @if (adminReports().length) {<div class="report-list">@for (report of adminReports(); track report.id) {<article class="report-card"><div class="report-top"><span class="status" [attr.data-status]="report.status">{{ report.status }}</span><time>{{ report.createdAt | date:'medium' }}</time></div><h3>{{ report.partTitle }}</h3><p class="report-reason">{{ reportReasonLabel(report.reason) }}</p><p>{{ report.details || 'No additional details supplied.' }}</p><dl><div><dt>Seller</dt><dd>{{ report.sellerName }}</dd></div><div><dt>Reported by</dt><dd>{{ report.reporterName }}</dd></div><div><dt>Listing status</dt><dd>{{ report.partStatus }}</dd></div></dl>@if (report.adminNote) {<small class="admin-note">{{ report.adminNote }}</small>}@if (report.status === 'PENDING') {<div class="report-actions"><button (click)="resolveAdminReport(report, 'DISMISSED')">Dismiss report</button><button class="danger" (click)="resolveAdminReport(report, 'ACTIONED')">Hide listing</button></div>}</article>}</div>} @else {<div class="empty compact"><span>✓</span><h3>Queue is clear</h3><p>No reports match this status.</p></div>}
+          </section>
+        }
+
+        @if (adminSection() === 'users') {
+          <section class="admin-section-page admin-management-panel"><div class="admin-section-toolbar"><div><span class="eyebrow">Access management</span><h2>Users <span>{{ adminUsers().length }}</span></h2><p>Search profiles, review access, and manage account status.</p></div><label class="admin-search"><span>⌕</span><input type="search" [ngModel]="adminUserSearch()" (ngModelChange)="adminUserSearch.set($event)" placeholder="Search name, email, location or role" aria-label="Search users"></label></div>
+            <div class="table-wrap"><table><thead><tr><th>User</th><th>Location</th><th>Role</th><th>Access</th><th></th></tr></thead><tbody>@for (person of filteredAdminUsers(); track person.id) {<tr><td><div class="admin-user-cell"><span>{{ person.fullName.slice(0, 1).toUpperCase() }}</span><div><strong>{{ person.fullName }}</strong><small>{{ person.email }}</small></div></div></td><td>{{ person.location || 'Not provided' }}</td><td><span class="status">{{ person.role }}</span></td><td><span class="account-state" [class.suspended]="person.suspended">{{ person.suspended ? 'Suspended' : 'Active' }}</span></td><td><button class="table-link" (click)="openAdminProfile(person)">Manage account</button></td></tr>} @empty {<tr><td colspan="5"><div class="admin-table-empty">No users match your search.</div></td></tr>}</tbody></table></div>
+          </section>
+        }
+
+        @if (adminSection() === 'listings') {
+          <section class="admin-section-page admin-management-panel"><div class="admin-section-toolbar"><div><span class="eyebrow">Inventory moderation</span><h2>All listings <span>{{ adminParts().length }}</span></h2><p>Find marketplace inventory and change its public availability.</p></div><label class="admin-search"><span>⌕</span><input type="search" [ngModel]="adminListingSearch()" (ngModelChange)="adminListingSearch.set($event)" placeholder="Search title, seller, OEM or vehicle" aria-label="Search listings"></label></div>
+            <div class="table-wrap"><table><thead><tr><th>Listing</th><th>Seller</th><th>Vehicle</th><th>Price</th><th>Status</th></tr></thead><tbody>@for (part of filteredAdminParts(); track part.id) {<tr><td><div class="table-part"><img [src]="imageUrl(part)" [alt]="part.title"><div><strong>{{ part.title }}</strong><span>{{ part.oemNumber || 'No OEM number' }}</span></div></div></td><td>{{ part.sellerName }}</td><td>{{ part.brand || '—' }} {{ part.model || '' }} {{ part.year || '' }}</td><td>{{ money(part.price) }}</td><td><select [ngModel]="part.status" (ngModelChange)="moderate(part, $event)"><option value="ACTIVE">Active</option><option value="SOLD">Sold</option><option value="INACTIVE">Inactive</option></select></td></tr>} @empty {<tr><td colspan="5"><div class="admin-table-empty">No listings match your search.</div></td></tr>}</tbody></table></div>
+          </section>
+        }
+
+        @if (adminSection() === 'audit') {
+          <section class="admin-section-page audit-panel"><div class="moderation-head"><div><span class="eyebrow">Accountability</span><h2>Administrator audit log <span>{{ adminAuditLogs().length }}</span></h2><p>A permanent history of sensitive administrator actions.</p></div><small>Latest 200 actions</small></div>@if (adminAuditLogs().length) {<div class="audit-list">@for (log of adminAuditLogs(); track log.id) {<article><span class="audit-icon">✓</span><div><strong>{{ auditActionLabel(log.action) }}</strong><p>{{ log.adminEmail }} acted on {{ log.targetLabel || (log.targetType + ' #' + log.targetId) }}</p>@if (log.details) {<small>{{ log.details }}</small>}</div><time>{{ log.createdAt | date:'medium' }}</time></article>}</div>} @else {<div class="empty compact"><p>No administrator actions recorded yet.</p></div>}</section>
+        }
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (view() === 'profile' || view() === 'admin-profile') {
+    @if (profileSubject(); as profile) {
+      <section class="profile-page">
+        <div class="profile-breadcrumb">
+          @if (view() === 'admin-profile') {<button (click)="setView('admin')">← Back to admin</button><span>Managing user account</span>}
+          @else {<button (click)="setView('market')">← Back to marketplace</button><span>My account</span>}
+        </div>
+        <div class="profile-layout">
+          <aside class="profile-sidebar">
+            <div class="profile-avatar">{{ profileInitials() }}</div>
+            <h1>{{ profile.fullName }}</h1>
+            <span class="role-pill" [attr.data-role]="profile.role">{{ profile.role }}</span>
+            @if (profile.businessName) {<strong class="business-name">{{ profile.businessName }}</strong>}
+            <p>{{ profile.location || 'Location not provided' }}</p>
+            <div class="completion"><div><span>Profile completion</span><strong>{{ profileCompletion() }}%</strong></div><div class="completion-track"><i [style.width.%]="profileCompletion()"></i></div></div>
+            <dl class="profile-meta">
+              <div><dt>Email</dt><dd>{{ profile.email }}</dd></div>
+              <div><dt>Phone</dt><dd>{{ profile.phone || 'Not provided' }}</dd></div>
+              <div><dt>Member since</dt><dd>{{ profile.createdAt ? (profile.createdAt | date:'MMMM y') : 'Recently' }}</dd></div>
+            </dl>
+            @if (view() === 'profile' && profile.role === 'BUYER') {
+              @if (profile.sellerApplicationStatus === 'PENDING') {<div class="seller-application-state pending"><strong>Application pending</strong><span>An administrator will review your seller details. You remain a buyer until approval.</span></div>}
+              @else if (profile.sellerApplicationStatus === 'REJECTED') {<div class="seller-application-state rejected"><strong>Application needs changes</strong><span>{{ profile.sellerApplicationReviewNote || 'Update your seller details before applying again.' }}</span></div><button class="dark full" (click)="becomeSeller()" [disabled]="submitting()">Apply again</button>}
+              @else {<button class="dark full" (click)="becomeSeller()" [disabled]="submitting()">Submit seller application</button>}
+            }
+          </aside>
+
+          <div class="profile-content">
+            <div class="profile-page-head"><div><span class="eyebrow">{{ view() === 'admin-profile' ? 'Administrator controls' : 'Account settings' }}</span><h2>Profile information</h2><p>Keep contact and location details current so the marketplace community can reach you.</p></div></div>
+            <form #profilePageForm="ngForm" class="profile-form" (ngSubmit)="saveProfile()">
+              <div class="profile-section"><div><h3>Identity</h3><p>Your email is your secure sign-in identity and cannot be changed here.</p></div><div class="profile-fields"><label>Full name<input #profileName="ngModel" name="profileName" [(ngModel)]="profileDraft.fullName" required maxlength="100">@if (profileName.invalid && profileName.touched) {<small class="field-error">Full name is required.</small>}</label><label>Email<input [value]="profile.email" readonly><small class="field-hint">Used for sign-in and account recovery.</small></label></div></div>
+              <div class="profile-section"><div><h3>Contact & location</h3><p>These details help buyers and sellers coordinate locally.</p></div><div class="profile-fields"><label>Phone<input name="profilePhone" [(ngModel)]="profileDraft.phone" maxlength="20" placeholder="+216 00 000 000"></label><label>Location<input name="profileLocation" [(ngModel)]="profileDraft.location" maxlength="120" placeholder="Tunis, Tunisia"></label><label class="wide">Website<input name="profileWebsite" [(ngModel)]="profileDraft.website" maxlength="255" placeholder="https://example.com"></label></div></div>
+              <div class="profile-section"><div><h3>Seller details</h3><p>{{ profile.role === 'BUYER' ? 'Complete these details before submitting a seller application.' : 'Present a clear business identity to prospective buyers.' }}</p></div><div class="profile-fields"><label class="wide">Business or shop name<input name="businessName" [(ngModel)]="profileDraft.businessName" maxlength="160" placeholder="Your garage or shop name"></label></div></div>
+              <div class="profile-section"><div><h3>About</h3><p>Share experience, specialties, or what you look for in the marketplace.</p></div><div class="profile-fields"><label class="wide">Biography<textarea name="profileBio" [(ngModel)]="profileDraft.bio" maxlength="1000" rows="6" placeholder="Tell the community about yourself..."></textarea><small class="field-hint">{{ profileDraft.bio.length }}/1000 characters</small></label></div></div>
+              @if (view() === 'admin-profile') {<div class="profile-section admin-role-section"><div><h3>Access role</h3><p>Buyer-to-seller promotion must be approved from the seller application queue.</p></div><div class="profile-fields"><label>Role<select [ngModel]="profile.role" (ngModelChange)="changeRole(profile, $event)" name="adminRole"><option value="BUYER">Buyer</option>@if (profile.role === 'SELLER' || profile.sellerApplicationStatus === 'APPROVED') {<option value="SELLER">Seller</option>}<option value="ADMIN">Administrator</option></select></label></div></div>}
+              @if (view() === 'admin-profile') {<div class="profile-section suspension-section" [class.is-suspended]="profile.suspended"><div><h3>{{ profile.suspended ? 'Suspended account' : 'Account access' }}</h3><p>{{ profile.suspended ? 'This user cannot sign in or use an existing session.' : 'Suspending access also hides all active listings from the marketplace.' }}</p>@if (profile.suspendedAt) {<small>Suspended {{ profile.suspendedAt | date:'medium' }}</small>}</div><div class="profile-fields">@if (!profile.suspended) {<label class="wide">Reason<textarea name="suspensionReason" [(ngModel)]="suspensionReasonDraft" maxlength="500" rows="3" placeholder="Explain the policy violation or safety concern"></textarea></label><button class="danger-action" type="button" (click)="updateSuspension(profile, true)">Suspend account</button>} @else {<div class="suspension-reason"><span>Reason</span><strong>{{ profile.suspensionReason }}</strong></div><button class="restore-action" type="button" (click)="updateSuspension(profile, false)">Restore account access</button>}</div></div>}
+              <div class="profile-actions"><span>Changes are saved to the marketplace account.</span><button class="primary" type="submit" [disabled]="profilePageForm.invalid || submitting()">{{ submitting() ? 'Saving…' : 'Save profile' }}</button></div>
+            </form>
+
+            @if (view() === 'profile') {
+              <div class="profile-overview"><div><span>{{ profile.role === 'BUYER' ? 'Saved parts' : 'Listings' }}</span><strong>{{ profile.role === 'BUYER' ? favorites().length : listings().length }}</strong></div><div><span>Account type</span><strong>{{ profile.role | titlecase }}</strong></div><div><span>Location</span><strong>{{ profile.location || 'Add location' }}</strong></div></div>
+            }
+          </div>
+        </div>
+      </section>
+    }
+  }
+
+  @if (view() === 'seller-profile') {
+    <section class="seller-public-page">
+      <div class="profile-breadcrumb"><button (click)="setView('market')">← Back to marketplace</button><span>Seller profile</span></div>
+      @if (loading()) {
+        <div class="seller-profile-loading"><div class="skeleton"></div><div class="skeleton"></div></div>
+      } @else if (publicSeller(); as seller) {
+        <div class="seller-public-hero">
+          <div class="profile-avatar">{{ sellerInitials() }}</div>
+          <div><span class="eyebrow">Verified marketplace seller</span><h1>{{ seller.businessName || seller.fullName }}</h1><p class="seller-person">{{ seller.fullName }} · {{ seller.location || 'Tunisia' }}</p><p>{{ seller.bio || 'Automotive parts seller on E-biessa.' }}</p></div>
+          <div class="seller-public-facts"><div><strong>{{ seller.activeListingCount }}</strong><span>Active listings</span></div><div><strong>{{ seller.reviewCount ? (seller.averageRating | number:'1.1-1') + ' ★' : 'New' }}</strong><span>{{ seller.reviewCount }} {{ seller.reviewCount === 1 ? 'review' : 'reviews' }}</span></div><div><strong>{{ seller.memberSince ? (seller.memberSince | date:'y') : 'New' }}</strong><span>Member since</span></div>@if (seller.website) {<a [href]="websiteUrl(seller.website)" target="_blank" rel="noopener noreferrer">Visit website ↗</a>}<button class="seller-report-trigger" type="button" (click)="openSellerReport(seller)">⚑ Report this seller</button></div>
+        </div>
+        @if (sellerReviews(); as reputation) {
+          <section class="seller-reputation" aria-labelledby="seller-reputation-title">
+            <div class="reputation-heading">
+              <div><span class="eyebrow">Buyer feedback</span><h2 id="seller-reputation-title">Seller reputation</h2><p>Reviews come from buyers who have contacted this seller through E-biessa.</p></div>
+              <div class="reputation-score"><strong>{{ reputation.reviewCount ? (reputation.averageRating | number:'1.1-1') : '—' }}</strong><span class="review-stars" [attr.aria-label]="reputation.averageRating + ' out of 5 stars'">{{ reviewStars(reputation.averageRating) }}</span><small>{{ reputation.reviewCount }} {{ reputation.reviewCount === 1 ? 'review' : 'reviews' }}</small></div>
+            </div>
+            @if (user()?.role === 'BUYER' && reputation.eligible) {
+              <form class="seller-review-form" (ngSubmit)="submitSellerReview(seller)">
+                <div><span class="review-form-title">{{ reputation.myReview ? 'Update your review' : 'Rate this seller' }}</span><small>Your comment is optional.</small></div>
+                <div class="star-picker" role="radiogroup" aria-label="Seller rating">@for (star of [1, 2, 3, 4, 5]; track star) {<button type="button" [class.active]="reviewDraft.rating >= star" (click)="setReviewRating(star)" [attr.aria-checked]="reviewDraft.rating === star" role="radio" [attr.aria-label]="star + (star === 1 ? ' star' : ' stars')">★</button>}</div>
+                <label>Feedback (optional)<textarea name="sellerReviewComment" [(ngModel)]="reviewDraft.comment" maxlength="1000" rows="3" placeholder="Share what went well with this seller..."></textarea><small>{{ reviewDraft.comment.length }}/1000 characters</small></label>
+                <button class="primary" type="submit" [disabled]="reviewDraft.rating < 1 || reviewSubmitting()">{{ reviewSubmitting() ? 'Saving…' : (reputation.myReview ? 'Update review' : 'Publish review') }}</button>
+              </form>
+            } @else if (user()?.role === 'BUYER') {
+              <p class="review-eligibility-note">Contact this seller from one of their listings before leaving a review.</p>
+            } @else if (!user()) {
+              <p class="review-eligibility-note">Sign in as a buyer and contact the seller to leave a verified review.</p>
+            }
+            <div class="seller-review-list">
+              @for (review of reputation.reviews; track review.id) {
+                <article class="seller-review-card"><header><div class="reviewer-avatar">{{ review.buyerName.slice(0, 1).toUpperCase() }}</div><div><strong>{{ review.buyerName }}</strong><span>{{ review.updatedAt | date:'mediumDate' }}</span></div><span class="review-stars" [attr.aria-label]="review.rating + ' out of 5 stars'">{{ reviewStars(review.rating) }}</span></header>@if (review.comment) {<p>{{ review.comment }}</p>}</article>
+              } @empty {
+                <div class="review-empty"><strong>No reviews yet</strong><span>This seller's reputation will appear here after their first buyer review.</span></div>
+              }
+            </div>
+          </section>
+        }
+        <div class="seller-listings-head"><div><span class="eyebrow">Available now</span><h2>Parts from this seller</h2></div><p>Open a listing to reveal buyer-only contact options.</p></div>
+        @if (publicSellerListings().length) {
+          <div class="parts-grid seller-parts-grid">@for (part of publicSellerListings(); track part.id) {<article class="part-card" (click)="openPart(part)"><div class="image-wrap"><img [src]="imageUrl(part)" [alt]="part.title"><span class="condition">{{ part.condition || 'Used' }}</span></div><div class="part-body"><div class="meta">{{ part.categoryName }} · {{ part.location }}</div><h3>{{ part.title }}</h3><p class="fit">{{ part.brand }} {{ part.model }} {{ part.year }}</p><div class="part-foot"><strong>{{ money(part.price) }}</strong><span>View details →</span></div></div></article>}</div>
+        } @else {<div class="empty"><span>⌕</span><h3>No active listings</h3><p>This seller has no parts available right now.</p></div>}
+      }
+    </section>
+  }
+
+  @if (view() === 'listing-detail') {
+    <section class="listing-page">
+      <div class="listing-breadcrumb"><button (click)="closeListing()">← Back to marketplace</button>@if (selected(); as part) {<button class="share-listing" (click)="shareListing(part)">Share listing ↗</button>}</div>
+      @if (listingLoading() && !selected()) {
+        <div class="listing-loading"><div class="skeleton"></div><div class="skeleton"></div></div>
+      } @else if (selected(); as part) {
+        <div class="listing-layout">
+          <section class="listing-gallery" aria-label="Listing photos">
+            <div class="listing-main-image"><img [src]="selectedImageUrl() || imageUrl(part)" [alt]="part.title"><span class="condition">{{ part.condition || 'Used' }}</span></div>
+            @if (partGallery(part).length > 1) {
+              <div class="listing-thumbnails">@for (url of partGallery(part); track url) {<button [class.active]="selectedImageUrl() === url" (click)="selectListingImage(url)"><img [src]="url" [alt]="part.title + ' photo ' + ($index + 1)"></button>}</div>
+            }
+          </section>
+
+          <article class="listing-information">
+            <div class="listing-kicker"><span>{{ part.categoryName || 'Automotive part' }}</span><span>Listed {{ part.createdAt | date:'mediumDate' }}</span></div>
+            <h1>{{ part.title }}</h1>
+            <strong class="listing-price">{{ money(part.price) }} @if (part.negotiable) {<small>Negotiable</small>}</strong>
+            <div class="listing-chips"><span>{{ part.condition || 'Used' }}</span>@if (part.brand) {<span>{{ part.brand }} {{ part.model }} {{ part.year }}</span>}<span>{{ part.location || 'Tunisia' }}</span></div>
+            <section class="listing-description"><h2>About this part</h2><p>{{ part.description || 'Contact the seller for more information about condition, fitment, and delivery.' }}</p></section>
+            <section class="compatibility-section"><div class="compatibility-heading"><div><span class="eyebrow">Fitment guide</span><h2>Vehicle compatibility</h2></div><span>{{ part.compatibleVehicles?.length || 0 }} vehicles</span></div>@if (part.compatibleVehicles?.length) {<div class="compatibility-list">@for (vehicle of part.compatibleVehicles; track vehicle.id) {<article><strong>{{ vehicle.brand }} {{ vehicle.model }}</strong><span>{{ vehicle.year }} · {{ vehicle.engine || 'Engine not specified' }} · {{ vehicle.fuelType || 'Fuel not specified' }}</span></article>}</div>} @else {<p>Universal fit or compatibility has not been specified. Confirm fitment with the seller before buying.</p>}<small>Always compare your vehicle details and OEM numbers before purchase.</small></section>
+            <dl class="listing-specs rich-specs"><div><dt>Manufacturer</dt><dd>{{ part.manufacturer || 'Not specified' }}</dd></div><div><dt>Part brand</dt><dd>{{ part.partBrand || 'Not specified' }}</dd></div><div><dt>Position</dt><dd>{{ positionLabel(part.partPosition) }}</dd></div><div><dt>Primary OEM number</dt><dd>{{ part.oemNumber || 'Not specified' }}</dd></div><div><dt>Alternative OEM numbers</dt><dd>{{ part.alternativeOemNumbers?.join(', ') || 'None listed' }}</dd></div><div><dt>Engine compatibility</dt><dd>{{ part.engineCompatibility || 'See vehicles above' }}</dd></div><div><dt>Fuel compatibility</dt><dd>{{ part.fuelCompatibility || 'See vehicles above' }}</dd></div><div><dt>Warranty</dt><dd>{{ part.warrantyInformation || 'Not specified' }}</dd></div><div><dt>Delivery / collection</dt><dd>{{ deliverySummary(part) }}</dd></div><div><dt>Condition</dt><dd>{{ part.condition || 'Not specified' }}</dd></div><div><dt>Location</dt><dd>{{ part.location || 'Tunisia' }}</dd></div><div><dt>Listing views</dt><dd>{{ part.views }}</dd></div><div><dt>Reference</dt><dd>#{{ part.id }}</dd></div></dl>
+            <button class="listing-seller-card" (click)="openSellerProfile(part)"><span class="listing-seller-avatar">{{ part.sellerName.slice(0, 1).toUpperCase() }}</span><span><small>Sold by</small><strong>{{ part.sellerName }}</strong><small>View public seller profile</small></span><b>→</b></button>
+          </article>
+
+          <aside class="listing-contact-panel">
+            <div class="contact-heading"><div><span class="eyebrow">Direct contact</span><h3>Contact seller</h3></div><span class="privacy-badge">Buyer-only</span></div>
+            @if (!user()) {<p>Log in with a buyer account to reveal the seller’s phone and email.</p><button class="dark full" (click)="openAuth(false)">Log in to contact</button>}
+            @else if (user()?.role !== 'BUYER') {<p>Contact details are protected and available only when signed in with a buyer account.</p>}
+            @else if (sellerContact()?.sellerId === part.sellerId) {
+              @if (sellerContact(); as contact) {
+                <div class="contact-details">@if (contact.phone) {<div><span>Phone</span><strong>{{ contact.phone }}</strong></div>}@if (contact.email) {<div><span>Email</span><strong>{{ contact.email }}</strong></div>}</div>
+                <div class="contact-actions">@if (contact.phone) {<a class="contact-call" [href]="phoneUrl(contact.phone)">Call seller</a><a class="contact-whatsapp" [href]="whatsappUrl(contact.phone, part)" target="_blank" rel="noopener noreferrer">WhatsApp</a>}@if (contact.email) {<a class="contact-email" [href]="emailUrl(contact.email, part)">Email</a>}</div>
+              }
+            } @else {<p>Your message will include the listing title so the seller knows which part you mean.</p><button class="primary full" [disabled]="contactLoading()" (click)="revealSellerContact(part)">{{ contactLoading() ? 'Loading contact…' : 'Show contact options' }}</button>}
+            <button class="save-secondary full listing-save" (click)="toggleFavorite(part)">{{ favoriteIds().has(part.id) || part.favorited ? '♥ Remove from saved' : '♡ Save this part' }}</button>
+            @if (user()?.role === 'BUYER') {<form class="listing-message" (ngSubmit)="startConversation(part)"><label>Message seller<textarea name="listingMessage" [(ngModel)]="listingMessageDraft" maxlength="2000" rows="3" placeholder="Hello, is this part still available?" required></textarea></label><button class="dark full" type="submit" [disabled]="!listingMessageDraft.trim() || submitting()">{{ submitting() ? 'Sending…' : 'Send private message' }}</button></form>}
+            <button class="report-listing full" (click)="openReport(part)">⚑ Report this listing</button>
+            <small class="contact-safety">Never send deposits before inspecting the part and confirming the seller’s identity.</small>
+          </aside>
+        </div>
+      }
+    </section>
+  }
+</main>
+
+@if (message()) {<div class="toast">{{ message() }}</div>}
+
+@if (reportOpen() && reportingPart(); as part) {
+  <div class="modal-backdrop"><form #reportForm="ngForm" class="modal report-modal" (ngSubmit)="submitReport()"><button type="button" class="close" (click)="reportOpen.set(false); reportingPart.set(null)">×</button><span class="eyebrow">Trust & safety</span><h2>Report this listing</h2><p>Tell our administrators what is wrong with “{{ part.title }}”. The seller will not see who submitted the report.</p><label>Reason<select name="reportReason" [(ngModel)]="reportDraft.reason" required><option value="WRONG_INFORMATION">Incorrect information</option><option value="SCAM">Suspected scam</option><option value="PROHIBITED_ITEM">Prohibited item</option><option value="DUPLICATE">Duplicate listing</option><option value="ALREADY_SOLD">Already sold</option><option value="OTHER">Other</option></select></label><label>Additional details<textarea name="reportDetails" [(ngModel)]="reportDraft.details" maxlength="1000" rows="5" placeholder="Describe what you noticed..."></textarea><small class="field-hint">{{ reportDraft.details.length }}/1000 characters</small></label><button class="primary full" type="submit" [disabled]="reportForm.invalid || submitting()">{{ submitting() ? 'Submitting…' : 'Submit report' }}</button></form></div>
+}
+
+@if (sellerReportOpen() && reportingSeller(); as seller) {
+  <div class="modal-backdrop"><form #sellerReportForm="ngForm" class="modal report-modal seller-report-modal" (ngSubmit)="submitSellerReport()"><button type="button" class="close" (click)="sellerReportOpen.set(false); reportingSeller.set(null)">×</button><span class="eyebrow">Trust & safety</span><h2>Report {{ seller.businessName || seller.fullName }}</h2><p>Reports are private. Administrators will review the seller's activity and may suspend the account when a violation is confirmed.</p><label>What happened?<select name="sellerReportReason" [(ngModel)]="sellerReportDraft.reason" required><option value="FRAUD_OR_SCAM">Fraud or payment scam</option><option value="HARASSMENT">Harassment or threats</option><option value="MISLEADING_PROFILE">Misleading identity or profile</option><option value="OFF_PLATFORM_ABUSE">Abuse outside E-biessa</option><option value="PROHIBITED_ACTIVITY">Prohibited activity</option><option value="OTHER">Other</option></select></label><label>Describe the incident<textarea #sellerReportDetails="ngModel" name="sellerReportDetails" [(ngModel)]="sellerReportDraft.details" required minlength="10" maxlength="1000" rows="6" placeholder="Include what happened, when it happened, and any useful context..."></textarea><small class="field-hint">{{ sellerReportDraft.details.length }}/1000 characters · minimum 10</small>@if (sellerReportDetails.invalid && sellerReportDetails.touched) {<small class="field-error">Provide at least 10 characters so administrators can investigate.</small>}</label><div class="report-privacy-note"><strong>Before submitting</strong><span>Do not include passwords, payment card numbers, or other highly sensitive information.</span></div><button class="primary full" type="submit" [disabled]="sellerReportForm.invalid || submitting()">{{ submitting() ? 'Submitting…' : 'Submit seller report' }}</button></form></div>
+}
+
+@if (authOpen()) {
+  <div class="modal-backdrop">
+    @if (authStep() === 'credentials') {
+      <form #authForm="ngForm" class="modal auth-modal" (ngSubmit)="submitAuth()"><button type="button" class="close" (click)="authOpen.set(false)">×</button><app-brand-logo variant="auth" /><span class="eyebrow">{{ registerMode() ? 'Join the marketplace' : 'Welcome back' }}</span><h2>{{ registerMode() ? 'Create your E-biessa account' : 'Log in to E-biessa' }}</h2><p class="auth-intro">{{ registerMode() ? 'Create an account with a provider or your email.' : 'Choose how you want to continue.' }}</p>
+        <div class="social-auth"><button type="button" [disabled]="!oauthProviders().google" (click)="startOAuth('google')"><b class="google-mark">G</b><span>Continue with Google</span></button><button type="button" [disabled]="!oauthProviders().facebook" (click)="startOAuth('facebook')"><b class="facebook-mark">f</b><span>Continue with Facebook</span></button><button type="button" [disabled]="!oauthProviders().microsoft" (click)="startOAuth('microsoft')"><b class="microsoft-mark">M</b><span>Continue with Microsoft</span></button></div>
+        @if (!oauthProviders().google && !oauthProviders().facebook && !oauthProviders().microsoft) {<small class="provider-note">Social providers appear here and become available after their credentials are configured.</small>}
+        <div class="auth-divider"><span>or continue with email</span></div>
+        @if (registerMode()) {<label>Full name<input #fullName="ngModel" name="fullName" [(ngModel)]="credentials.fullName" required maxlength="100" placeholder="Your full name">@if (fullName.invalid && fullName.touched) {<small class="field-error">Enter your full name.</small>}</label><label>Phone<input name="phone" [(ngModel)]="credentials.phone" maxlength="20" placeholder="+216"></label>}
+        <label>Email<input #email="ngModel" name="email" type="email" [(ngModel)]="credentials.email" required email autocomplete="email" placeholder="you@example.com">@if (email.invalid && email.touched) {<small class="field-error">Enter a valid email address.</small>}</label><label>Password<input #password="ngModel" name="password" type="password" [(ngModel)]="credentials.password" [minlength]="registerMode() ? 8 : 6" required [autocomplete]="registerMode() ? 'new-password' : 'current-password'" [placeholder]="registerMode() ? 'At least 8 characters' : 'Your password'">@if (password.invalid && password.touched) {<small class="field-error">Password must contain at least {{ registerMode() ? 8 : 6 }} characters.</small>}</label>
+        @if (!registerMode()) {<button type="button" class="forgot-link" (click)="authStep.set('recovery-request'); recovery.identifier = credentials.email">Forgot password?</button>}
+        <button class="primary full" type="submit" [disabled]="authForm.invalid || submitting()">{{ submitting() ? 'Please wait…' : registerMode() ? 'Create account' : 'Log in' }}</button><button type="button" class="switch" (click)="registerMode.set(!registerMode())">{{ registerMode() ? 'Already have an account? Log in' : 'New to E-biessa? Create an account' }}</button>
+      </form>
+    } @else if (authStep() === 'recovery-request') {
+      <form #recoveryRequestForm="ngForm" class="modal auth-modal recovery-modal" (ngSubmit)="requestRecovery()"><button type="button" class="close" (click)="authOpen.set(false)">×</button><app-brand-logo variant="auth" /><span class="eyebrow">Account recovery</span><h2>Find your account</h2><p class="auth-intro">Enter the email address or phone number registered on your E-biessa account.</p><label>Email or phone<input name="recoveryIdentifier" [(ngModel)]="recovery.identifier" required autocomplete="username" placeholder="you@example.com or +216…"></label><button class="primary full" type="submit" [disabled]="recoveryRequestForm.invalid || submitting()">{{ submitting() ? 'Sending…' : 'Send recovery code' }}</button><button type="button" class="switch" (click)="authStep.set('credentials')">← Back to login</button></form>
+    } @else {
+      <form #recoveryCompleteForm="ngForm" class="modal auth-modal recovery-modal" (ngSubmit)="completeRecovery()"><button type="button" class="close" (click)="authOpen.set(false)">×</button><app-brand-logo variant="auth" /><span class="eyebrow">Check your messages</span><h2>Set a new password</h2><p class="auth-intro">Enter the six-digit code sent to {{ recovery.identifier }}. It expires after 10 minutes.</p>@if (recoveryDevelopmentCode()) {<div class="development-code"><span>Development code</span><strong>{{ recoveryDevelopmentCode() }}</strong></div>}<label>Recovery code<input name="recoveryCode" [(ngModel)]="recovery.code" required pattern="[0-9]{6}" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000"></label><label>New password<input name="newPassword" type="password" [(ngModel)]="recovery.newPassword" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></label><button class="primary full" type="submit" [disabled]="recoveryCompleteForm.invalid || submitting()">{{ submitting() ? 'Updating…' : 'Update password' }}</button><button type="button" class="switch" (click)="authStep.set('recovery-request')">Use another email or phone</button></form>
+    }
+  </div>
+}
+
+@if (editorOpen()) {
+  <div class="modal-backdrop"><form #listingForm="ngForm" class="modal editor-modal" (ngSubmit)="saveListing()"><button type="button" class="close" (click)="editorOpen.set(false); listingPreview.set(false)">×</button><span class="eyebrow">Seller studio</span><h2>{{ listingPreview() ? 'Preview your listing' : editingId() ? 'Edit listing' : 'Create a listing' }}</h2>
+    @if (!listingPreview()) {
+      <div class="form-grid"><label class="wide">Title<input #listingTitle="ngModel" name="title" [(ngModel)]="draft.title" required maxlength="255" placeholder="e.g. Golf 7 LED headlight">@if (listingTitle.invalid && listingTitle.touched) {<small class="field-error">A title is required.</small>}</label><label>Price (TND)<input #listingPrice="ngModel" name="price" type="number" min="1" [(ngModel)]="draft.price" required>@if (listingPrice.invalid && listingPrice.touched) {<small class="field-error">Enter a price greater than zero.</small>}</label><label>Condition<select name="condition" [(ngModel)]="draft.condition"><option>New</option><option>Like new</option><option>Used - good</option><option>Used - fair</option></select></label><label>Category<select name="category" [(ngModel)]="draft.categoryId"><option [ngValue]="null">Select category</option>@for (category of categories(); track category.id) {<option [ngValue]="category.id">{{ category.name }}</option>}</select></label>
+      <fieldset class="wide vehicle-picker"><legend>Compatible vehicles</legend><small>Select every vehicle this exact part fits.</small><div>@for (vehicle of vehicles(); track vehicle.id) {<label><input type="checkbox" [checked]="isVehicleSelected(vehicle.id)" (change)="toggleVehicleCompatibility(vehicle.id, $any($event.target).checked)"><span><strong>{{ vehicle.brand }} {{ vehicle.model }} {{ vehicle.year }}</strong><small>{{ vehicle.engine || 'Engine unknown' }} · {{ vehicle.fuelType || 'Fuel unknown' }}</small></span></label>}</div></fieldset>
+      <label>Manufacturer<input name="manufacturer" [(ngModel)]="draft.manufacturer" maxlength="120" placeholder="e.g. Bosch"></label><label>Part brand<input name="partBrand" [(ngModel)]="draft.partBrand" maxlength="120" placeholder="e.g. Bosch Original"></label><label>Primary OEM number<input name="oem" [(ngModel)]="draft.oemNumber" maxlength="100" placeholder="Optional"></label><label>Position<select name="position" [(ngModel)]="draft.partPosition"><option value="">Not specified</option><option value="FRONT">Front</option><option value="REAR">Rear</option><option value="LEFT">Left</option><option value="RIGHT">Right</option><option value="FRONT_LEFT">Front left</option><option value="FRONT_RIGHT">Front right</option><option value="REAR_LEFT">Rear left</option><option value="REAR_RIGHT">Rear right</option><option value="UNIVERSAL">Universal</option></select></label><label class="wide">Alternative OEM numbers<textarea name="alternativeOems" [(ngModel)]="alternativeOemText" rows="2" maxlength="2000" placeholder="One per line or separated by commas"></textarea></label><label>Engine compatibility<input name="engineCompatibility" [(ngModel)]="draft.engineCompatibility" maxlength="255" placeholder="e.g. 1.6 TDI"></label><label>Fuel compatibility<input name="fuelCompatibility" [(ngModel)]="draft.fuelCompatibility" maxlength="100" placeholder="e.g. Diesel"></label><label class="wide">Warranty information<input name="warranty" [(ngModel)]="draft.warrantyInformation" maxlength="500" placeholder="e.g. 90-day seller warranty"></label><label>Location<input name="location" [(ngModel)]="draft.location" maxlength="255" placeholder="Tunis"></label><div class="listing-options"><label><input type="checkbox" name="delivery" [(ngModel)]="draft.deliveryAvailable"> Delivery available</label><label><input type="checkbox" name="collection" [(ngModel)]="draft.collectionAvailable"> Collection available</label><label><input type="checkbox" name="negotiable" [(ngModel)]="draft.negotiable"> Price negotiable</label></div><label class="wide">Description<textarea name="description" [(ngModel)]="draft.description" maxlength="5000" rows="4" placeholder="Condition, fitment notes, and included accessories..."></textarea></label>
+      @if (editingPart()?.images?.length) {<div class="wide"><span class="form-label">Current photos</span><small class="drag-hint">Drag photos to reorder them. The first photo becomes the listing cover.</small><div class="photo-grid">@for (image of editingPart()!.images; track image.id) {<div class="photo-item draggable-photo" draggable="true" [class.primary-photo]="image.primary" [class.dragging]="draggedImageId() === image.id" (dragstart)="startImageDrag(image)" (dragend)="draggedImageId.set(null)" (dragover)="$event.preventDefault()" (drop)="dropImage(image, $event)"><span class="drag-handle">⠿</span><img [src]="assetUrl(image.url)" alt="Listing photo"><div><button type="button" [disabled]="image.primary" (click)="makePrimary(image)">{{ image.primary ? 'Cover photo' : 'Make cover' }}</button><button type="button" class="danger" (click)="deleteListingImage(image)">Delete</button></div></div>}</div></div>}
+      <label class="wide upload">Add photos<input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple (change)="selectImages($event)"><span>JPEG, PNG, or WebP · automatically compressed · 5 MB each · maximum 6 photos</span></label>@if (filePreviews().length) {<div class="wide"><span class="form-label">Compressed and ready to upload</span><div class="photo-grid previews">@for (preview of filePreviews(); track preview.name) {<div class="photo-item"><img [src]="preview.url" [alt]="preview.name"><small>{{ preview.name }}</small></div>}</div></div>}</div><button class="dark full" type="button" [disabled]="listingForm.invalid" (click)="listingPreview.set(true)">Preview before publishing →</button>
+    } @else {
+      <article class="seller-listing-preview"><div class="preview-image">@if (filePreviews().length) {<img [src]="filePreviews()[0].url" [alt]="draft.title">} @else if (editingPart()) {<img [src]="imageUrl(editingPart()!)" [alt]="draft.title">} @else {<span>Photo preview</span>}</div><span class="condition">{{ draft.condition }}</span><h3>{{ draft.title }}</h3><strong>{{ money(draft.price) }} @if (draft.negotiable) {<small>Negotiable</small>}</strong><p>{{ draft.description || 'No description provided.' }}</p><section><h4>Compatibility</h4>@if (selectedDraftVehicles().length) {<div class="preview-vehicles">@for (vehicle of selectedDraftVehicles(); track vehicle.id) {<span>{{ vehicle.brand }} {{ vehicle.model }} {{ vehicle.year }} · {{ vehicle.engine || 'Engine unknown' }} · {{ vehicle.fuelType || 'Fuel unknown' }}</span>}</div>} @else {<p>Universal or not specified</p>}</section><dl><div><dt>Manufacturer / brand</dt><dd>{{ draft.manufacturer || '—' }} / {{ draft.partBrand || '—' }}</dd></div><div><dt>OEM references</dt><dd>{{ draft.oemNumber || '—' }} @if (parseAlternativeOems().length) { · {{ parseAlternativeOems().join(', ') }} }</dd></div><div><dt>Position</dt><dd>{{ positionLabel(draft.partPosition) }}</dd></div><div><dt>Warranty</dt><dd>{{ draft.warrantyInformation || 'Not specified' }}</dd></div><div><dt>Fulfilment</dt><dd>{{ deliverySummary(draft) }}</dd></div></dl></article><div class="preview-actions"><button class="ghost" type="button" (click)="listingPreview.set(false)">← Continue editing</button><button class="primary" type="submit" [disabled]="submitting()">{{ submitting() ? 'Saving…' : editingId() ? 'Save changes' : 'Publish listing' }}</button></div>
+    }
+    </form></div>
+}
+
+@if (view() !== 'admin') {<footer><div class="brand"><app-brand-logo variant="footer" /></div><p>Built for Tunisia's automotive community.</p><span>© 2026 E-biessa</span></footer>}
+</div>

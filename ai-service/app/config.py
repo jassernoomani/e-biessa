@@ -1,0 +1,29 @@
+from functools import lru_cache
+from pathlib import Path
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    ai_service_token: str = Field(min_length=24)
+    ai_host: str = "127.0.0.1"
+    ai_port: int = 8001
+    qdrant_path: Path = Path("./data/qdrant")
+    qdrant_url: str | None = None
+    qdrant_api_key: str | None = None
+    qdrant_collection: str = "e_biessa_parts"
+    embedding_model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    embedding_cache_dir: Path = Path("./data/models")
+    ollama_enabled: bool = False
+    ollama_url: str = "http://127.0.0.1:11434"
+    ollama_model: str = "e-biessa-query-v2"
+    ollama_timeout_seconds: float = Field(default=90.0, gt=0, le=120)
+    ollama_keep_alive: str = "30m"
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()  # type: ignore[call-arg]

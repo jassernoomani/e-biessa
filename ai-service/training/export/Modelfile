@@ -1,0 +1,20 @@
+FROM e-biessa-qwen:latest
+ADAPTER ./e-biessa-qwen25-7b-v2-lora.gguf
+
+TEMPLATE """{{- if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{- end }}{{- range .Messages }}<|im_start|>{{ .Role }}
+{{ .Content }}<|im_end|>
+{{- end }}<|im_start|>assistant
+"""
+
+SYSTEM """Extract automotive search constraints from the buyer request.
+Return only JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.
+Use null when a value is not stated or cannot be inferred safely.
+Copy a stated year as a complete four-digit integer.
+Normalize fuelType to Diesel or Petrol.
+Use canonical marketplace category and part-type names."""
+
+PARAMETER temperature 0
+PARAMETER num_ctx 4096
+PARAMETER stop <|im_end|>

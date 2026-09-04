@@ -1,0 +1,802 @@
+[
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2017 Ford Fiesta rear tail light for the Petrol version?",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la bloc pompe ABS mta3 Mercedes-Benz E-Class diesel 2019.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":2019,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front brake disc pair for a Petrol Mercedes-Benz C-Class; the year is not specified.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مُبرّد المحرك لسيارة Renault Megane ديزل، السنة غير محددة.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مُبرّد المحرك لسيارة Peugeot 308 ديزل سنة 2020.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a ABS pump module, compatible with my Hyundai Tucson Diesel from 2020.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un boîte de vitesses automatique pour Peugeot 308 version diesel, année 2017 ?",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2017,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma alternateur compatible m3a Ford Focus diesel modèle 2021 ?",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":2021,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج علبة تروس أوتوماتيكية متوافقا مع Volkswagen Golf موديل 2020 ديزل.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un kit embrayage pour une Ford Focus diesel, année non précisée.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un étrier de frein avant pour une Volkswagen Passat diesel, année non précisée.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un paire de disques de frein avant pour une Mercedes-Benz C-Class essence de 2015.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":2015,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la démarreur mta3 Skoda Octavia diesel 2018.",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2018,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un feu arrière, compatible avec ma Hyundai i20 2015 essence.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":2015,\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Mercedes-Benz E-Class 2016 diesel w n7eb radiateur.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a automatic gearbox for a 2023 Diesel Peugeot 308.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2023,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma radiateur compatible m3a Ford Fiesta essence modèle 2020 ?",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2020,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front brake disc pair for a 2020 Diesel Skoda Octavia.",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la alternateur mta3 Volkswagen Passat diesel 2019.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":2019,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a clutch kit, compatible with my Volkswagen Golf Diesel from 2016.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a automatic gearbox, compatible with my Peugeot 208 Petrol from 2017.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la kit embrayage mta3 Peugeot 208 essence, ma na3rech el année.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un rétroviseur gauche, compatible avec ma Citroën C3 2016 essence.",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":2016,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un rétroviseur gauche, compatible avec ma Renault Clio 2021 essence.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a front brake disc pair, compatible with my Skoda Octavia Diesel from 2021.",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2021,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma étrier frein avant compatible m3a Toyota Yaris essence modèle 2019 ?",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":2019,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a left door mirror for a 2017 Petrol Ford Fiesta.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a rear tail light for a Petrol Hyundai i20; the year is not specified.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a automatic gearbox for a 2020 Diesel Renault Megane.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مصباح أمامي LED لسيارة Kia Sportage ديزل سنة 2014.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مصباح أمامي LED متوافقا مع Kia Rio موديل 2019 بنزين.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2019,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a automatic gearbox for a Petrol Toyota Yaris; the year is not specified.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un bloc pompe ABS pour Ford Fiesta version essence, année 2021 ?",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a front shock absorber, compatible with my Renault Clio Petrol from 2020.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2020,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن ممتص صدمات أمامي لسيارة Mercedes-Benz E-Class ديزل سنة 2014.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un boîte de vitesses automatique pour une Toyota Corolla essence, année non précisée.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la phare avant LED mta3 Citroën C3 essence, ma na3rech el année.",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un rétroviseur gauche pour une Citroën C4 diesel de 2022.",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma bloc pompe ABS compatible m3a Kia Rio essence modèle 2023 ?",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2023,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد مولد كهربائي لسيارة Ford Fiesta بنزين لعام 2020؟",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2020,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج ممتص صدمات أمامي متوافقا مع Citroën C4 موديل 2020 ديزل.",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مِلقط فرامل أمامي لسيارة Seat Leon ديزل سنة 2017.",
+    "output": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":2017,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد مُبرّد المحرك لسيارة Citroën C3 بنزين لعام 2018؟",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":2018,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la étrier frein avant mta3 Toyota Yaris essence, ma na3rech el année.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مصباح أمامي LED لسيارة Renault Megane ديزل سنة 2015.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":2015,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un phare avant LED pour une Toyota Yaris essence, année non précisée.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد مرآة باب يسار لسيارة Peugeot 208 بنزين لعام 2020؟",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":2020,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a clutch kit, compatible with my Kia Rio Petrol from 2018.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2018,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مِلقط فرامل أمامي متوافقا مع Renault Clio موديل 2016 بنزين.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2016,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2019 Skoda Octavia front shock absorber for the Diesel version?",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2019,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد ممتص صدمات أمامي لسيارة Citroën C4 ديزل لعام 2021؟",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2021,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Toyota Yaris 2019 essence w n7eb kit embrayage.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":2019,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un radiateur pour Peugeot 208 version essence, année 2020 ?",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":2020,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un alternateur pour une Hyundai Tucson diesel de 2015.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2015,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Mercedes-Benz E-Class 2021 diesel w n7eb étrier frein avant.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":2021,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un alternateur, compatible avec ma Kia Sportage 2019 diesel.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2019,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Toyota Corolla 2019 essence w n7eb démarreur.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2019,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a LED front headlight for a 2017 Petrol Hyundai i20.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن ممتص صدمات أمامي لسيارة Volkswagen Golf ديزل سنة 2014.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Kia Rio 2018 essence w n7eb radiateur.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2018,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un étrier de frein avant pour Toyota Yaris version essence, année 2016 ?",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":2016,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد ممتص صدمات أمامي لسيارة Mercedes-Benz E-Class ديزل لعام 2016؟",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2014 Skoda Octavia starter motor for the Diesel version?",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2016 Renault Clio starter motor for the Petrol version?",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2016,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un bloc pompe ABS, compatible avec ma Seat Leon 2022 diesel.",
+    "output": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد مصباح خلفي لسيارة Renault Megane ديزل لعام 2022؟",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a front brake caliper, compatible with my Ford Focus Diesel from 2022.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2023 Citroën C3 rear tail light for the Petrol version?",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":2023,\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مولد كهربائي متوافقا مع Hyundai Tucson موديل 2022 ديزل.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un phare avant LED pour Toyota Corolla version essence, année 2024 ?",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2024,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la amortisseur avant mta3 Seat Leon diesel, ma na3rech el année.",
+    "output": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مُبرّد المحرك متوافقا مع Peugeot 208 موديل 2014 بنزين.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":2014,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un boîte de vitesses automatique pour une Kia Rio essence, année non précisée.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a starter motor, compatible with my Toyota Corolla Petrol from 2024.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2024,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un paire de disques de frein avant pour une Peugeot 208 essence de 2017.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد زوج أقراص فرامل أمامية لسيارة Hyundai Tucson ديزل لعام 2014؟",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la boîte auto mta3 Kia Sportage diesel 2014.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un feu arrière pour une Hyundai Tucson diesel de 2021.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2021,\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la démarreur mta3 Hyundai Tucson diesel, ma na3rech el année.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un étrier de frein avant pour une Ford Fiesta essence, année non précisée.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن علبة تروس أوتوماتيكية لسيارة Ford Fiesta بنزين، السنة غير محددة.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن علبة تروس أوتوماتيكية لسيارة Mercedes-Benz C-Class بنزين، السنة غير محددة.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a ABS pump module, compatible with my Kia Sportage Diesel from 2023.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2023,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un alternateur pour une Ford Fiesta essence, année non précisée.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front brake disc pair for a Petrol Peugeot 208; the year is not specified.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج بادئ تشغيل متوافقا مع Mercedes-Benz C-Class موديل 2014 بنزين.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":2014,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2021 Peugeot 208 ABS pump module for the Petrol version?",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a radiator for a 2022 Diesel Peugeot 308.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Citroën C4 2016 diesel w n7eb kit embrayage.",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma alternateur compatible m3a Hyundai Tucson diesel modèle 2020 ?",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un phare avant LED pour une Kia Rio essence, année non précisée.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un rétroviseur gauche pour une Peugeot 208 essence, année non précisée.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مصباح أمامي LED متوافقا مع Toyota Corolla موديل 2018 بنزين.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2018,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un alternateur, compatible avec ma Ford Fiesta 2024 essence.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2024,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مصباح خلفي متوافقا مع Kia Rio موديل 2024 بنزين.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2024,\"fuelType\":\"Petrol\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un étrier de frein avant pour une Mercedes-Benz E-Class diesel, année non précisée.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front brake disc pair for a Diesel Kia Sportage; the year is not specified.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la boîte auto mta3 Ford Fiesta essence 2019.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2019,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مولد كهربائي لسيارة Seat Leon ديزل سنة 2020.",
+    "output": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la feu arrière mta3 Volkswagen Passat diesel, ma na3rech el année.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a starter motor, compatible with my Hyundai Tucson Diesel from 2018.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2018,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un alternateur pour une Toyota Corolla essence de 2021.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج طقم قابض متوافقا مع Hyundai Tucson موديل 2020 ديزل.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد مِلقط فرامل أمامي لسيارة Renault Clio بنزين لعام 2017؟",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2016 Toyota Yaris alternator for the Petrol version?",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":2016,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la deux disques frein avant mta3 Ford Focus diesel, ma na3rech el année.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Ford Fiesta 2021 essence w n7eb démarreur.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن وحدة مضخة ABS لسيارة Kia Rio بنزين سنة 2024.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2024,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد بادئ تشغيل لسيارة Citroën C4 ديزل لعام 2016؟",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la phare avant LED mta3 Toyota Corolla essence, ma na3rech el année.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Electrical Parts\",\"partType\":\"LED front headlight\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a front brake caliper, compatible with my Hyundai i20 Petrol from 2014.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":2014,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a rear tail light, compatible with my Volkswagen Golf Diesel from 2024.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":2024,\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un paire de disques de frein avant pour Citroën C4 version diesel, année 2018 ?",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2018,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن بادئ تشغيل لسيارة Kia Rio بنزين سنة 2022.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2022,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un feu arrière, compatible avec ma Peugeot 308 2018 diesel.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2018,\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un kit embrayage, compatible avec ma Kia Rio 2021 essence.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un kit embrayage, compatible avec ma Hyundai Tucson 2014 diesel.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma radiateur compatible m3a Volkswagen Passat diesel modèle 2024 ?",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":2024,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Cooling & Heating\",\"partType\":\"Radiator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un étrier de frein avant pour une Mercedes-Benz E-Class diesel de 2017.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"E-Class\",\"year\":2017,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la démarreur mta3 Ford Focus diesel, ma na3rech el année.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un démarreur, compatible avec ma Renault Clio 2018 essence.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2018,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مرآة باب يسار لسيارة Volkswagen Golf ديزل سنة 2023.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Golf\",\"year\":2023,\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un boîte de vitesses automatique pour une Hyundai Tucson diesel, année non précisée.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma étrier frein avant compatible m3a Skoda Octavia diesel modèle 2023 ?",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2023,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج علبة تروس أوتوماتيكية متوافقا مع Ford Focus موديل 2016 ديزل.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la deux disques frein avant mta3 Hyundai Tucson diesel 2020.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مولد كهربائي لسيارة Toyota Yaris بنزين، السنة غير محددة.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Yaris\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مرآة باب يسار لسيارة Skoda Octavia ديزل، السنة غير محددة.",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a ABS pump module, compatible with my Toyota Corolla Petrol from 2015.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2015,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a rear tail light for a 2017 Diesel Citroën C4.",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C4\",\"year\":2017,\"fuelType\":\"Diesel\",\"position\":\"REAR\",\"category\":\"Electrical Parts\",\"partType\":\"Rear tail light\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Besoin d'un étrier de frein avant, compatible avec ma Mercedes-Benz C-Class 2022 essence.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":2022,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a left door mirror for a Diesel Volkswagen Passat; the year is not specified.",
+    "output": "{\"brand\":\"Volkswagen\",\"model\":\"Passat\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج طقم قابض متوافقا مع Kia Sportage موديل 2023 ديزل.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2023,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un kit embrayage pour une Peugeot 208 essence, année non précisée.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"208\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un démarreur pour une Mercedes-Benz C-Class essence, année non précisée.",
+    "output": "{\"brand\":\"Mercedes-Benz\",\"model\":\"C-Class\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la deux disques frein avant mta3 Renault Megane diesel, ma na3rech el année.",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":null,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "3andi Ford Focus 2019 diesel w n7eb amortisseur avant.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":2019,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la deux disques frein avant mta3 Kia Sportage diesel 2023.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2023,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un rétroviseur gauche pour Kia Rio version essence, année 2021 ?",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front shock absorber for a 2015 Petrol Hyundai i20.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"i20\",\"year\":2015,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج وحدة مضخة ABS متوافقا مع Peugeot 308 موديل 2014 ديزل.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2014,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Brake Systems\",\"partType\":\"ABS pump module\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un amortisseur avant pour une Toyota Corolla essence, année non précisée.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a starter motor for a 2014 Petrol Ford Fiesta.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2014,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a alternator, compatible with my Peugeot 308 Diesel from 2020.",
+    "output": "{\"brand\":\"Peugeot\",\"model\":\"308\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Alternator\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front brake caliper for a 2020 Diesel Hyundai Tucson.",
+    "output": "{\"brand\":\"Hyundai\",\"model\":\"Tucson\",\"year\":2020,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a starter motor for a 2018 Diesel Ford Focus.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":2018,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Electrical Parts\",\"partType\":\"Starter motor\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un étrier de frein avant pour une Seat Leon diesel de 2022.",
+    "output": "{\"brand\":\"Seat\",\"model\":\"Leon\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma boîte auto compatible m3a Renault Megane diesel modèle 2017 ?",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Megane\",\"year\":2017,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "I need a front brake caliper for a 2017 Petrol Ford Fiesta.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma boîte auto compatible m3a Ford Fiesta essence modèle 2021 ?",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Fiesta\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Looking for a front brake disc pair, compatible with my Ford Focus Diesel from 2016.",
+    "output": "{\"brand\":\"Ford\",\"model\":\"Focus\",\"year\":2016,\"fuelType\":\"Diesel\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Brake disc pair\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Do you have a 2021 Citroën C3 automatic gearbox for the Petrol version?",
+    "output": "{\"brand\":\"Citroën\",\"model\":\"C3\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد علبة تروس أوتوماتيكية لسيارة Renault Clio بنزين لعام 2024؟",
+    "output": "{\"brand\":\"Renault\",\"model\":\"Clio\",\"year\":2024,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Automatic gearbox\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Famma étrier frein avant compatible m3a Toyota Corolla essence modèle 2023 ?",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2023,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Avez-vous un amortisseur avant pour Toyota Corolla version essence, année 2022 ?",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2022,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Suspension\",\"partType\":\"Front shock absorber\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "هل يوجد طقم قابض لسيارة Kia Rio بنزين لعام 2017؟",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Rio\",\"year\":2017,\"fuelType\":\"Petrol\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Je cherche un kit embrayage pour une Skoda Octavia diesel de 2019.",
+    "output": "{\"brand\":\"Skoda\",\"model\":\"Octavia\",\"year\":2019,\"fuelType\":\"Diesel\",\"position\":\"UNIVERSAL\",\"category\":\"Transmission\",\"partType\":\"Clutch kit\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أبحث عن مِلقط فرامل أمامي لسيارة Toyota Corolla بنزين، السنة غير محددة.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":null,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "Nlawwej 3la étrier frein avant mta3 Toyota Corolla essence 2021.",
+    "output": "{\"brand\":\"Toyota\",\"model\":\"Corolla\",\"year\":2021,\"fuelType\":\"Petrol\",\"position\":\"FRONT\",\"category\":\"Brake Systems\",\"partType\":\"Front brake caliper\"}"
+  },
+  {
+    "instruction": "Extract automotive search constraints from the buyer request.\nReturn only valid JSON with exactly these keys: brand, model, year, fuelType, position, category, partType.\nUse null when a value is not stated or cannot be inferred safely.\nWhen a year is stated, copy all four digits exactly and return it as an integer; never abbreviate or repeat digits.\nNormalize fuelType to Diesel or Petrol.\nNormalize position to FRONT, REAR, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT, or UNIVERSAL.\nUse canonical marketplace category and part-type names.",
+    "input": "أحتاج مرآة باب يسار متوافقا مع Kia Sportage موديل 2022 ديزل.",
+    "output": "{\"brand\":\"Kia\",\"model\":\"Sportage\",\"year\":2022,\"fuelType\":\"Diesel\",\"position\":\"LEFT\",\"category\":\"Body & Exterior\",\"partType\":\"Left door mirror\"}"
+  }
+]

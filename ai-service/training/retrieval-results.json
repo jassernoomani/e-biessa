@@ -1,0 +1,103 @@
+{
+  "cases": 6,
+  "hitRateAt12": 1.0,
+  "meanReciprocalRank": 1.0,
+  "constraintAccuracy": 1.0,
+  "details": [
+    {
+      "language": "en",
+      "query": "I need a front brake caliper for a 2020 diesel Volkswagen Golf",
+      "expectedTitle": "Volkswagen Golf Front brake caliper 2020",
+      "rank": 1,
+      "constraintMatches": {
+        "brand": true,
+        "model": true,
+        "year": true,
+        "fuelType": true,
+        "position": true,
+        "category": true
+      },
+      "tookMs": 3608,
+      "answerGeneratedBy": null
+    },
+    {
+      "language": "fr",
+      "query": "Je cherche un phare avant pour une Citroën C3 essence de 2020",
+      "expectedTitle": "Citroën C3 LED front headlight 2020",
+      "rank": 1,
+      "constraintMatches": {
+        "brand": true,
+        "model": true,
+        "year": true,
+        "fuelType": true,
+        "position": true,
+        "category": true
+      },
+      "tookMs": 2641,
+      "answerGeneratedBy": null
+    },
+    {
+      "language": "tn",
+      "query": "Nlawwej 3la alternateur mta3 Ford Focus diesel 2020",
+      "expectedTitle": "Ford Focus Alternator 2020",
+      "rank": 1,
+      "constraintMatches": {
+        "brand": true,
+        "model": true,
+        "year": true,
+        "fuelType": true,
+        "category": true
+      },
+      "tookMs": 2545,
+      "answerGeneratedBy": null
+    },
+    {
+      "language": "en",
+      "query": "2019 diesel BMW 5 Series radiator for the front",
+      "expectedTitle": "BMW 5 Series Radiator 2019",
+      "rank": 1,
+      "constraintMatches": {
+        "brand": true,
+        "model": true,
+        "year": true,
+        "fuelType": true,
+        "position": true,
+        "category": true
+      },
+      "tookMs": 2590,
+      "answerGeneratedBy": null
+    },
+    {
+      "language": "fr",
+      "query": "Amortisseur avant pour Renault Megane diesel 2019",
+      "expectedTitle": "Renault Megane Front shock absorber 2019",
+      "rank": 1,
+      "constraintMatches": {
+        "brand": true,
+        "model": true,
+        "year": true,
+        "fuelType": true,
+        "position": true,
+        "category": true
+      },
+      "tookMs": 2584,
+      "answerGeneratedBy": null
+    },
+    {
+      "language": "tn",
+      "query": "N7eb feu arrière mta3 Hyundai Tucson diesel 2019",
+      "expectedTitle": "Hyundai Tucson Rear tail light 2019",
+      "rank": 1,
+      "constraintMatches": {
+        "brand": true,
+        "model": true,
+        "year": true,
+        "fuelType": true,
+        "position": true,
+        "category": true
+      },
+      "tookMs": 2531,
+      "answerGeneratedBy": null
+    }
+  ]
+}

@@ -47,9 +47,27 @@
         <div class="searchbar">
           <span>{{ searchMode() === 'ai' ? '✦' : '⌕' }}</span>
           <input data-testid="market-search-input" [ngModel]="searchInput()" (ngModelChange)="updateSearchInput($event)" (keyup.enter)="applyFilters()" [placeholder]="searchMode() === 'ai' ? 'Try: front brake part for a diesel Golf' : 'Search by part, OEM number, or keyword'">
+          <select class="voice-language" [(ngModel)]="voiceLanguage" aria-label="Voice language"><option value="fr-TN">FR</option><option value="ar-TN">AR</option><option value="en-US">EN</option></select>
+          <button type="button" class="voice-search" [class.listening]="voiceListening()" (click)="toggleVoiceSearch()" [attr.aria-label]="voiceListening() ? 'Stop voice search' : 'Start voice search'">{{ voiceListening() ? '■' : '🎙' }}</button>
           <button data-testid="market-search-submit" class="primary" (click)="applyFilters()">{{ searchMode() === 'ai' ? 'Search with AI' : 'Find parts' }}</button>
         </div>
-        @if (searchMode() === 'ai') {<p class="ai-search-hint">Describe the vehicle, fuel, position, and part you need. Compatibility signals are checked before results are shown.</p>}
+        @if (voiceError()) {<p class="voice-error">{{ voiceError() }}</p>}
+        @if (searchMode() === 'ai') {
+          <p class="ai-search-hint">Describe the vehicle, fuel, position, and part you need. Compatibility signals are checked before results are shown.</p>
+          <section class="vision-search" data-testid="vision-search">
+            <div class="vision-intro"><span>◎</span><div><strong>Not sure what the part is?</strong><small>Upload a clear photo for part-type suggestions. A photo never determines vehicle fitment.</small></div></div>
+            @if (user()) {
+              <label class="vision-upload" [class.disabled]="visionLoading()"><input type="file" accept="image/jpeg,image/png,image/webp" (change)="identifyPartPhoto($event)" [disabled]="visionLoading()">{{ visionLoading() ? 'Analyzing…' : 'Identify from photo' }}</label>
+            } @else {
+              <button class="vision-upload" (click)="openAuth(false)">Log in to identify a photo</button>
+            }
+            @if (visionPreview()) {<img class="vision-preview" [src]="visionPreview()" alt="Uploaded part preview">}
+            @if (visionResult(); as result) {
+              <div class="vision-suggestions"><strong>Possible matches</strong>@for (candidate of result.candidates; track candidate.partType) {<button (click)="searchVisionCandidate(candidate)"><span>{{ candidate.partType }}</span><small>{{ candidate.category }} · {{ candidate.confidence | percent:'1.0-0' }}</small></button>}<p>{{ result.caution }}</p></div>
+            }
+            @if (visionError()) {<p class="vision-error">{{ visionError() }}</p>}
+          </section>
+        }
         <div class="trust"><span>✓ Verified sellers</span><span>✓ Local inventory</span><span>✓ Direct contact</span></div>
       </div>
       <div class="hero-visual">
@@ -60,6 +78,9 @@
       </div>
     </section>
 
+    @if (user()?.role === 'BUYER' && searchMode() === 'keyword' && !filters.search && !filters.brand && !filters.model && !filters.year && !filters.categoryId && advancedFilterCount() === 0) {
+      <div style="padding: 2rem clamp(1.25rem,6vw,6rem) 0"><app-recommendations [vehicles]="vehicles()" (openListing)="openPart($event)" /></div>
+    }
     <section class="market-shell">
       <aside class="filters">
         <div class="section-title"><span>Refine results</span><button (click)="resetFilters()">Reset</button></div>
@@ -97,6 +118,7 @@
       <section class="results">
         <div class="results-head"><div><span class="eyebrow">{{ searchMode() === 'ai' ? 'Compatibility-aware search' : 'Fresh inventory' }}</span><h2>{{ searchMode() === 'ai' ? 'AI-ranked matches' : 'Parts worth a closer look' }}</h2></div><div class="results-tools"><span>{{ total() }} results</span>@if (searchMode() === 'keyword') {<label>Sort<select [(ngModel)]="sort" (change)="changeSort()"><option value="createdAt,desc">Newest first</option><option value="price,asc">Price: low to high</option><option value="price,desc">Price: high to low</option><option value="views,desc">Most viewed</option><option value="title,asc">Name A–Z</option></select></label>} @else if (aiSearchResponse()) {<small>{{ aiSearchResponse()!.tookMs }} ms</small>}</div></div>
         @if (searchMode() === 'ai' && aiConstraintLabels().length) {<div class="ai-constraints"><strong>Understood:</strong>@for (label of aiConstraintLabels(); track label) {<span>{{ label }}</span>}</div>}
+        @if (searchMode() === 'ai' && aiToolLabels().length) {<div data-testid="agent-tools" class="agent-tools"><strong>Assistant workflow:</strong>@for (tool of aiToolLabels(); track tool) {<span>✓ {{ tool }}</span>}</div>}
         @if (searchMode() === 'ai' && aiSearchResponse()?.answer; as answer) {<section data-testid="ai-answer" class="ai-answer" aria-live="polite"><span class="ai-answer-icon">✦</span><div><div class="ai-answer-title"><strong>E-biessa AI answer</strong><small>Verified from active listings</small></div><p>{{ answer.summary }}</p>@if (answer.cautions.length) {<ul>@for (caution of answer.cautions; track caution) {<li>{{ caution }}</li>}</ul>}</div></section>}
         @if (searchMode() === 'ai' && aiError()) {<div class="ai-error"><span>!</span><div><strong>AI search needs attention</strong><p>{{ aiError() }}</p></div><button class="ghost" (click)="setSearchMode('keyword')">Use keyword search</button></div>}
         @if (loading()) {
@@ -287,6 +309,9 @@
           @if (view() === 'admin-profile') {<button (click)="setView('admin')">← Back to admin</button><span>Managing user account</span>}
           @else {<button (click)="setView('market')">← Back to marketplace</button><span>My account</span>}
         </div>
+        @if (view() === 'profile' && profile.role === 'BUYER') {
+          <div style="margin-bottom: 1.5rem"><app-recommendations [vehicles]="vehicles()" [settingsOnly]="true" /></div>
+        }
         <div class="profile-layout">
           <aside class="profile-sidebar">
             <div class="profile-avatar">{{ profileInitials() }}</div>
@@ -453,6 +478,21 @@
 @if (editorOpen()) {
   <div class="modal-backdrop"><form #listingForm="ngForm" class="modal editor-modal" (ngSubmit)="saveListing()"><button type="button" class="close" (click)="editorOpen.set(false); listingPreview.set(false)">×</button><span class="eyebrow">Seller studio</span><h2>{{ listingPreview() ? 'Preview your listing' : editingId() ? 'Edit listing' : 'Create a listing' }}</h2>
     @if (!listingPreview()) {
+      <section class="price-estimator">
+        <div><strong>Price guidance</strong><small>Compare this draft with similar active E-biessa listings.</small></div>
+        <button type="button" (click)="estimateListingPrice()" [disabled]="priceEstimating()">{{ priceEstimating() ? 'Comparing…' : 'Estimate from listings' }}</button>
+        @if (priceEstimate(); as estimate) {
+          <div class="price-estimate-result" [attr.data-confidence]="estimate.confidence">
+            @if (estimate.suggestedPrice != null) {
+              <strong>{{ money(estimate.suggestedPrice) }}</strong>
+              <span>{{ estimate.lowerRange | number:'1.0-0' }}–{{ estimate.upperRange | number:'1.0-0' }} TND range · {{ estimate.comparableCount }} comparables · {{ estimate.confidence.toLowerCase() }} confidence</span>
+              <button type="button" (click)="useSuggestedPrice()">Use suggested price</button>
+            } @else { <span>No reliable local estimate is available yet.</span> }
+            @for (reason of estimate.reasons; track reason) { <small>{{ reason }}</small> }
+            <small>{{ estimate.caution }}</small>
+          </div>
+        }
+      </section>
       <div class="form-grid"><label class="wide">Title<input #listingTitle="ngModel" name="title" [(ngModel)]="draft.title" required maxlength="255" placeholder="e.g. Golf 7 LED headlight">@if (listingTitle.invalid && listingTitle.touched) {<small class="field-error">A title is required.</small>}</label><label>Price (TND)<input #listingPrice="ngModel" name="price" type="number" min="1" [(ngModel)]="draft.price" required>@if (listingPrice.invalid && listingPrice.touched) {<small class="field-error">Enter a price greater than zero.</small>}</label><label>Condition<select name="condition" [(ngModel)]="draft.condition"><option>New</option><option>Like new</option><option>Used - good</option><option>Used - fair</option></select></label><label>Category<select name="category" [(ngModel)]="draft.categoryId"><option [ngValue]="null">Select category</option>@for (category of categories(); track category.id) {<option [ngValue]="category.id">{{ category.name }}</option>}</select></label>
       <fieldset class="wide vehicle-picker"><legend>Compatible vehicles</legend><small>Select every vehicle this exact part fits.</small><div>@for (vehicle of vehicles(); track vehicle.id) {<label><input type="checkbox" [checked]="isVehicleSelected(vehicle.id)" (change)="toggleVehicleCompatibility(vehicle.id, $any($event.target).checked)"><span><strong>{{ vehicle.brand }} {{ vehicle.model }} {{ vehicle.year }}</strong><small>{{ vehicle.engine || 'Engine unknown' }} · {{ vehicle.fuelType || 'Fuel unknown' }}</small></span></label>}</div></fieldset>
       <label>Manufacturer<input name="manufacturer" [(ngModel)]="draft.manufacturer" maxlength="120" placeholder="e.g. Bosch"></label><label>Part brand<input name="partBrand" [(ngModel)]="draft.partBrand" maxlength="120" placeholder="e.g. Bosch Original"></label><label>Primary OEM number<input name="oem" [(ngModel)]="draft.oemNumber" maxlength="100" placeholder="Optional"></label><label>Position<select name="position" [(ngModel)]="draft.partPosition"><option value="">Not specified</option><option value="FRONT">Front</option><option value="REAR">Rear</option><option value="LEFT">Left</option><option value="RIGHT">Right</option><option value="FRONT_LEFT">Front left</option><option value="FRONT_RIGHT">Front right</option><option value="REAR_LEFT">Rear left</option><option value="REAR_RIGHT">Rear right</option><option value="UNIVERSAL">Universal</option></select></label><label class="wide">Alternative OEM numbers<textarea name="alternativeOems" [(ngModel)]="alternativeOemText" rows="2" maxlength="2000" placeholder="One per line or separated by commas"></textarea></label><label>Engine compatibility<input name="engineCompatibility" [(ngModel)]="draft.engineCompatibility" maxlength="255" placeholder="e.g. 1.6 TDI"></label><label>Fuel compatibility<input name="fuelCompatibility" [(ngModel)]="draft.fuelCompatibility" maxlength="100" placeholder="e.g. Diesel"></label><label class="wide">Warranty information<input name="warranty" [(ngModel)]="draft.warrantyInformation" maxlength="500" placeholder="e.g. 90-day seller warranty"></label><label>Location<input name="location" [(ngModel)]="draft.location" maxlength="255" placeholder="Tunis"></label><div class="listing-options"><label><input type="checkbox" name="delivery" [(ngModel)]="draft.deliveryAvailable"> Delivery available</label><label><input type="checkbox" name="collection" [(ngModel)]="draft.collectionAvailable"> Collection available</label><label><input type="checkbox" name="negotiable" [(ngModel)]="draft.negotiable"> Price negotiable</label></div><label class="wide">Description<textarea name="description" [(ngModel)]="draft.description" maxlength="5000" rows="4" placeholder="Condition, fitment notes, and included accessories..."></textarea></label>

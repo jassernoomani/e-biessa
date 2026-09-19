@@ -129,6 +129,65 @@ public class AiServiceClient {
         }
     }
 
+    public AiServiceAssistantResponse assist(String query, int limit, double minimumScore, AiSearchFilter filters,
+                                              List<AiRecommendationCandidate> recommendationCandidates) {
+        requireEnabled();
+        boolean acquired = false;
+        try {
+            acquired = searchSlots.tryAcquire(acquireTimeoutMillis, TimeUnit.MILLISECONDS);
+            if (!acquired) throw new ResponseStatusException(TOO_MANY_REQUESTS,
+                    "AI assistant is busy. Wait a moment and try again.");
+            AiServiceAssistantResponse response = client.post().uri("/v1/assistant")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("query", query, "limit", limit, "minimumScore", minimumScore,
+                            "filters", filters, "recommendationCandidates", recommendationCandidates))
+                    .retrieve().body(AiServiceAssistantResponse.class);
+            return response == null
+                    ? new AiServiceAssistantResponse(query, "SEARCH", List.of(), 0, Map.of(), List.of(), GroundedAnswerResponse.empty())
+                    : response;
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            throw new ResponseStatusException(SERVICE_UNAVAILABLE, "AI assistant was interrupted.");
+        } catch (ResponseStatusException exception) {
+            throw exception;
+        } catch (RestClientException exception) {
+            throw unavailable(exception);
+        } finally {
+            if (acquired) searchSlots.release();
+        }
+    }
+
+    public AiVisionResponse identifyPartImage(byte[] image, MediaType mediaType) {
+        requireEnabled();
+        boolean acquired = false;
+        try {
+            acquired = searchSlots.tryAcquire(acquireTimeoutMillis, TimeUnit.MILLISECONDS);
+            if (!acquired) {
+                throw new ResponseStatusException(TOO_MANY_REQUESTS,
+                        "AI image identification is busy. Wait a moment and try again.");
+            }
+            AiVisionResponse response = client.post().uri("/v1/vision/identify")
+                    .contentType(mediaType)
+                    .body(image)
+                    .retrieve().body(AiVisionResponse.class);
+            if (response == null) {
+                throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                        "AI image identification returned no result.");
+            }
+            return response;
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                    "AI image identification was interrupted.");
+        } catch (ResponseStatusException exception) {
+            throw exception;
+        } catch (RestClientException exception) {
+            throw unavailable(exception);
+        } finally {
+            if (acquired) searchSlots.release();
+        }
+    }
+
     private void requireEnabled() {
         if (!enabled) throw new ResponseStatusException(SERVICE_UNAVAILABLE,
                 "AI search is not enabled. Start the FastAPI service and set AI_SERVICE_ENABLED=true.");

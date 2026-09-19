@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+from typing import Literal
+
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -129,6 +131,45 @@ class SearchResponse(BaseModel):
     answer: GroundedAnswer
 
 
+class RecommendationCandidate(BaseModel):
+    listingId: int
+    score: float = Field(ge=0)
+    reasons: list[str] = Field(default_factory=list, max_length=4)
+
+
+class AssistantRequest(SearchRequest):
+    recommendationCandidates: list[RecommendationCandidate] = Field(default_factory=list, max_length=24)
+
+
+class AssistantResult(BaseModel):
+    listingId: int
+    score: float = Field(ge=0, le=1)
+    matchReasons: list[str] = Field(default_factory=list)
+    source: Literal["SEARCH", "RECOMMENDATION"]
+
+
+class AssistantResponse(BaseModel):
+    query: str
+    intent: Literal["SEARCH", "COMPATIBILITY", "RECOMMENDATION"]
+    results: list[AssistantResult]
+    tookMs: int
+    extractedConstraints: ExtractedConstraints
+    toolsUsed: list[str]
+    answer: GroundedAnswer
+
+
 class IndexResponse(BaseModel):
     indexed: int = 0
     deleted: int = 0
+
+
+class VisionCandidate(BaseModel):
+    partType: str
+    category: str
+    confidence: float = Field(ge=0, le=1)
+
+
+class VisionIdentificationResponse(BaseModel):
+    candidates: list[VisionCandidate]
+    model: str
+    caution: str

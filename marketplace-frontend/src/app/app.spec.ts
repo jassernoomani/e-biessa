@@ -36,6 +36,29 @@ describe('E-biessa Angular application', () => {
     expect(fixture.nativeElement.querySelector('.app-shell.dark-theme')).toBeTruthy();
   });
 
+  it('places browser speech recognition text into the active search field', () => {
+    const fixture = TestBed.createComponent(App);
+    class FakeSpeechRecognition {
+      lang = '';
+      interimResults = false;
+      continuous = false;
+      onresult?: (event: any) => void;
+      onerror?: (event: any) => void;
+      onend?: () => void;
+      start(): void {
+        this.onresult?.({ results: [[{ transcript: 'frein avant Golf diesel' }]] });
+        this.onend?.();
+      }
+      stop(): void { this.onend?.(); }
+    }
+    Object.defineProperty(window, 'webkitSpeechRecognition', { value: FakeSpeechRecognition, configurable: true });
+    fixture.componentInstance.setSearchMode('ai');
+    fixture.componentInstance.toggleVoiceSearch();
+    expect(fixture.componentInstance.aiQuery).toBe('frein avant Golf diesel');
+    expect(fixture.componentInstance.voiceListening()).toBe(false);
+    delete (window as any).webkitSpeechRecognition;
+  });
+
   it('shows the complete vehicle filter set', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
@@ -94,14 +117,16 @@ describe('E-biessa Angular application', () => {
     http.expectOne('http://localhost:8080/api/vehicles/catalog/makes').flush([]);
     http.expectOne(req => req.url.endsWith('/parts')).flush({ content: [], totalElements: 0, totalPages: 0, number: 0 });
 
+    fixture.componentInstance.user.set({ id: 3, userId: 3, email: 'buyer@example.com', fullName: 'Buyer', role: 'BUYER' });
     fixture.componentInstance.setSearchMode('ai');
     fixture.componentInstance.aiQuery = 'front brake part for a diesel Golf';
     fixture.componentInstance.applyFilters();
-    const request = http.expectOne(req => req.url.endsWith('/ai/search'));
+    const request = http.expectOne(req => req.url.endsWith('/ai/assistant'));
     expect(request.request.params.get('query')).toBe('front brake part for a diesel Golf');
     expect(request.request.params.get('minimumScore')).toBe('0.5');
     request.flush({
-      query: 'front brake part for a diesel Golf', tookMs: 14,
+      query: 'front brake part for a diesel Golf', intent: 'COMPATIBILITY', tookMs: 14,
+      toolsUsed: ['search_agent', 'compatibility_agent'],
       extractedConstraints: { model: 'Golf', fuelType: 'Diesel', position: 'FRONT', category: 'Brake Systems' },
       answer: { summary: 'Listing #7 is the strongest current match.', recommendedListingIds: [7], cautions: ['Confirm exact fitment.'], generatedBy: 'deterministic' },
       results: [{
@@ -117,6 +142,8 @@ describe('E-biessa Angular application', () => {
     expect(fixture.nativeElement.textContent).toContain('Brake system');
     expect(fixture.nativeElement.textContent).toContain('91% match');
     expect(fixture.nativeElement.textContent).toContain('E-biessa AI answer');
+    expect(fixture.nativeElement.textContent).toContain('Inventory search');
+    expect(fixture.nativeElement.textContent).toContain('Compatibility check');
     expect(fixture.nativeElement.textContent).toContain('Listing #7 is the strongest current match.');
     expect(fixture.nativeElement.textContent).toContain('Confirm exact fitment.');
     expect(window.location.search).toContain('mode=ai');

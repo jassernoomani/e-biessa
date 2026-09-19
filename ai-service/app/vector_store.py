@@ -152,6 +152,21 @@ class ListingVectorStore:
         answer = grounded_answer_fallback(selected, constraints)
         return selected, constraints, answer
 
+    def validate_compatibility(self, hits: list[SearchHit], constraints: ExtractedConstraints) -> list[SearchHit]:
+        """Re-check retrieved rows against the authoritative structured listing payloads."""
+        payloads = {int(payload["id"]): payload for payload in self._catalog_payloads() if payload.get("id") is not None}
+        verified: list[SearchHit] = []
+        for hit in hits:
+            payload = payloads.get(hit.listingId)
+            if payload is None:
+                continue
+            ranked = rank_candidate(payload, hit.rawScore, constraints)
+            if ranked is None:
+                continue
+            score, reasons = ranked
+            verified.append(hit.model_copy(update={"score": round(score, 6), "matchReasons": reasons}))
+        return verified
+
     def _point(self, listing: ListingDocument, vector: list[float]) -> models.PointStruct:
         payload = listing.model_dump(mode="json")
         payload["price"] = float(listing.price)

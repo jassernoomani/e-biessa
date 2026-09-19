@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/**", "/uploads/**", "/ws/**").permitAll()
                         .requestMatchers("/api/parts/my-listings").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/vehicles/vin/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/sellers/*/contact").hasRole("BUYER")
                         .requestMatchers(HttpMethod.GET, "/api/parts/**", "/api/categories/**", "/api/vehicles/**",
                                 "/api/sellers/*", "/api/sellers/*/listings", "/api/sellers/*/reviews", "/api/ai/search").permitAll()

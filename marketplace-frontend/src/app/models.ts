@@ -1,4 +1,14 @@
 export type UserRole = 'BUYER' | 'SELLER' | 'ADMIN';
+
+export interface RecommendationSettings {
+  personalizationEnabled: boolean;
+  vehicles: Vehicle[];
+}
+export interface RecommendationFeed {
+  mode: 'PERSONALIZED' | 'VEHICLE' | 'DISCOVER';
+  results: { part: Part; score: number; reasons: string[] }[];
+  caution: string;
+}
 export type SellerApplicationStatus = 'NONE' | 'PENDING' | 'APPROVED' | 'REJECTED';
 export type PartStatus = 'ACTIVE' | 'SOLD' | 'INACTIVE';
 
@@ -113,6 +123,17 @@ export interface VehicleCatalogMake {
   country?: string;
 }
 
+export interface VinDecodeResult {
+  vin: string;
+  make: string;
+  model: string;
+  year?: number;
+  engine?: string;
+  fuelType?: string;
+  matchedVehicleIds: number[];
+  warnings: string[];
+}
+
 export interface Part {
   id: number;
   title: string;
@@ -149,6 +170,17 @@ export interface Part {
   favorited: boolean;
 }
 
+export interface PriceEstimate {
+  suggestedPrice?: number;
+  lowerRange?: number;
+  upperRange?: number;
+  comparableCount: number;
+  confidence: 'INSUFFICIENT' | 'LOW' | 'MEDIUM' | 'HIGH';
+  comparableListingIds: number[];
+  reasons: string[];
+  caution: string;
+}
+
 export interface Page<T> {
   content: T[];
   totalElements: number;
@@ -163,6 +195,7 @@ export interface SemanticPartResult {
   part: Part;
   score: number;
   matchReasons: string[];
+  source?: 'SEARCH' | 'RECOMMENDATION';
 }
 
 export interface GroundedAiAnswer {
@@ -178,6 +211,23 @@ export interface SemanticSearchResponse {
   tookMs: number;
   extractedConstraints: Record<string, string | number | null>;
   answer: GroundedAiAnswer;
+}
+
+export interface MarketplaceAssistantResponse extends SemanticSearchResponse {
+  intent: 'SEARCH' | 'COMPATIBILITY' | 'RECOMMENDATION';
+  toolsUsed: string[];
+}
+
+export interface VisionCandidate {
+  partType: string;
+  category: string;
+  confidence: number;
+}
+
+export interface VisionIdentification {
+  candidates: VisionCandidate[];
+  model: string;
+  caution: string;
 }
 
 export type ReportReason = 'SCAM' | 'WRONG_INFORMATION' | 'PROHIBITED_ITEM' | 'DUPLICATE' | 'ALREADY_SOLD' | 'OTHER';

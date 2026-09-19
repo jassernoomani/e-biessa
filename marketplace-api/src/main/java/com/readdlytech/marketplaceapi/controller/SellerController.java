@@ -30,6 +30,7 @@ public class SellerController {
     private final SellerService sellerService;
     private final SellerReviewService sellerReviewService;
     private final CurrentUserService currentUserService;
+    private final com.readdlytech.marketplaceapi.service.BuyerActivityService buyerActivity;
 
     @GetMapping("/{sellerId}")
     public ResponseEntity<SellerProfileResponse> profile(@PathVariable Long sellerId) {
@@ -45,8 +46,11 @@ public class SellerController {
 
     @GetMapping("/{sellerId}/contact")
     @PreAuthorize("hasRole('BUYER')")
-    public ResponseEntity<SellerContactResponse> contact(@PathVariable Long sellerId) {
-        return ResponseEntity.ok(sellerService.getContact(sellerId));
+    public ResponseEntity<SellerContactResponse> contact(@PathVariable Long sellerId, Authentication authentication) {
+        SellerContactResponse response = sellerService.getContact(sellerId);
+        buyerActivity.record(currentUserService.require(authentication).getId(),
+                com.readdlytech.marketplaceapi.entity.BuyerInteraction.Kind.CONTACT, sellerId, null, sellerId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{sellerId}/reviews")

@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     ollama_model: str = "e-biessa-query-v2"
     ollama_timeout_seconds: float = Field(default=90.0, gt=0, le=120)
     ollama_keep_alive: str = "30m"
+    vision_enabled: bool = False
+    vision_model: str = "openai/clip-vit-base-patch32"
+    vision_cache_dir: Path = Path("./data/vision-models")
+    vision_max_image_bytes: int = Field(default=5_242_880, ge=1024, le=10_485_760)
+    vision_max_image_pixels: int = Field(default=25_000_000, ge=1_000_000, le=100_000_000)
 
 
 @lru_cache

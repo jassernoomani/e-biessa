@@ -1,24 +1,38 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostBinding, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener, NgZone, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, switchMap } from 'rxjs';
 import { ApiService } from './api.service';
 import { ThemeService } from './core/theme.service';
-import { AdminAuditLog, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, Part, PartPayload, PartStatus, ProfilePayload, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticPartResult, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake } from './models';
+import { AdminAuditLog, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, Part, PartPayload, PartStatus, PriceEstimate, ProfilePayload, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticPartResult, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake, VisionCandidate, VisionIdentification } from './models';
 import { BrandLogoComponent } from './shared/brand-logo.component';
+import { RecommendationsComponent } from './recommendations/recommendations.component';
 
 type View = 'market' | 'favorites' | 'inbox' | 'studio' | 'admin' | 'profile' | 'admin-profile' | 'seller-profile' | 'listing-detail';
 type AdminSection = 'overview' | 'applications' | 'seller-reports' | 'listing-reports' | 'users' | 'listings' | 'audit';
+type SpeechEvent = Event & { results: { length: number; [index: number]: { [index: number]: { transcript: string } } } };
+interface BrowserSpeechRecognition {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechEvent) => void) | null;
+  onerror: ((event: Event & { error?: string }) => void) | null;
+  onend: (() => void) | null;
+  start(): void;
+  stop(): void;
+}
+type BrowserSpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule, BrandLogoComponent],
+  imports: [CommonModule, FormsModule, BrandLogoComponent, RecommendationsComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css', './features.css', './theme.css']
 })
 export class App implements OnInit, OnDestroy {
   private readonly api = inject(ApiService);
   private readonly theme = inject(ThemeService);
+  private readonly zone = inject(NgZone);
   readonly view = signal<View>('market');
   readonly user = signal<User | null>(null);
   readonly parts = signal<Part[]>([]);
@@ -60,6 +74,8 @@ export class App implements OnInit, OnDestroy {
   readonly recoveryDevelopmentCode = signal('');
   readonly editorOpen = signal(false);
   readonly listingPreview = signal(false);
+  readonly priceEstimating = signal(false);
+  readonly priceEstimate = signal<PriceEstimate | null>(null);
   readonly editingId = signal<number | null>(null);
   readonly editingPart = signal<Part | null>(null);
   readonly filePreviews = signal<{ name: string; url: string }[]>([]);
@@ -72,6 +88,12 @@ export class App implements OnInit, OnDestroy {
   readonly aiSearchResponse = signal<SemanticSearchResponse | null>(null);
   readonly aiMatches = signal<Record<number, SemanticPartResult>>({});
   readonly aiError = signal('');
+  readonly visionLoading = signal(false);
+  readonly visionResult = signal<VisionIdentification | null>(null);
+  readonly visionPreview = signal('');
+  readonly visionError = signal('');
+  readonly voiceListening = signal(false);
+  readonly voiceError = signal('');
   readonly reportOpen = signal(false);
   readonly reportingPart = signal<Part | null>(null);
   readonly sellerReportOpen = signal(false);
@@ -116,6 +138,7 @@ export class App implements OnInit, OnDestroy {
 
   filters = { search: '', categoryId: '', brand: '', model: '', year: '', condition: '', minPrice: '', maxPrice: '', manufacturer: '', partBrand: '', partPosition: '', engine: '', fuelType: '', warranty: '', deliveryAvailable: '', collectionAvailable: '', negotiable: '' };
   aiQuery = '';
+  voiceLanguage = 'fr-TN';
   sort = 'createdAt,desc';
   adminReportFilter: ReportStatus | '' = 'PENDING';
   adminSellerReportFilter: ReportStatus | '' = 'PENDING';
@@ -133,6 +156,7 @@ export class App implements OnInit, OnDestroy {
   readonly conversationSearch = signal('');
   @ViewChild('messageStream') private messageStream?: ElementRef<HTMLElement>;
   private messageSocket?: WebSocket;
+  private voiceRecognition?: BrowserSpeechRecognition;
   private socketReconnectTimer?: ReturnType<typeof setTimeout>;
   private socketGeneration = 0;
   suspensionReasonDraft = '';
@@ -167,6 +191,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.voiceRecognition?.stop();
     this.disconnectRealtimeMessaging();
   }
 
@@ -243,7 +268,10 @@ export class App implements OnInit, OnDestroy {
     this.loading.set(true);
     this.aiError.set('');
     if (syncUrl && window.location.pathname === '/') this.syncBrowseUrl();
-    this.api.semanticSearch(query, this.semanticFilterParams()).subscribe({
+    const request = this.user()?.role === 'BUYER'
+      ? this.api.marketplaceAssistant(query, this.semanticFilterParams())
+      : this.api.semanticSearch(query, this.semanticFilterParams());
+    request.subscribe({
       next: response => {
         this.aiSearchResponse.set(response);
         this.aiMatches.set(Object.fromEntries(response.results.map(result => [result.part.id, result])));
@@ -261,7 +289,89 @@ export class App implements OnInit, OnDestroy {
     });
   }
 
+  identifyPartPhoto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      this.visionError.set('Choose a JPEG, PNG, or WebP image.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      this.visionError.set('The image must be 5 MB or smaller.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => this.visionPreview.set(String(reader.result ?? ''));
+    reader.readAsDataURL(file);
+    this.visionLoading.set(true);
+    this.visionError.set('');
+    this.visionResult.set(null);
+    this.api.identifyPartImage(file).subscribe({
+      next: result => {
+        this.visionResult.set(result);
+        this.visionLoading.set(false);
+      },
+      error: error => {
+        this.visionLoading.set(false);
+        this.visionError.set(error?.error?.message || 'The photo could not be identified. Check that the vision model is enabled.');
+      }
+    });
+  }
+
+  toggleVoiceSearch(): void {
+    if (this.voiceListening()) {
+      this.voiceRecognition?.stop();
+      return;
+    }
+    const browserWindow = window as typeof window & {
+      SpeechRecognition?: BrowserSpeechRecognitionConstructor;
+      webkitSpeechRecognition?: BrowserSpeechRecognitionConstructor;
+    };
+    const Recognition = browserWindow.SpeechRecognition ?? browserWindow.webkitSpeechRecognition;
+    if (!Recognition) {
+      this.voiceError.set('Voice search is not supported by this browser. Use Chrome or Edge on localhost.');
+      return;
+    }
+    const recognition = new Recognition();
+    recognition.lang = this.voiceLanguage;
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onresult = event => {
+      const transcript = event.results[event.results.length - 1]?.[0]?.transcript?.trim();
+      if (transcript) this.zone.run(() => this.updateSearchInput(transcript));
+      this.voiceError.set('');
+    };
+    recognition.onerror = event => {
+      this.voiceError.set(event.error === 'not-allowed'
+        ? 'Microphone permission was denied. Allow it in your browser settings and try again.'
+        : 'Speech could not be recognized. Try again or type your search.');
+    };
+    recognition.onend = () => this.zone.run(() => this.voiceListening.set(false));
+    this.voiceRecognition = recognition;
+    this.voiceError.set('');
+    this.voiceListening.set(true);
+    recognition.start();
+  }
+
+  searchVisionCandidate(candidate: VisionCandidate): void {
+    const current = this.aiQuery.trim();
+    this.aiQuery = current.toLowerCase().includes(candidate.partType.toLowerCase())
+      ? current : `${candidate.partType} ${current}`.trim();
+    this.runAiSearch();
+  }
+
   aiMatch(partId: number): SemanticPartResult | undefined { return this.aiMatches()[partId]; }
+
+  aiToolLabels(): string[] {
+    const labels: Record<string, string> = {
+      search_agent: 'Inventory search', compatibility_agent: 'Compatibility check',
+      recommendation_agent: 'Personalized ranking'
+    };
+    const tools = (this.aiSearchResponse() as SemanticSearchResponse & { toolsUsed?: string[] } | null)?.toolsUsed ?? [];
+    return tools.map(tool => labels[tool]).filter((label): label is string => !!label);
+  }
 
   aiConstraintLabels(): string[] {
     const constraints = this.aiSearchResponse()?.extractedConstraints ?? {};
@@ -720,9 +830,34 @@ export class App implements OnInit, OnDestroy {
     } : this.emptyDraft();
     this.alternativeOemText = this.draft.alternativeOemNumbers.join('\n');
     this.listingPreview.set(false);
+    this.priceEstimate.set(null);
     this.uploadFiles = [];
     this.filePreviews.set([]);
     this.editorOpen.set(true);
+  }
+
+  estimateListingPrice(): void {
+    if (!this.draft.title.trim() && !this.draft.categoryId && !this.draft.vehicleIds.length && !this.draft.oemNumber.trim()) {
+      this.notice('Add a title, category, vehicle, or OEM number before estimating a price.');
+      return;
+    }
+    this.priceEstimating.set(true);
+    this.priceEstimate.set(null);
+    this.api.estimatePrice({ ...this.draft, alternativeOemNumbers: this.parseAlternativeOems() }, this.editingId() ?? undefined).subscribe({
+      next: estimate => {
+        this.priceEstimate.set(estimate);
+        this.priceEstimating.set(false);
+      },
+      error: error => {
+        this.priceEstimating.set(false);
+        this.handleError(error);
+      }
+    });
+  }
+
+  useSuggestedPrice(): void {
+    const suggested = this.priceEstimate()?.suggestedPrice;
+    if (suggested != null) this.draft.price = suggested;
   }
 
   async selectImages(event: Event): Promise<void> {

@@ -1,0 +1,26 @@
+\chapter{Variables de configuration}
+
+{\small\singlespacing\arrayrulecolor{tableline}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr 0.350\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|>{\raggedright\arraybackslash}p{\dimexpr 0.650\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}
+\hline
+\rowcolor{tablehead} \color{white}\bfseries Variable & \color{white}\bfseries Usage \\ \hline
+\endfirsthead
+\rowcolor{tablehead} \color{white}\bfseries Variable & \color{white}\bfseries Usage \\ \hline
+\endhead
+\hline\endfoot
+DB\_URL / DB\_USERNAME / DB\_PASSWORD & Connexion MySQL \\ \hline
+\rowcolor{tablerow} JWT\_SECRET & Signature des jetons d'accès \\ \hline
+CORS\_ALLOWED\_ORIGINS & Origines frontend autorisées \\ \hline
+\rowcolor{tablerow} AI\_SERVICE\_TOKEN & Authentification interne Spring/FastAPI \\ \hline
+AI\_SERVICE\_ENABLED & Activation de la recherche sémantique \\ \hline
+\rowcolor{tablerow} OLLAMA\_BASE\_URL / OLLAMA\_MODEL & Accès au modèle local \\ \hline
+CLOUDINARY\_* & Stockage distant optionnel des images \\ \hline
+\rowcolor{tablerow} GOOGLE\_* / FACEBOOK\_* / MICROSOFT\_* & Fournisseurs OAuth optionnels \\ \hline
+SMTP\_* / TWILIO\_* & Récupération de compte hors profil de développement \\ \hline
+\end{longtable}
+}
+
+
+\textbf{Règle de gestion}
+
+Les fichiers .env, les uploads, les index Qdrant, les caches, les modèles GGUF, les adaptateurs LoRA et les résultats Playwright sont exclus du dépôt Git.

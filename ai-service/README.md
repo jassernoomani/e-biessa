@@ -1,6 +1,6 @@
 # E-biessa AI service
 
-This FastAPI service is the Phase 2 boundary for semantic listing retrieval. Spring Boot remains the system of record and authorization boundary. The service stores only a searchable projection of active listings.
+This FastAPI service is the Phase 2/3 boundary for semantic retrieval and read-only LangChain orchestration. Spring Boot remains the system of record and authorization boundary. The service stores only a searchable projection of active listings.
 
 ## Local setup on Windows
 
@@ -33,6 +33,10 @@ Register the fine-tuned adapter by following `training/README.md`, make sure Oll
 
 The `/health` response exposes `queryModelEnabled` and `queryModel`, which confirms configuration but does not force-load the model.
 
+## Optional image identification
+
+Install `requirements-vision.txt` and set `VISION_ENABLED=true` to enable internal `POST /v1/vision/identify`. CLIP loads lazily on the first image request and is cached under `data/vision-models`. The endpoint returns only bounded part-type/category suggestions; Spring authentication and deterministic listing compatibility remain authoritative. See `../IMAGE_AND_VOICE_SEARCH.md`.
+
 ## Retrieval evaluation
 
 After starting Ollama, FastAPI, and Spring Boot and reindexing active listings, run the multilingual end-to-end benchmark from `ai-service`:
@@ -45,4 +49,8 @@ The benchmark measures hit rate at 12, mean reciprocal rank, validated-constrain
 
 ## Security
 
-All indexing and search endpoints require `X-AI-Service-Token`. Use the same value for `AI_SERVICE_TOKEN` in this service and the Spring Boot application. Do not expose this service directly to the browser or commit the real token.
+All indexing, search, assistant, and image-identification endpoints require `X-AI-Service-Token`. Use the same value for `AI_SERVICE_TOKEN` in this service and the Spring Boot application. Do not expose this service directly to the browser or commit the real token.
+
+## Phase 3 assistant
+
+`POST /v1/assistant` coordinates three LangChain `StructuredTool` instances: semantic inventory search, deterministic compatibility validation, and sanitized personalized ranking. The router is deterministic, the tool set is read-only, and no user profile, message body, contact detail, or raw activity history is accepted. Browser requests go through Spring's authenticated `GET /api/ai/assistant` endpoint; FastAPI is never a public authorization boundary.

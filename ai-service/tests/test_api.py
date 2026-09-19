@@ -4,8 +4,8 @@ os.environ.setdefault("AI_SERVICE_TOKEN", "test-token-that-is-at-least-24-charac
 
 from fastapi.testclient import TestClient
 
-from app.main import app, get_store
-from app.models import ExtractedConstraints, SearchHit
+from app.main import app, get_store, get_vision_identifier
+from app.models import ExtractedConstraints, SearchHit, VisionCandidate, VisionIdentificationResponse
 from app.ollama_client import grounded_answer_fallback
 
 
@@ -43,9 +43,25 @@ class FakeStore:
         results, constraints = hits
         return results, constraints, grounded_answer_fallback(results, constraints)
 
+    def validate_compatibility(self, hits, constraints):
+        return hits
+
+
+class FakeVisionIdentifier:
+    ready = True
+
+    def identify(self, data):
+        assert data.startswith(b"\x89PNG")
+        return VisionIdentificationResponse(
+            candidates=[VisionCandidate(partType="brake caliper", category="Brake Systems", confidence=0.82)],
+            model="test-clip",
+            caution="Confirm fitment with the seller.",
+        )
+
 
 fake_store = FakeStore()
 app.dependency_overrides[get_store] = lambda: fake_store
+app.dependency_overrides[get_vision_identifier] = lambda: FakeVisionIdentifier()
 client = TestClient(app)
 headers = {"X-AI-Service-Token": "test-token-that-is-at-least-24-characters"}
 listing = {
@@ -112,3 +128,58 @@ def test_rejects_invalid_price_filter_range():
         "filters": {"minPrice": 500, "maxPrice": 100}
     }, headers=headers)
     assert response.status_code == 422
+
+
+def test_assistant_orchestrates_search_compatibility_and_personalized_recommendations():
+    client.put("/v1/listings/42", json=listing, headers=headers)
+    response = client.post("/v1/assistant", json={
+        "query": "Recommend the best compatible diesel Golf brake for me",
+        "limit": 5,
+        "recommendationCandidates": [{
+            "listingId": 42,
+            "score": 48.5,
+            "reasons": ["Listed for your Volkswagen Golf", "Based on saved parts in this category"]
+        }]
+    }, headers=headers)
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["intent"] == "RECOMMENDATION"
+    assert body["toolsUsed"] == ["search_agent", "compatibility_agent", "recommendation_agent"]
+    assert body["results"][0]["listingId"] == 42
+    assert body["results"][0]["source"] == "RECOMMENDATION"
+    assert "Listed for your Volkswagen Golf" in body["results"][0]["matchReasons"]
+
+
+def test_assistant_requires_the_internal_service_token():
+    response = client.post("/v1/assistant", json={"query": "Golf brake"})
+    assert response.status_code == 401
+
+
+def test_image_identification_requires_internal_token_and_returns_bounded_candidates():
+    image = b"\x89PNG\r\n\x1a\nmock-image"
+    assert client.post("/v1/vision/identify", content=image,
+                       headers={"Content-Type": "image/png"}).status_code == 401
+
+    response = client.post("/v1/vision/identify", content=image,
+                           headers={**headers, "Content-Type": "image/png"})
+    assert response.status_code == 200
+    assert response.json()["candidates"] == [{
+        "partType": "brake caliper", "category": "Brake Systems", "confidence": 0.82
+    }]
+    assert response.json()["model"] == "test-clip"
+
+
+def test_image_identification_rejects_unsupported_media_types_before_model_use():
+    response = client.post("/v1/vision/identify", content=b"not-an-image",
+                           headers={**headers, "Content-Type": "text/plain"})
+    assert response.status_code == 415
+
+
+def test_assistant_does_not_widen_personalized_results_when_compatibility_has_no_match():
+    response = client.post("/v1/assistant", json={
+        "query": "Recommend a compatible diesel Golf brake for me",
+        "recommendationCandidates": [{"listingId": 999, "score": 50, "reasons": ["Popular"]}]
+    }, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["results"] == []

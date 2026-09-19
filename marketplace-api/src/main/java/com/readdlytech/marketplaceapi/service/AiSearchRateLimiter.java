@@ -17,6 +17,7 @@ public class AiSearchRateLimiter {
     private final Clock clock;
     private final Map<String, Window> windows = new ConcurrentHashMap<>();
 
+    @org.springframework.beans.factory.annotation.Autowired
     public AiSearchRateLimiter(
             @Value("${app.ai.search.rate-limit.requests:12}") int requestsPerWindow,
             @Value("${app.ai.search.rate-limit.window-seconds:60}") long windowSeconds) {

@@ -89,6 +89,12 @@ class MarketplaceSecurityIntegrationTests {
     }
 
     @Test
+    void vinDecodingRequiresAuthentication() throws Exception {
+        mockMvc.perform(get("/api/vehicles/vin/WVWZZZ1KZAW000001"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void administratorCanSuspendAnAccountAndAuditTheAction() throws Exception {
         User admin = user("admin@example.com", UserRole.ADMIN);
@@ -207,6 +213,23 @@ class MarketplaceSecurityIntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPartJson()))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void priceGuidanceIsRestrictedToSellerAccounts() throws Exception {
+        String request = "{\"title\":\"Golf brake caliper\",\"vehicleIds\":[]}";
+        mockMvc.perform(post("/api/parts/price-estimate")
+                        .contentType(MediaType.APPLICATION_JSON).content(request))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(post("/api/parts/price-estimate")
+                        .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("buyer@example.com").roles("BUYER"))
+                        .contentType(MediaType.APPLICATION_JSON).content(request))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(post("/api/parts/price-estimate")
+                        .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("seller@example.com").roles("SELLER"))
+                        .contentType(MediaType.APPLICATION_JSON).content(request))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.confidence").value("INSUFFICIENT"));
     }
 
     @Test
@@ -867,6 +890,34 @@ class MarketplaceSecurityIntegrationTests {
     @Test
     void publicSemanticSearchFailsClearlyWhenAiServiceIsDisabled() throws Exception {
         mockMvc.perform(get("/api/ai/search").param("query", "Golf diesel brake"))
+                .andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
+    void marketplaceAssistantRequiresAuthentication() throws Exception {
+        mockMvc.perform(get("/api/ai/assistant").param("query", "recommend a Golf brake for me"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void imageIdentificationRequiresAuthentication() throws Exception {
+        MockMultipartFile image = new MockMultipartFile("file", "part.png", "image/png", new byte[]{1, 2, 3});
+        mockMvc.perform(multipart("/api/ai/identify").file(image))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void authenticatedImageIdentificationValidatesUploadAndFailsClearlyWhenAiIsDisabled() throws Exception {
+        User buyer = userRepository.save(user("vision-buyer@example.com", UserRole.BUYER));
+        var authentication = org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+                .user(buyer.getEmail()).roles("BUYER");
+
+        MockMultipartFile text = new MockMultipartFile("file", "part.txt", "text/plain", "not an image".getBytes());
+        mockMvc.perform(multipart("/api/ai/identify").file(text).with(authentication))
+                .andExpect(status().isBadRequest());
+
+        MockMultipartFile image = new MockMultipartFile("file", "part.png", "image/png", new byte[]{1, 2, 3});
+        mockMvc.perform(multipart("/api/ai/identify").file(image).with(authentication))
                 .andExpect(status().isServiceUnavailable());
     }
 

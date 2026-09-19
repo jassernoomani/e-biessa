@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminAuditLog, AuthUser, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, OAuthProviders, Page, Part, PartPayload, PartStatus, ProfilePayload, RecoveryStartResponse, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake } from './models';
+import { MarketplaceAssistantResponse, PriceEstimate, RecommendationFeed, RecommendationSettings, VisionIdentification } from './models';
+import { AdminAuditLog, AuthUser, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, OAuthProviders, Page, Part, PartPayload, PartStatus, ProfilePayload, RecoveryStartResponse, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake, VinDecodeResult } from './models';
 
 interface AuthResponse extends AuthUser { token: string; }
 
@@ -10,6 +11,15 @@ export class ApiService {
   private readonly baseUrl = 'http://localhost:8080/api';
 
   constructor(private readonly http: HttpClient) {}
+
+  assetUrl(url: string): string { return new URL(url, this.baseUrl.replace(/\/api$/, '')).href; }
+
+  recommendations(): Observable<RecommendationFeed> { return this.http.get<RecommendationFeed>(`${this.baseUrl}/recommendations`); }
+  recommendationSettings(): Observable<RecommendationSettings> { return this.http.get<RecommendationSettings>(`${this.baseUrl}/recommendations/settings`); }
+  saveRecommendationSettings(personalizationEnabled: boolean, vehicleIds: number[]): Observable<RecommendationSettings> {
+    return this.http.put<RecommendationSettings>(`${this.baseUrl}/recommendations/settings`, { personalizationEnabled, vehicleIds });
+  }
+  clearRecommendationHistory(): Observable<void> { return this.http.delete<void>(`${this.baseUrl}/recommendations/history`); }
 
   get token(): string | null { return localStorage.getItem('e_bieca_token') || localStorage.getItem('partly_token'); }
   set token(value: string | null) {
@@ -31,9 +41,22 @@ export class ApiService {
     Object.entries(filters).forEach(([key, value]) => { if (value) params = params.set(key, value); });
     return this.http.get<SemanticSearchResponse>(`${this.baseUrl}/ai/search`, { params });
   }
+  marketplaceAssistant(query: string, filters: Record<string, string>, minimumScore = 0.5): Observable<MarketplaceAssistantResponse> {
+    let params = new HttpParams().set('query', query).set('limit', '12').set('minimumScore', String(minimumScore));
+    Object.entries(filters).forEach(([key, value]) => { if (value) params = params.set(key, value); });
+    return this.http.get<MarketplaceAssistantResponse>(`${this.baseUrl}/ai/assistant`, { params });
+  }
+  identifyPartImage(file: File): Observable<VisionIdentification> {
+    const body = new FormData();
+    body.append('file', file);
+    return this.http.post<VisionIdentification>(`${this.baseUrl}/ai/identify`, body);
+  }
   part(id: number): Observable<Part> { return this.http.get<Part>(`${this.baseUrl}/parts/${id}`); }
   categories(): Observable<Category[]> { return this.http.get<Category[]>(`${this.baseUrl}/categories`); }
   vehicles(): Observable<Vehicle[]> { return this.http.get<Vehicle[]>(`${this.baseUrl}/vehicles`); }
+  decodeVin(vin: string): Observable<VinDecodeResult> {
+    return this.http.get<VinDecodeResult>(`${this.baseUrl}/vehicles/vin/${encodeURIComponent(vin)}`);
+  }
   vehicleCatalogYears(): Observable<number[]> { return this.http.get<number[]>(`${this.baseUrl}/vehicles/catalog/years`); }
   vehicleCatalogMakes(year?: string): Observable<VehicleCatalogMake[]> {
     const options = year ? { params: new HttpParams().set('year', year) } : {};
@@ -83,6 +106,18 @@ export class ApiService {
   unfavorite(id: number): Observable<unknown> { return this.http.delete(`${this.baseUrl}/favorites/${id}`); }
   myListings(): Observable<Part[]> { return this.http.get<Part[]>(`${this.baseUrl}/parts/my-listings`); }
   createPart(body: PartPayload): Observable<Part> { return this.http.post<Part>(`${this.baseUrl}/parts`, body); }
+  estimatePrice(body: PartPayload, excludeListingId?: number): Observable<PriceEstimate> {
+    return this.http.post<PriceEstimate>(`${this.baseUrl}/parts/price-estimate`, {
+      excludeListingId: excludeListingId ?? null,
+      title: body.title,
+      categoryId: body.categoryId,
+      vehicleIds: body.vehicleIds,
+      condition: body.condition,
+      partBrand: body.partBrand,
+      oemNumber: body.oemNumber,
+      partPosition: body.partPosition
+    });
+  }
   updatePart(id: number, body: PartPayload): Observable<Part> { return this.http.put<Part>(`${this.baseUrl}/parts/${id}`, body); }
   updatePartStatus(id: number, status: PartStatus): Observable<Part> { return this.http.patch<Part>(`${this.baseUrl}/parts/${id}/status`, { status }); }
   deletePart(id: number): Observable<void> { return this.http.delete<void>(`${this.baseUrl}/parts/${id}`); }

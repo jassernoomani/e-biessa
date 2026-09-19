@@ -1,0 +1,71 @@
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Je tiens à remercier toutes les personnes qui ont contribué, directement ou indirectement, à la réalisation de ce projet. Leurs échanges, leurs retours et leurs conseils ont permis de transformer un cahier des charges ambitieux en une solution cohérente, testable et documentée.
+
+
+Ce travail a également été l'occasion d'approfondir des domaines complémentaires : conception d'API sécurisées, développement d'interfaces Angular, modélisation de données, recherche sémantique, adaptation d'un modèle de langage et validation de règles de compatibilité automobile.
+
+
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+
+E-biessa est une place de marché intelligente dédiée aux pièces automobiles d'occasion en Tunisie. La plateforme réunit trois profils - acheteur, vendeur et administrateur - autour d'un parcours complet : création de compte, gestion du profil, publication d'annonces illustrées, recherche multicritère, contact, messagerie instantanée, modération et suivi de la réputation.
+
+
+L'originalité de la solution réside dans une architecture hybride. Spring Boot garantit les transactions, les droits d'accès et la cohérence du catalogue. Angular fournit une interface responsive en modes clair et sombre. Un service FastAPI réalise l'indexation vectorielle et la recherche sémantique. Un modèle Qwen 2.5 7B, adapté localement par QLoRA, extrait les contraintes véhicule, carburant, position et type de pièce à partir de requêtes en français, en anglais ou en arabe tunisien. Les résultats sont ensuite contrôlés par des règles déterministes afin d'éviter toute compatibilité inventée.
+
+
+La version finale intègre aussi des recommandations personnalisées explicables, une orchestration LangChain en lecture seule, une assistance VIN, une estimation indicative des prix, une identification de pièces par image et une saisie vocale. La validation distingue les règles testées automatiquement des intégrations optionnelles qui exigent des services externes. L'application constitue un démonstrateur académique ; elle ne réalise ni paiement ni commande en ligne.
+
+
+Mots-clés : marketplace, pièces automobiles, Spring Boot, Angular, FastAPI, Qdrant, Qwen, QLoRA, RAG, recommandation, sécurité.
+
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+E-biessa is an intelligent marketplace for used automotive parts in Tunisia. It supports buyers, sellers and administrators through secure account management, rich listings, multi-vehicle fitment, image handling, moderation, seller reputation, direct contact and real-time messaging.
+
+
+The final solution uses Spring Boot for transactions and security, Angular for the user interface, and FastAPI for semantic retrieval and model-backed query understanding. A locally fine-tuned Qwen 2.5 7B model proposes automotive constraints, while deterministic catalogue rules remain authoritative. Explainable recommendations, read-only LangChain orchestration, VIN assistance, indicative pricing, optional CLIP image identification and editable voice input complete the academic demonstrator. Online payments and production deployment are outside its delivered scope.
+
+
+Keywords: automotive marketplace, semantic search, fitment, Spring Boot, Angular, FastAPI, Qdrant, QLoRA, recommendations.
+
+
+\clearpage
+\tableofcontents
+
+\chapter*{Liste des abréviations}
+\addcontentsline{toc}{chapter}{Liste des abréviations}
+
+{\small\singlespacing\arrayrulecolor{tableline}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr 0.350\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|>{\raggedright\arraybackslash}p{\dimexpr 0.650\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}
+\hline
+\rowcolor{tablehead} \color{white}\bfseries Abréviation & \color{white}\bfseries Signification \\ \hline
+\endfirsthead
+\rowcolor{tablehead} \color{white}\bfseries Abréviation & \color{white}\bfseries Signification \\ \hline
+\endhead
+\hline\endfoot
+API & Application Programming Interface \\ \hline
+\rowcolor{tablerow} DTO & Data Transfer Object \\ \hline
+E2E & End-to-End \\ \hline
+\rowcolor{tablerow} JWT & JSON Web Token \\ \hline
+LLM & Large Language Model \\ \hline
+\rowcolor{tablerow} OEM & Original Equipment Manufacturer \\ \hline
+QLoRA & Quantized Low-Rank Adaptation \\ \hline
+\rowcolor{tablerow} RAG & Retrieval-Augmented Generation \\ \hline
+RBAC & Role-Based Access Control \\ \hline
+\rowcolor{tablerow} SPA & Single-Page Application \\ \hline
+UML & Unified Modeling Language \\ \hline
+\rowcolor{tablerow} WebSocket & Canal bidirectionnel persistant entre client et serveur \\ \hline
+\end{longtable}
+}
+
+
+\clearpage
+\listoffigures
+
+\clearpage
+\pagenumbering{arabic}

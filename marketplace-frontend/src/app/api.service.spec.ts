@@ -51,6 +51,29 @@ describe('ApiService', () => {
     request.flush({ query: 'front brake part for a diesel Golf', results: [], tookMs: 8, extractedConstraints: {} });
   });
 
+  it('calls the authenticated marketplace assistant with safe filters', () => {
+    api.marketplaceAssistant('recommend a Golf brake for me', { model: 'Golf', fuelType: 'Diesel' }).subscribe();
+    const request = http.expectOne(req => req.url.endsWith('/ai/assistant'));
+    expect(request.request.method).toBe('GET');
+    expect(request.request.params.get('query')).toBe('recommend a Golf brake for me');
+    expect(request.request.params.get('model')).toBe('Golf');
+    expect(request.request.params.get('fuelType')).toBe('Diesel');
+    request.flush({ query: 'recommend a Golf brake for me', intent: 'RECOMMENDATION', results: [], tookMs: 4,
+      extractedConstraints: {}, toolsUsed: ['search_agent', 'recommendation_agent'],
+      answer: { summary: 'No match', recommendedListingIds: [], cautions: [], generatedBy: 'deterministic' } });
+  });
+
+  it('uploads a part photo for authenticated visual identification', () => {
+    const photo = new File(['image-bytes'], 'unknown-part.jpg', { type: 'image/jpeg' });
+    api.identifyPartImage(photo).subscribe();
+    const request = http.expectOne('http://localhost:8080/api/ai/identify');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body instanceof FormData).toBe(true);
+    expect((request.request.body as FormData).get('file')).toBe(photo);
+    request.flush({ candidates: [{ partType: 'brake caliper', category: 'Brake Systems', confidence: .74 }],
+      model: 'openai/clip-vit-base-patch32', caution: 'Confirm fitment.' });
+  });
+
   it('loads dependent CarQuery vehicle catalog options through the backend', () => {
     api.vehicleCatalogYears().subscribe();
     http.expectOne('http://localhost:8080/api/vehicles/catalog/years').flush([2026, 2025]);
@@ -65,6 +88,14 @@ describe('ApiService', () => {
     expect(models.request.params.get('makeId')).toBe('volkswagen');
     expect(models.request.params.get('year')).toBe('2020');
     models.flush(['Golf', 'Passat']);
+  });
+
+  it('decodes a VIN through the authenticated backend route', () => {
+    api.decodeVin('WVWZZZ1KZAW000001').subscribe();
+    const request = http.expectOne('http://localhost:8080/api/vehicles/vin/WVWZZZ1KZAW000001');
+    expect(request.request.method).toBe('GET');
+    request.flush({ vin: 'WVWZZZ1KZAW000001', make: 'Volkswagen', model: 'Golf', year: 2020,
+      matchedVehicleIds: [3], warnings: [] });
   });
 
   it('publishes all rich listing and compatibility fields', () => {
@@ -83,7 +114,31 @@ describe('ApiService', () => {
     request.flush({ id: 1 });
   });
 
+  it('requests a grounded price estimate using listing identity fields', () => {
+    const listing = {
+      title: 'Golf front caliper', description: '', price: 1, condition: 'Used - good', categoryId: 2,
+      vehicleIds: [7], manufacturer: '', partBrand: 'ATE', oemNumber: '1K0615123',
+      alternativeOemNumbers: [], partPosition: 'FRONT', engineCompatibility: '', fuelCompatibility: '',
+      warrantyInformation: '', deliveryAvailable: false, collectionAvailable: true, negotiable: false, location: ''
+    };
+    api.estimatePrice(listing, 14).subscribe();
+    const request = http.expectOne('http://localhost:8080/api/parts/price-estimate');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({ excludeListingId: 14, title: 'Golf front caliper', categoryId: 2,
+      vehicleIds: [7], condition: 'Used - good', partBrand: 'ATE', oemNumber: '1K0615123', partPosition: 'FRONT' });
+    request.flush({ suggestedPrice: 300, lowerRange: 250, upperRange: 400, comparableCount: 5,
+     confidence: 'MEDIUM', comparableListingIds: [1, 2], reasons: ['2 comparable listings'], caution: 'Estimate only' });
+  });
+
   it('loads a shareable listing detail', () => {
+    const photo = new File(['part'], 'caliper.png', { type: 'image/png' });
+    api.identifyPartImage(photo).subscribe();
+    const identification = http.expectOne('http://localhost:8080/api/ai/identify');
+    expect(identification.request.method).toBe('POST');
+    expect(identification.request.body instanceof FormData).toBe(true);
+    expect((identification.request.body as FormData).get('file')).toBe(photo);
+    identification.flush({ candidates: [], model: 'clip', caution: 'Confirm fitment.' });
+
     api.part(42).subscribe();
     const request = http.expectOne('http://localhost:8080/api/parts/42');
     expect(request.request.method).toBe('GET');

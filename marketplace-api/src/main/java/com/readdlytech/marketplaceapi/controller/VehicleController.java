@@ -2,11 +2,14 @@ package com.readdlytech.marketplaceapi.controller;
 
 import com.readdlytech.marketplaceapi.dto.VehicleResponse;
 import com.readdlytech.marketplaceapi.dto.VehicleCatalogMakeResponse;
+import com.readdlytech.marketplaceapi.dto.VinDecodeResponse;
 import com.readdlytech.marketplaceapi.repository.VehicleRepository;
 import com.readdlytech.marketplaceapi.service.VehicleCatalogService;
+import com.readdlytech.marketplaceapi.service.VinDecoderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +22,7 @@ import java.util.List;
 public class VehicleController {
     private final VehicleRepository vehicleRepository;
     private final VehicleCatalogService vehicleCatalogService;
+    private final VinDecoderService vinDecoderService;
 
     @GetMapping
     public ResponseEntity<List<VehicleResponse>> vehicles(@RequestParam(required = false) String brand) {
@@ -26,6 +30,11 @@ public class VehicleController {
                 ? vehicleRepository.findAll()
                 : vehicleRepository.findByBrand(brand);
         return ResponseEntity.ok(vehicles.stream().map(VehicleResponse::from).toList());
+    }
+
+    @GetMapping("/vin/{vin}")
+    public ResponseEntity<VinDecodeResponse> decodeVin(@PathVariable String vin) {
+        return ResponseEntity.ok(vinDecoderService.decode(vin));
     }
 
     @GetMapping("/catalog/years")

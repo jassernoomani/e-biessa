@@ -179,6 +179,21 @@ def rank_candidate(payload: dict[str, Any], raw_score: float, constraints: Extra
     reasons: list[str] = []
     bonus = 0.0
 
+    # Every requested vehicle attribute must be satisfied by ONE declared row.
+    # Independent array membership checks can invent e.g. a 2020 diesel Golf
+    # from a 2018 petrol Golf plus a 2020 diesel Passat.
+    vehicle_fields = (("brand", constraints.brand), ("model", constraints.model),
+                      ("year", constraints.year), ("fuelType", constraints.fuelType))
+    if any(value is not None for _, value in vehicle_fields):
+        if not any(all(value is None or (vehicle.get(key) == value if key == "year"
+                       else normalize(vehicle.get(key)) == normalize(value))
+                       for key, value in vehicle_fields) for vehicle in vehicles):
+            return None
+    if constraints.fuelType and payload.get("fuelCompatibility"):
+        declared_fuels = {normalize(value) for value in re.split(r"[,;/|]", payload["fuelCompatibility"])}
+        if not declared_fuels.intersection({normalize(constraints.fuelType), "all", "universal"}):
+            return None
+
     if constraints.partType:
         expected = normalize(constraints.partType)
         if expected not in title:
@@ -203,7 +218,6 @@ def rank_candidate(payload: dict[str, Any], raw_score: float, constraints: Extra
     if constraints.fuelType:
         vehicle_fuels = [vehicle.get("fuelType") for vehicle in vehicles]
         compatible = any(normalize(value) == normalize(constraints.fuelType) for value in vehicle_fuels)
-        compatible = compatible or normalize(payload.get("fuelCompatibility")) == normalize(constraints.fuelType)
         if not compatible:
             return None
         reasons.append(constraints.fuelType)

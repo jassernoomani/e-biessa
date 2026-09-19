@@ -36,6 +36,11 @@
 tmp/
 *.log
 
+# Generated report-review scratch output
+report_rendered/
+tmp_reference_report.txt
+tmp_reference_report_pages/
+
 # IDE / operating system
 .idea/
 .vscode/

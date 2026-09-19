@@ -2,17 +2,24 @@ from contextlib import asynccontextmanager
 from functools import lru_cache
 from time import perf_counter
 
-from fastapi import Depends, FastAPI, Response, status
+from fastapi import Body, Depends, FastAPI, Header, HTTPException, Response, status
 
 from .config import Settings, get_settings
-from .models import BulkListingRequest, IndexResponse, ListingDocument, SearchRequest, SearchResponse
+from .models import AssistantRequest, AssistantResponse, BulkListingRequest, IndexResponse, ListingDocument, SearchRequest, SearchResponse, VisionIdentificationResponse
+from .orchestrator import MarketplaceAgentOrchestrator
 from .security import require_service_token
 from .vector_store import ListingVectorStore
+from .vision_identifier import InvalidPartImage, VisionPartIdentifier, VisionUnavailable
 
 
 @lru_cache
 def get_store() -> ListingVectorStore:
     return ListingVectorStore(get_settings())
+
+
+@lru_cache
+def get_vision_identifier() -> VisionPartIdentifier:
+    return VisionPartIdentifier(get_settings())
 
 
 @asynccontextmanager
@@ -39,6 +46,9 @@ def create_app() -> FastAPI:
             "modelLoaded": store.ready,
             "queryModelEnabled": settings.ollama_enabled,
             "queryModel": settings.ollama_model if settings.ollama_enabled else None,
+            "visionEnabled": settings.vision_enabled,
+            "visionModel": settings.vision_model if settings.vision_enabled else None,
+            "visionModelLoaded": get_vision_identifier().ready,
         }
 
     @application.put("/v1/listings/{listing_id}", response_model=IndexResponse, dependencies=[Depends(require_service_token)])
@@ -68,6 +78,30 @@ def create_app() -> FastAPI:
         return SearchResponse(query=request.query.strip(), hits=hits,
                               tookMs=round((perf_counter() - started) * 1000),
                               extractedConstraints=constraints, answer=answer)
+
+    @application.post("/v1/assistant", response_model=AssistantResponse, dependencies=[Depends(require_service_token)])
+    def assistant(request: AssistantRequest, store: ListingVectorStore = Depends(get_store)) -> AssistantResponse:
+        started = perf_counter()
+        response = MarketplaceAgentOrchestrator(store).run(request)
+        return response.model_copy(update={"tookMs": round((perf_counter() - started) * 1000)})
+
+    @application.post("/v1/vision/identify", response_model=VisionIdentificationResponse,
+                      dependencies=[Depends(require_service_token)])
+    def identify_part_image(
+            image: bytes = Body(...),
+            content_type: str | None = Header(default=None, alias="Content-Type"),
+            identifier: VisionPartIdentifier = Depends(get_vision_identifier),
+    ) -> VisionIdentificationResponse:
+        media_type = (content_type or "").split(";", 1)[0].strip().lower()
+        if media_type not in {"image/jpeg", "image/png", "image/webp"}:
+            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                                detail="Only JPEG, PNG, and WebP images are supported.")
+        try:
+            return identifier.identify(image)
+        except InvalidPartImage as exception:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exception)) from exception
+        except VisionUnavailable as exception:
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exception)) from exception
 
     return application
 

@@ -1,0 +1,71 @@
+<section class="recommendations" aria-label="Buyer recommendations">
+  <header>
+    <div><span class="eyebrow">YOUR NEXT FIND</span><h2>{{ settingsOnly ? 'Vehicles & recommendations' : 'Recommended for you' }}</h2>
+      <p>{{ settingsOnly ? 'Choose up to five catalog vehicles and control how your activity is used.' : feed()?.mode === 'PERSONALIZED' ? 'Picks informed by your recent interests. Every suggestion tells you why.' : feed()?.mode === 'VEHICLE' ? 'Listings that declare your preferred vehicle configuration.' : 'Start exploring. Save parts or choose your vehicle to tailor these picks.' }}</p>
+    </div>
+    @if (!settingsOnly) {<div class="actions"><button type="button" (click)="editorOpen.set(!editorOpen())" [attr.aria-expanded]="editorOpen()">My preferences</button><button type="button" (click)="refresh()" [disabled]="loading() || busy()">Refresh picks</button></div>}
+  </header>
+  @if (error()) {<div class="feedback" role="alert">{{ error() }} <button type="button" (click)="retry()">Retry</button></div>}
+  @if (notice()) {<p class="feedback" role="status">{{ notice() }}</p>}
+  @if (editorOpen()) {
+    <div class="preferences">
+      @if (!ready()) {<p>Loading preferences…</p>} @else {
+        <label class="check"><input type="checkbox" [(ngModel)]="enabled" [disabled]="busy()">Use my activity to personalize recommendations</label>
+        <p class="hint">Uses viewed categories, search-result categories, saved parts, and sellers you contacted or messaged. No query text, message content or contact details are stored in recommendation history. Turning this off also clears that history.</p>
+        <section class="vin-panel" aria-labelledby="vin-heading">
+          <div>
+            <strong id="vin-heading">Add a vehicle by VIN</strong>
+            <p class="hint">Decode a 17-character VIN and select an exact match from the local catalog. The VIN itself is not saved.</p>
+          </div>
+          <div class="vin-controls">
+            <label>
+              <span>Vehicle identification number</span>
+              <input type="text" [(ngModel)]="vin" maxlength="17" autocomplete="off" spellcheck="false" placeholder="WVWZZZ1KZAW000001" [disabled]="vinLoading() || busy()">
+            </label>
+            <button type="button" (click)="decodeVin()" [disabled]="vinLoading() || busy()">{{ vinLoading() ? 'Decoding…' : 'Decode VIN' }}</button>
+          </div>
+          @if (vinResult(); as decoded) {
+            <div class="vin-result" role="status">
+              <strong>{{ decoded.year || 'Year unknown' }} {{ decoded.make }} {{ decoded.model }}</strong>
+              <span>{{ decoded.engine || 'Engine unknown' }} · {{ decoded.fuelType || 'Fuel unknown' }}</span>
+              @if (decoded.matchedVehicleIds.length) {
+                <small>Matching local catalog configuration found.</small>
+              } @else {
+                <small>No exact local catalog configuration was found. Use the manual search below.</small>
+              }
+              @for (warning of decoded.warnings; track warning) { <small class="warning">{{ warning }}</small> }
+            </div>
+          }
+        </section>
+        <label class="search-label">Find your vehicle<input type="search" [(ngModel)]="vehicleSearch" placeholder="Make, model, year, engine…"></label>
+        <fieldset [disabled]="busy()"><legend>Preferred vehicles ({{ selectedIds.length }}/5)</legend>
+          <div class="vehicle-options">
+            @for (vehicle of visibleVehicles(); track vehicle.id) {
+              <label class="check"><input type="checkbox" [checked]="selectedIds.includes(vehicle.id)" [disabled]="!selectedIds.includes(vehicle.id) && selectedIds.length >= 5" (change)="toggleVehicle(vehicle.id, $any($event.target).checked)">{{ vehicleLabel(vehicle) }}</label>
+            } @empty {<p>No catalog vehicles match. Try another search; only existing vehicle definitions can be selected.</p>}
+          </div>
+        </fieldset>
+        <p class="hint">Vehicle choices filter this feed, not marketplace search. No compatible inventory means an empty feed; we will not silently broaden your choices.</p>
+        <div class="actions"><button type="button" class="save" (click)="save()" [disabled]="busy()">{{ busy() ? 'Please wait…' : 'Save preferences' }}</button><button type="button" (click)="confirmClear.set(true)" [disabled]="busy()">Clear recommendation history</button></div>
+        @if (confirmClear()) {<div class="feedback"><p>Forget past activity for recommendations? Saved parts and messages will remain. Future activity can personalize new picks.</p><div class="actions"><button type="button" (click)="clearHistory()" [disabled]="busy()">Confirm clear history</button><button type="button" (click)="confirmClear.set(false)" [disabled]="busy()">Cancel</button></div></div>}
+      }
+    </div>
+  }
+  @if (!settingsOnly) {
+    @if (loading()) {<p role="status">Finding your next parts…</p>}
+    @else if (feed(); as results) {
+      <div class="recommendation-grid">
+        @for (item of results.results; track item.part.id) {
+          <article class="recommendation-card">
+            <button type="button" class="listing-link" (click)="openListing.emit(item.part)">
+              @if (item.part.imageUrls.length) {<img [src]="imageUrl(item.part.imageUrls[0])" [alt]="item.part.title" loading="lazy">} @else {<div class="no-image" aria-hidden="true">⚙</div>}
+              <span class="listing-copy"><small>{{ item.part.categoryName || 'Auto part' }} · {{ item.part.location || 'Tunisia' }}</small><strong>{{ item.part.title }}</strong><b>{{ item.part.price | number:'1.0-2' }} TND</b></span>
+            </button>
+            <ul aria-label="Why this part">@for (reason of item.reasons; track reason) {<li>{{ reason }}</li>}</ul>
+          </article>
+        } @empty {<p class="empty-picks">No new eligible parts right now. Check your vehicle choices or return when sellers add inventory. Saved parts remain in Saved.</p>}
+      </div>
+      <p class="hint caution">{{ results.caution }}</p>
+    }
+  }
+</section>

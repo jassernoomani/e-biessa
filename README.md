@@ -1,6 +1,6 @@
 # E-biessa marketplace
 
-E-biessa is the Phase 1 marketplace from the internship PRD: buyers discover and
+E-biessa is an academic AI-powered marketplace from the internship PRD: buyers discover and
 save used car parts, sellers publish and manage listings with photos, and
 administrators manage roles and moderate inventory.
 
@@ -10,8 +10,9 @@ administrators manage roles and moderate inventory.
 - `marketplace-frontend`: responsive Angular 21 standalone application
 - `ai-service`: FastAPI / multilingual FastEmbed embeddings / persistent local Qdrant
 - Image storage: local filesystem in development; Cloudinary when enabled
-- Future AI service: FastAPI boundary for embeddings, RAG, compatibility, and
-  recommendations (see `ARCHITECTURE.md`)
+- Local Ollama fine-tuned Qwen query extraction and deterministic compatibility checks
+- Explainable buyer recommendations with vehicle preferences and private activity controls
+- Read-only LangChain orchestration across search, compatibility, and personalized recommendation tools
 
 ## Local setup
 
@@ -31,18 +32,42 @@ Follow `ai-service/README.md` to create its Python environment. Put the same lon
 
 After both APIs are running, log in as an administrator and make one request to `POST /api/admin/ai/reindex` with the administrator JWT. This creates embeddings for every active listing. New listing creation, edits, status changes, moderation, and deletion are synchronized automatically after the MySQL transaction commits. Indexing failures never prevent the marketplace operation from completing.
 
-The initial Spring endpoint for semantic retrieval is `GET /api/ai/search?query=your natural language request&limit=12`. The Angular AI assistant will consume this endpoint in the next UI milestone.
+The Spring endpoint for semantic retrieval is `GET /api/ai/search?query=your natural language request&limit=12`. Angular's AI fitment search consumes this endpoint and displays normalized constraints, match reasons and an answer built deterministically from current listings.
 
-The development seed preserves existing records and fills the catalog up to 100
-listings. It creates ten reusable sellers, from `seller01@e-biessa.tn` through
-`seller10@e-biessa.tn`, all with password `Seller123!`. It also creates
-`buyer@e-biessa.tn` with password `Buyer123!` and `admin@e-biessa.tn` with
+For a signed-in buyer, the same Angular search uses `GET /api/ai/assistant`. Spring supplies only sanitized recommendation candidates (listing ID, score, and explanation), while FastAPI coordinates LangChain search, compatibility, and recommendation tools. Spring rehydrates every returned ID from MySQL and rebuilds the final answer deterministically. See `AGENT_ORCHESTRATION.md`.
+
+The development seed preserves existing records and creates 60
+listings. It creates three reusable sellers, from `seller01@e-biessa.tn` through
+`seller03@e-biessa.tn`, all with password `Seller123!`. It also creates
+`buyer01@e-biessa.tn` through `buyer03@e-biessa.tn` with password `Buyer123!` and `admin@e-biessa.tn` with
 password `Admin123!`. Each seeded seller owns multiple
 listings with full descriptions, vehicle fitment, OEM references, prices,
 locations, conditions, and primary images. Restarting the API does not duplicate
 the seed data. Never use these credentials in production.
 
-## Required production configuration
+## Personalized recommendations
+
+Restart Spring Boot after updating the code (the existing `ddl-auto=update` setting adds the buyer preference and interaction tables/columns). Restart Angular or let its development server rebuild. No model download, retraining, reindex, or additional environment variables are needed for this milestone.
+
+Sign in as a **buyer**. On the unfiltered keyword marketplace, open **Recommended for you → My preferences**, or use **Profile → Vehicles & recommendations**. Select up to five existing catalog vehicle definitions and save. View parts, save parts, run searches, or contact/message sellers; refresh the feed to see updated suggestions. Preferred vehicles strictly constrain the feed, not ordinary marketplace search.
+
+The first implementation is a deterministic content-based recommendation baseline, not a new trained recommendation model. It uses category interests, seller interactions, declared vehicle compatibility, saves and recency. Explanations are derived from the same evidence as the scores. Sold/inactive listings, suspended sellers, own listings and already-saved exact listings are excluded. Recent conversation-start listings are excluded when activity personalization is enabled.
+
+Buyers can disable activity personalization or clear recommendation history without deleting saved parts or conversations. Only identifiers and timestamps are stored in recommendation history, not raw queries, messages or contact details. Read `RECOMMENDATIONS.md` for ranking, privacy, limitations and evaluation cases.
+
+### VIN-assisted vehicle preferences
+
+Signed-in buyers can decode a 17-character VIN from **Profile → Vehicles & recommendations**. Spring maps the decoded make, model, year and fuel type to existing catalog rows, and Angular adds exact matches to the unsaved preference selection. The VIN is not stored and the result is never presented as a part-fitment guarantee. See `VIN_COMPATIBILITY.md`.
+
+### Grounded seller price guidance
+
+Sellers can request **Price guidance** while creating or editing a listing. Spring compares the draft only with similar active local listings and returns a median, interquartile range, sample size, confidence label, and reasons. The estimate is optional and never overwrites the seller's price unless **Use suggested price** is selected. See `PRICE_ESTIMATION.md`.
+
+### Image-assisted identification and voice search
+
+Signed-in users can upload a part photo from **AI fitment search** to receive bounded CLIP part-type suggestions. Image analysis is optional and disabled by default; it never claims vehicle fitment. The search bar also supports browser speech recognition in French, Arabic, and English, with editable transcription before submission. See `IMAGE_AND_VOICE_SEARCH.md` for setup, privacy, and limitations.
+
+## Configuration reference (deployment deferred)
 
 Set `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, and
 `CORS_ALLOWED_ORIGINS`. For Cloudinary-backed images, also set

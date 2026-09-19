@@ -86,5 +86,19 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favorite> favorites = new ArrayList<>();
+
+    @Column(nullable = false)
+    @org.hibernate.annotations.ColumnDefault("true")
+    private Boolean personalizationEnabled = true;
+
+    private LocalDateTime recommendationHistorySince;
+
+    @ManyToMany
+    @JoinTable(name = "buyer_preferred_vehicles", joinColumns = @JoinColumn(name = "buyer_id"),
+            inverseJoinColumns = @JoinColumn(name = "vehicle_id"))
+    private List<Vehicle> preferredVehicles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BuyerInteraction> interactions = new ArrayList<>();
 }
 

@@ -3,11 +3,14 @@ package com.readdlytech.marketplaceapi.controller;
 import com.readdlytech.marketplaceapi.dto.PartRequest;
 import com.readdlytech.marketplaceapi.dto.PartResponse;
 import com.readdlytech.marketplaceapi.dto.PartStatusRequest;
+import com.readdlytech.marketplaceapi.dto.PriceEstimateRequest;
+import com.readdlytech.marketplaceapi.dto.PriceEstimateResponse;
 import com.readdlytech.marketplaceapi.entity.Part;
 import com.readdlytech.marketplaceapi.entity.PartStatus;
 import com.readdlytech.marketplaceapi.entity.User;
 import com.readdlytech.marketplaceapi.security.CurrentUserService;
 import com.readdlytech.marketplaceapi.service.PartService;
+import com.readdlytech.marketplaceapi.service.PriceEstimatorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +35,9 @@ import java.util.Set;
 public class PartController {
     private static final Set<String> ALLOWED_SORTS = Set.of("createdAt", "price", "views", "title");
     private final PartService partService;
+    private final PriceEstimatorService priceEstimatorService;
     private final CurrentUserService currentUserService;
+    private final com.readdlytech.marketplaceapi.service.BuyerActivityService buyerActivity;
 
     @GetMapping
     public ResponseEntity<Page<PartResponse>> getParts(
@@ -106,11 +111,23 @@ public class PartController {
         if (collectionAvailable != null) spec = spec.and((root, query, cb) -> cb.equal(root.get("collectionAvailable"), collectionAvailable));
         if (negotiable != null) spec = spec.and((root, query, cb) -> cb.equal(root.get("negotiable"), negotiable));
         spec = spec.and(partService.publiclyVisibleSpecification());
-        return ResponseEntity.ok(partService.getAllParts(spec, pageable, userId));
+        Page<PartResponse> response = partService.getAllParts(spec, pageable, userId);
+        if (pageable.getPageNumber() == 0 && (hasText(search) || categoryId != null)) {
+            response.getContent().stream().map(PartResponse::getCategoryId).filter(java.util.Objects::nonNull)
+                    .distinct().limit(3).forEach(id -> buyerActivity.record(userId,
+                            com.readdlytech.marketplaceapi.entity.BuyerInteraction.Kind.SEARCH, id, id, null));
+        }
+        return ResponseEntity.ok(response);
     }
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();
+    }
+
+    @PostMapping("/price-estimate")
+    @PreAuthorize("hasAnyRole('SELLER','ADMIN')")
+    public ResponseEntity<PriceEstimateResponse> estimatePrice(@Valid @RequestBody PriceEstimateRequest request) {
+        return ResponseEntity.ok(priceEstimatorService.estimate(request));
     }
 
     @GetMapping("/my-listings")
@@ -121,7 +138,10 @@ public class PartController {
     @GetMapping("/{id}")
     public ResponseEntity<PartResponse> getPart(@PathVariable Long id, Authentication authentication) {
         Long userId = currentUserService.optional(authentication).map(User::getId).orElse(null);
-        return ResponseEntity.ok(partService.getPartById(id, userId));
+        PartResponse response = partService.getPartById(id, userId);
+        buyerActivity.record(userId, com.readdlytech.marketplaceapi.entity.BuyerInteraction.Kind.VIEW,
+                id, response.getCategoryId(), response.getSellerId());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping

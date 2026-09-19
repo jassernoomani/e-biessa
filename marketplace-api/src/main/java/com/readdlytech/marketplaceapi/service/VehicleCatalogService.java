@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class VehicleCatalogService {
     private final VehicleRepository vehicleRepository;
     private final ObjectMapper objectMapper;
-    private final HttpClient httpClient;
+    private volatile HttpClient httpClient;
     private final boolean enabled;
     private final String baseUrl;
     private final Duration requestTimeout;
@@ -47,10 +47,10 @@ public class VehicleCatalogService {
         this.enabled = enabled;
         this.baseUrl = baseUrl;
         this.requestTimeout = Duration.ofSeconds(Math.max(1, timeoutSeconds));
-        this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(this.requestTimeout)
-                .followRedirects(HttpClient.Redirect.NEVER)
-                .build();
+        // CarQuery is optional. Creating the JDK HTTP client can fail on restricted
+        // Windows hosts, so defer it until a remote catalog request is actually made.
+        // Any failure is then handled by the existing listing-derived fallback.
+        this.httpClient = null;
     }
 
     public List<Integer> years() {
@@ -125,7 +125,7 @@ public class VehicleCatalogService {
                 .header("Accept", "application/json, application/javascript")
                 .GET()
                 .build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client().send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200 || response.body() == null || response.body().isBlank()) {
             throw new IllegalStateException("CarQuery returned HTTP " + response.statusCode());
         }
@@ -134,6 +134,20 @@ public class VehicleCatalogService {
         int jsonEnd = body.lastIndexOf('}');
         if (jsonStart < 0 || jsonEnd < jsonStart) throw new IllegalStateException("CarQuery returned invalid JSON");
         return objectMapper.readTree(body.substring(jsonStart, jsonEnd + 1));
+    }
+
+    private HttpClient client() {
+        HttpClient current = httpClient;
+        if (current != null) return current;
+        synchronized (this) {
+            if (httpClient == null) {
+                httpClient = HttpClient.newBuilder()
+                        .connectTimeout(requestTimeout)
+                        .followRedirects(HttpClient.Redirect.NEVER)
+                        .build();
+            }
+            return httpClient;
+        }
     }
 
     private List<VehicleCatalogMakeResponse> fallbackMakes(Integer year) {

@@ -59,6 +59,9 @@ pipeline {
                         dir('marketplace-frontend') {
                             sh '''
                                 npm ci
+                                # Keep the cached browser revision aligned with the
+                                # Playwright version resolved by package-lock.json.
+                                npx playwright install chromium
                                 npm run test:coverage
                                 npm run build
                                 npx playwright test e2e/app.spec.ts

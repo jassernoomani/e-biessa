@@ -59,6 +59,29 @@ describe('E-biessa Angular application', () => {
     delete (window as any).webkitSpeechRecognition;
   });
 
+  it('explains when the browser speech service cannot be reached', () => {
+    const fixture = TestBed.createComponent(App);
+    class FailingSpeechRecognition {
+      lang = '';
+      interimResults = false;
+      continuous = false;
+      onresult?: (event: any) => void;
+      onerror?: (event: any) => void;
+      onnomatch?: () => void;
+      onend?: () => void;
+      start(): void {
+        this.onerror?.({ error: 'network' });
+        this.onend?.();
+      }
+      stop(): void { this.onend?.(); }
+    }
+    Object.defineProperty(window, 'webkitSpeechRecognition', { value: FailingSpeechRecognition, configurable: true });
+    fixture.componentInstance.toggleVoiceSearch();
+    expect(fixture.componentInstance.voiceError()).toContain('Brave');
+    expect(fixture.componentInstance.voiceListening()).toBe(false);
+    delete (window as any).webkitSpeechRecognition;
+  });
+
   it('shows the complete vehicle filter set', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();

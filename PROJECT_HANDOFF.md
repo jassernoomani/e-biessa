@@ -244,7 +244,7 @@ cd ai-service
 
 ### Angular
 
-Latest verified unit/component result: 51 passing tests, including recommendations, price guidance, image identification, and voice transcription. Run:
+Latest verified unit/component result: 52 passing tests, including recommendations, price guidance, image identification, and voice transcription. Run:
 
 ```powershell
 cd marketplace-frontend
@@ -411,3 +411,21 @@ Two small verification fixes are part of this milestone:
 - Angular production size budgets reflect the completed academic feature set without hiding future material growth.
 
 One environment-specific limitation remains: an agent-launched Java process on this Windows host could connect to MySQL and initialize Spring, but embedded Tomcat could not create the JDK NIO loopback selector (`Unable to establish loopback connection`). This failure occurs inside the host JDK selector before application request handling. Run Spring from IntelliJ/your normal terminal and execute `npm run test:e2e:live` to obtain the final four-process browser evidence; do not weaken application security or networking code to work around this host-specific launcher issue.
+
+## 19. DevOps and observability — 21 September 2026
+
+- `Jenkinsfile` is the primary pipeline: Spring, FastAPI, Angular, and isolated
+  Playwright gates run before SonarQube analysis and Docker builds.
+- GHCR publication is parameterized and disabled by default; there is no public
+  deployment because this remains an academic project.
+- Spring exposes `/actuator/health` and `/actuator/prometheus`; `/actuator/info`
+  stays protected. FastAPI exposes `/metrics/` using bounded route-template
+  labels, with a regression test preventing its service token from appearing.
+- `devops/docker-compose.devops.yml` runs Jenkins, SonarQube/PostgreSQL,
+  Prometheus, Grafana, Alertmanager, and Blackbox Exporter with named volumes.
+- Grafana provisions an E-biessa dashboard. Prometheus includes uptime and
+  elevated-error alerts. Follow `DEVOPS.md` for the complete setup.
+- Verification after this change: 63 Spring tests, 29 FastAPI tests, 52 Angular
+  tests, and 7 isolated Playwright journeys passed; the Angular production
+  build, JaCoCo XML, Python coverage XML, LCOV, Compose resolution, dashboard
+  JSON, and all monitoring YAML files were also validated.

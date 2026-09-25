@@ -2,6 +2,7 @@
 **/.env
 **/.env.*
 !**/.env.example
+devops/.env
 
 # Java
 **/target/
@@ -12,6 +13,8 @@
 **/dist/
 **/.angular/
 **/coverage/
+**/coverage.xml
+**/.coverage
 **/test-results/
 **/playwright-report/
 **/blob-report/
@@ -22,6 +25,7 @@
 **/__pycache__/
 **/.pytest_cache/
 **/*.pyc
+**/.scannerwork/
 
 # AI models and generated data
 **/training/out/

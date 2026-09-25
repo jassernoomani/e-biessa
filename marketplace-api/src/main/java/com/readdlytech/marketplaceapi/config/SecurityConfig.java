@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .accessDeniedHandler((request, response, ex) -> response.sendError(403, "Access denied")))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/prometheus").permitAll()
                         .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/**", "/uploads/**", "/ws/**").permitAll()
                         .requestMatchers("/api/parts/my-listings").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/vehicles/vin/**").authenticated()

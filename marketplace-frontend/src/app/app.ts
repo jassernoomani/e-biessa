@@ -17,6 +17,7 @@ interface BrowserSpeechRecognition {
   interimResults: boolean;
   onresult: ((event: SpeechEvent) => void) | null;
   onerror: ((event: Event & { error?: string }) => void) | null;
+  onnomatch: (() => void) | null;
   onend: (() => void) | null;
   start(): void;
   stop(): void;
@@ -343,16 +344,35 @@ export class App implements OnInit, OnDestroy {
       if (transcript) this.zone.run(() => this.updateSearchInput(transcript));
       this.voiceError.set('');
     };
-    recognition.onerror = event => {
-      this.voiceError.set(event.error === 'not-allowed'
-        ? 'Microphone permission was denied. Allow it in your browser settings and try again.'
-        : 'Speech could not be recognized. Try again or type your search.');
-    };
+    recognition.onnomatch = () => this.zone.run(() => this.voiceError.set(
+      'No matching speech was recognized. Select the language you are speaking, move closer to the microphone, and try again.'
+    ));
+    recognition.onerror = event => this.zone.run(() => this.voiceError.set(this.voiceRecognitionError(event.error)));
     recognition.onend = () => this.zone.run(() => this.voiceListening.set(false));
     this.voiceRecognition = recognition;
     this.voiceError.set('');
     this.voiceListening.set(true);
     recognition.start();
+  }
+
+  private voiceRecognitionError(error?: string): string {
+    switch (error) {
+      case 'aborted':
+        return '';
+      case 'not-allowed':
+      case 'service-not-allowed':
+        return 'Microphone access or the browser speech service was blocked. Allow microphone access for localhost, then try again.';
+      case 'audio-capture':
+        return 'No working microphone was found. Check the selected Windows input device and its microphone level.';
+      case 'no-speech':
+        return 'No speech was detected. Select FR, AR, or EN to match your language, then speak after the microphone activates.';
+      case 'language-not-supported':
+        return 'This browser does not support the selected recognition language. Try French or English.';
+      case 'network':
+        return 'The browser speech service could not be reached. Brave may block this service; try Chrome or Edge, or type your search.';
+      default:
+        return 'Speech recognition failed in the browser. Check microphone permission and try Chrome or Edge.';
+    }
   }
 
   searchVisionCandidate(candidate: VisionCandidate): void {

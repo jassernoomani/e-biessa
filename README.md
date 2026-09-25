@@ -14,6 +14,14 @@ administrators manage roles and moderate inventory.
 - Explainable buyer recommendations with vehicle preferences and private activity controls
 - Read-only LangChain orchestration across search, compatibility, and personalized recommendation tools
 
+## DevOps and observability
+
+The repository includes an academic local DevOps stack with Jenkins,
+SonarQube, Prometheus, Grafana, Alertmanager, Blackbox Exporter, and reproducible
+Docker images for all three applications. Start with [DEVOPS.md](DEVOPS.md).
+The pipeline tests every service, enforces a SonarQube quality gate, builds
+images, and leaves registry publication disabled unless explicitly selected.
+
 ## Local setup
 
 1. Create the MySQL database: `CREATE DATABASE marketplace;`

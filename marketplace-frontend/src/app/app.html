@@ -55,15 +55,21 @@
         @if (searchMode() === 'ai') {
           <p class="ai-search-hint">Describe the vehicle, fuel, position, and part you need. Compatibility signals are checked before results are shown.</p>
           <section class="vision-search" data-testid="vision-search">
-            <div class="vision-intro"><span>◎</span><div><strong>Not sure what the part is?</strong><small>Upload a clear photo for part-type suggestions. A photo never determines vehicle fitment.</small></div></div>
-            @if (user()) {
-              <label class="vision-upload" [class.disabled]="visionLoading()"><input type="file" accept="image/jpeg,image/png,image/webp" (change)="identifyPartPhoto($event)" [disabled]="visionLoading()">{{ visionLoading() ? 'Analyzing…' : 'Identify from photo' }}</label>
-            } @else {
-              <button class="vision-upload" (click)="openAuth(false)">Log in to identify a photo</button>
-            }
-            @if (visionPreview()) {<img class="vision-preview" [src]="visionPreview()" alt="Uploaded part preview">}
-            @if (visionResult(); as result) {
-              <div class="vision-suggestions"><strong>Possible matches</strong>@for (candidate of result.candidates; track candidate.partType) {<button (click)="searchVisionCandidate(candidate)"><span>{{ candidate.partType }}</span><small>{{ candidate.category }} · {{ candidate.confidence | percent:'1.0-0' }}</small></button>}<p>{{ result.caution }}</p></div>
+            <div class="vision-search-head">
+              <div class="vision-intro"><span>◎</span><div><strong>Not sure what the part is?</strong><small>Upload a clear photo for part-type suggestions. A photo never determines vehicle fitment.</small></div></div>
+              @if (user()) {
+                <label class="vision-upload" [class.disabled]="visionLoading()"><input type="file" accept="image/jpeg,image/png,image/webp" (change)="identifyPartPhoto($event)" [disabled]="visionLoading()">{{ visionLoading() ? 'Analyzing…' : 'Identify from photo' }}</label>
+              } @else {
+                <button class="vision-upload" (click)="openAuth(false)">Log in to identify a photo</button>
+              }
+            </div>
+            @if (visionPreview() || visionResult()) {
+              <div class="vision-result">
+                @if (visionPreview()) {<img class="vision-preview" [src]="visionPreview()" alt="Uploaded part preview">}
+                @if (visionResult(); as result) {
+                  <div class="vision-suggestions"><strong>Possible matches</strong>@for (candidate of result.candidates; track candidate.partType) {<button (click)="searchVisionCandidate(candidate)"><span>{{ candidate.partType }}</span><small>{{ candidate.category }} · {{ candidate.confidence | percent:'1.0-0' }}</small></button>}<p>{{ result.caution }}</p></div>
+                }
+              </div>
             }
             @if (visionError()) {<p class="vision-error">{{ visionError() }}</p>}
           </section>

@@ -91,6 +91,14 @@ def test_health_is_public_and_does_not_load_the_model():
     assert response.json()["modelLoaded"] is True
 
 
+def test_prometheus_metrics_are_public_and_do_not_expose_request_values():
+    client.get("/health")
+    response = client.get("/metrics/")
+    assert response.status_code == 200
+    assert "e_biessa_ai_http_requests_total" in response.text
+    assert "test-token-that-is-at-least-24-characters" not in response.text
+
+
 def test_mutations_require_the_shared_service_token():
     assert client.put("/v1/listings/42", json=listing).status_code == 401
 

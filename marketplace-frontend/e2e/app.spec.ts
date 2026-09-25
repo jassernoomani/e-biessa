@@ -124,6 +124,11 @@ test('signed-in buyer identifies a part photo and uses the suggestion in search'
   });
   await expect(page.getByText('Possible matches')).toBeVisible();
   await expect(page.getByText('brake caliper', { exact: true })).toBeVisible();
+  const previewBox = await page.getByAltText('Uploaded part preview').boundingBox();
+  const suggestionsBox = await page.locator('.vision-suggestions').boundingBox();
+  expect(previewBox).not.toBeNull();
+  expect(suggestionsBox).not.toBeNull();
+  expect(previewBox!.x + previewBox!.width).toBeLessThanOrEqual(suggestionsBox!.x);
   await page.getByRole('button', { name: /brake caliper.*Brake Systems/ }).click();
   await expect(page.getByTestId('market-search-input')).toHaveValue('brake caliper');
   await expect(page.getByText('Volkswagen Golf front brake caliper', { exact: true })).toBeVisible();

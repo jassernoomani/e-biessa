@@ -3,6 +3,8 @@ from functools import lru_cache
 from time import perf_counter
 
 from fastapi import Body, Depends, FastAPI, Header, HTTPException, Response, status
+from prometheus_client import Counter, Histogram, make_asgi_app
+from starlette.requests import Request
 
 from .config import Settings, get_settings
 from .models import AssistantRequest, AssistantResponse, BulkListingRequest, IndexResponse, ListingDocument, SearchRequest, SearchResponse, VisionIdentificationResponse
@@ -10,6 +12,18 @@ from .orchestrator import MarketplaceAgentOrchestrator
 from .security import require_service_token
 from .vector_store import ListingVectorStore
 from .vision_identifier import InvalidPartImage, VisionPartIdentifier, VisionUnavailable
+
+
+HTTP_REQUESTS = Counter(
+    "e_biessa_ai_http_requests_total",
+    "FastAPI requests completed.",
+    ("method", "route", "status"),
+)
+HTTP_DURATION = Histogram(
+    "e_biessa_ai_http_request_duration_seconds",
+    "FastAPI request duration in seconds.",
+    ("method", "route"),
+)
 
 
 @lru_cache
@@ -35,6 +49,23 @@ def create_app() -> FastAPI:
         description="Semantic listing indexing and retrieval boundary for the E-biessa marketplace.",
         lifespan=lifespan,
     )
+
+    @application.middleware("http")
+    async def observe_http(request: Request, call_next):
+        if request.url.path.startswith("/metrics"):
+            return await call_next(request)
+        started = perf_counter()
+        response_status = 500
+        try:
+            response = await call_next(request)
+            response_status = response.status_code
+            return response
+        finally:
+            route = getattr(request.scope.get("route"), "path", "unmatched")
+            HTTP_REQUESTS.labels(request.method, route, str(response_status)).inc()
+            HTTP_DURATION.labels(request.method, route).observe(perf_counter() - started)
+
+    application.mount("/metrics", make_asgi_app())
 
     @application.get("/health")
     def health(settings: Settings = Depends(get_settings), store: ListingVectorStore = Depends(get_store)) -> dict:

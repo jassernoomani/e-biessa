@@ -216,6 +216,18 @@ class MarketplaceSecurityIntegrationTests {
     }
 
     @Test
+    void monitoringEndpointsExposeHealthAndMetricsWithoutAuthentication() throws Exception {
+        mockMvc.perform(get("/actuator/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("UP"));
+        mockMvc.perform(get("/actuator/prometheus"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("jvm_memory_used_bytes")));
+        mockMvc.perform(get("/actuator/info"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void priceGuidanceIsRestrictedToSellerAccounts() throws Exception {
         String request = "{\"title\":\"Golf brake caliper\",\"vehicleIds\":[]}";
         mockMvc.perform(post("/api/parts/price-estimate")

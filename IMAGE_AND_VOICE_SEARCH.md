@@ -24,6 +24,8 @@ The search bar provides French (Tunisia), Arabic (Tunisia), and English recognit
 
 Voice recognition depends on browser support and may use the browser vendor's speech service. It works best on localhost or HTTPS in Chrome and Edge. Typed search remains the fallback.
 
+Choose `FR`, `AR`, or `EN` before recording so the recognition locale matches the spoken language. Brave exposes parts of Chromium's speech API but may return a `network` error because its browser speech service is unavailable or blocked; use current Chrome or Edge for the academic demonstration. The interface distinguishes permission, microphone, no-speech, language, and network failures.
+
 ## Verification
 
 FastAPI tests use a fake identifier and do not download CLIP. Spring integration tests verify authentication, upload validation, and the disabled-service response. Angular tests and Playwright cover candidate selection and speech-to-search behavior.

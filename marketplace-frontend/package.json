@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false",
+    "test:coverage": "ng test --watch=false --coverage --coverage-reporters=lcov --coverage-reporters=text-summary",
     "test:e2e": "playwright test",
     "test:e2e:live": "cross-env E2E_LIVE=true playwright test e2e/live-stack.spec.ts",
     "verify": "npm run test:ci && npm run build"
@@ -25,12 +26,13 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
     "@angular/build": "^21.2.21",
     "@angular/cli": "^21.2.21",
     "@angular/compiler-cli": "^21.2.0",
-    "jsdom": "^28.0.0",
+    "@playwright/test": "^1.56.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "cross-env": "^10.1.0",
+    "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

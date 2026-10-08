@@ -1,122 +1,250 @@
-# E-biessa marketplace
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="marketplace-frontend/public/e-biessa-logo-dark.png">
+    <img src="marketplace-frontend/public/e-biessa-logo.png" alt="E-biessa" width="280">
+  </picture>
+</p>
 
-E-biessa is an academic AI-powered marketplace from the internship PRD: buyers discover and
-save used car parts, sellers publish and manage listings with photos, and
-administrators manage roles and moderate inventory.
+<h1 align="center">The right part. Without the guesswork.</h1>
+
+<p align="center">
+  An automotive parts marketplace connecting buyers and sellers,<br>
+  with compatibility-aware search, real-time messaging, and seller management.
+</p>
+
+<p align="center"><strong>Angular · Spring Boot · FastAPI · MySQL · Qwen · Docker</strong></p>
+
+<p align="center">
+  <a href="#features">Features</a> ·
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#getting-started">Getting started</a> ·
+  <a href="#documentation">Documentation</a>
+</p>
+
+![E-biessa marketplace homepage in light mode](documentation/images/marketplace.png)
+
+> An academic software-engineering project built around the Tunisian used-parts market.
+> Intended for local development and demonstration, not a production deployment.
+
+## Features
+
+### For buyers
+
+- **Find compatible parts:** keyword and natural-language search, vehicle filters, OEM references, sorting, and pagination.
+- **Discover relevant listings:** explainable recommendations based on vehicle preferences, saved listings, and optional activity history.
+- **Talk to sellers:** real-time conversations with image attachments, plus protected phone, WhatsApp, and email contact options.
+- **Buy with more context:** public seller profiles, star ratings, reviews, and reporting tools.
+- **Search your way:** optional photo-based part identification, browser voice input, and VIN-assisted vehicle selection.
+
+### For sellers
+
+- **Manage inventory:** create, preview, edit, and remove listings; mark sold parts to hide them immediately.
+- **Show the details:** multiple compatible vehicles, engine and fuel information, part position, OEM references, warranty, and delivery options.
+- **Present better photos:** previews, compression, drag-and-drop ordering, and primary-image selection.
+- **Get price guidance:** advisory estimates based on comparable active listings, never automatic price changes.
+
+### For administrators
+
+- Review seller applications before granting seller access.
+- Moderate reported listings and sellers, suspend accounts, and review audit logs.
+- Manage the marketplace through a dedicated dashboard.
+
+Across all roles: editable profiles, light/dark themes, JWT authentication, and optional social sign-in and account recovery integrations.
+
+## Screenshots
+
+Selected demonstration captures. Listings, photos, and account names shown are sample data;
+these images are not evidence of actual part fitment or seller response times.
+
+| Compatibility-aware search | Seller workspace |
+| --- | --- |
+| [![Search with extracted constraints and match explanations](documentation/images/ai-search.png)](documentation/images/ai-search.png) | [![Seller studio inventory and listing actions](documentation/images/seller-studio.png)](documentation/images/seller-studio.png) |
 
 ## Architecture
 
-- `marketplace-api`: Spring Boot 3 / Java 21 / MySQL / JWT
-- `marketplace-frontend`: responsive Angular 21 standalone application
-- `ai-service`: FastAPI / multilingual FastEmbed embeddings / persistent local Qdrant
-- Image storage: local filesystem in development; Cloudinary when enabled
-- Local Ollama fine-tuned Qwen query extraction and deterministic compatibility checks
-- Explainable buyer recommendations with vehicle preferences and private activity controls
-- Read-only LangChain orchestration across search, compatibility, and personalized recommendation tools
+```mermaid
+flowchart LR
+    User[Buyer / Seller / Administrator] --> Web[Angular frontend]
+    Web --> API[Spring Boot API]
+    API --> DB[(MySQL)]
+    API --> Images[Local images / optional Cloudinary]
+    API --> AI[FastAPI AI service]
+    AI --> Vectors[(Qdrant)]
+    AI --> Model[Optional Ollama / Qwen]
+    AI --> Vision[Optional CLIP]
+```
+
+| Layer | Technologies | Responsibility |
+| --- | --- | --- |
+| Frontend | Angular 21, TypeScript | Marketplace, profiles, messaging, seller and admin workspaces |
+| Core API | Spring Boot 3, Java 21, Spring Security, JPA | Authorization, business rules, persistence, WebSocket messaging |
+| Database | MySQL | Accounts, listings, conversations, reviews, and moderation |
+| Search service | FastAPI, FastEmbed, Qdrant, LangChain | Semantic retrieval and read-only tool orchestration |
+| Models | Qwen 2.5 via Ollama, optional CLIP | Query extraction and image-based part-type suggestions |
+| Quality & operations | Docker, Jenkins, SonarQube, Prometheus, Grafana | Build pipeline, analysis, metrics, and alerting |
+
+### Search with explicit boundaries
+
+Natural-language queries can be interpreted in English, French, and Tunisian transliteration.
+The local Qwen model was adapted with Unsloth and QLoRA; training and evaluation scripts are included.
+
+Model output does **not** establish compatibility. Deterministic checks validate constraints,
+and Spring rechecks returned listings against MySQL before constructing the displayed answer.
+Inactive listings and suspended sellers are excluded. Photo identification suggests a part type,
+not vehicle fitment. Recommendations use an explainable content-based baseline, not a separately trained model.
+
+## Getting started
+
+### Prerequisites
+
+- Java 21 and MySQL
+- An Angular 21-compatible Node.js release; the frontend declares npm 10.9.4
+- Python 3.12 for the AI service
+- Optional: Ollama for model-backed query extraction; Docker Desktop for the DevOps stack
+
+Commands below use **PowerShell**, starting from the repository root.
+Keep each service in its own terminal. If you already have `.env` files, edit them instead of overwriting them.
+
+### 1. Configure the services
+
+Create the database in your MySQL client:
+
+```sql
+CREATE DATABASE marketplace;
+```
+
+For a fresh checkout:
+
+```powershell
+Copy-Item marketplace-api/.env.example marketplace-api/.env
+Copy-Item ai-service/.env.example ai-service/.env
+```
+
+Edit the files before starting:
+
+| File | Required configuration |
+| --- | --- |
+| `marketplace-api/.env` | Your `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`; a random `JWT_SECRET` of at least 32 bytes; `CORS_ALLOWED_ORIGINS=http://localhost:4200` |
+| Both `.env` files | The same long, random `AI_SERVICE_TOKEN` |
+| `marketplace-api/.env` | Set `AI_SERVICE_ENABLED=true` for AI search; optionally set `SPRING_PROFILES_ACTIVE=local` for demonstration data |
+
+Never commit real credentials. The example files are templates; `.env` files are ignored.
+
+### 2. Start FastAPI — port 8001
+
+```powershell
+cd ai-service
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8001
+```
+
+Calling the environment's Python directly avoids PowerShell activation-policy issues.
+Check [AI health](http://127.0.0.1:8001/health) or open the [API documentation](http://127.0.0.1:8001/docs).
+The embedding model downloads on first use. Model weights and vector data are not included in Git.
+
+### 3. Start Spring Boot — port 8080
+
+In a new terminal at the repository root:
+
+```powershell
+cd marketplace-api
+.\mvnw.cmd spring-boot:run
+```
+
+MySQL must already be running. Spring reads `.env` from the service working directory.
+
+### 4. Start Angular — port 4200
+
+In another terminal at the repository root:
+
+```powershell
+cd marketplace-frontend
+npm ci
+npm start
+```
+
+Open **[E-biessa](http://localhost:4200)**.
+On subsequent launches, start MySQL and rerun only the three service start commands.
+
+### 5. Initialize search and optional features
+
+- **Search index:** sign in as an administrator and call `POST /api/admin/ai/reindex` with the administrator's bearer token. Listing changes subsequently trigger synchronization after database commits.
+- **Local query model:** follow the [training and Ollama guide](ai-service/training/README.md), then set `OLLAMA_ENABLED=true` in the AI environment. The custom model is not bundled with a clone; without it, deterministic query parsing remains available.
+- **Photo identification:** install the optional vision requirements and follow the [image and voice guide](documentation/IMAGE_AND_VOICE_SEARCH.md).
+- **Social login / recovery:** configure provider credentials before enabling the integrations. See [configuration details](#configuration-details).
+
+<details>
+<summary><strong>Local demonstration accounts</strong></summary>
+
+The `local` or `dev` profile seeds demonstration data, including 60 listings, three sellers,
+three buyers, and an administrator. Seeding preserves existing records rather than resetting the database.
+
+| Role | Email | Development password |
+| --- | --- | --- |
+| Buyer | `buyer01@e-biessa.tn` through `buyer03@e-biessa.tn` | `Buyer123!` |
+| Seller | `seller01@e-biessa.tn` through `seller03@e-biessa.tn` | `Seller123!` |
+| Administrator | `admin@e-biessa.tn` | `Admin123!` |
+
+These are public development credentials. Never expose a seeded instance publicly.
+Existing accounts whose passwords have changed are not reset by these instructions.
+
+</details>
+
+## Testing and DevOps
+
+Run from the indicated service directory:
+
+| Service | Command |
+| --- | --- |
+| Spring Boot | `.\mvnw.cmd verify` |
+| FastAPI | `.\.venv\Scripts\python.exe -m pytest` |
+| Angular unit tests and build | `npm run verify` |
+| Browser tests | `npx playwright install chromium`, then `npm run test:e2e` |
+
+Live-stack browser tests require running services and configured test accounts;
+ordinary browser tests use controlled API responses. A passing mocked test is not a live-stack validation.
+
+The [DevOps guide](documentation/DEVOPS.md) covers Docker, Jenkins, SonarQube,
+Prometheus, Grafana, Alertmanager, and Blackbox Exporter. The pipeline is configured to run tests,
+apply a quality gate, and build images. Registry publication is opt-in; no current build status is asserted here.
+
+## Configuration details
+
+<details>
+<summary><strong>OAuth, recovery, storage, and privacy</strong></summary>
+
+- **OAuth:** configure Google, Facebook, or Microsoft credentials in `marketplace-api/.env` and enable `OAUTH_ENABLED`. Register `http://localhost:8080/login/oauth2/code/{provider}`, replacing `{provider}` with `google`, `facebook`, or `microsoft`. Redirects exchange a short-lived single-use code, not a JWT in the URL.
+- **Recovery:** configure `SMTP_*` and `RECOVERY_EMAIL_ENABLED` for email, or `TWILIO_*` and `RECOVERY_SMS_ENABLED` for SMS. Development recovery behavior is for local testing only.
+- **Images:** local storage is the development default. Cloudinary is optional through `CLOUDINARY_*` settings.
+- **Recommendations:** buyers can disable activity personalization or clear history without deleting saved listings or conversations. Raw messages and contact details are not sent to recommendation tools.
+- **VIN:** decoding uses NHTSA vPIC to select existing catalog vehicles; VINs are not stored and decoded data does not guarantee fitment.
+- **Voice:** recognition depends on browser support and its speech service. Typed search remains available.
+
+See the [Spring environment template](marketplace-api/.env.example) and [AI environment template](ai-service/.env.example) for configuration keys.
+
+</details>
 
 ## Documentation
 
-Supporting guides are grouped in [documentation/](documentation/), including
-[architecture](documentation/ARCHITECTURE.md), DevOps, search, and recommendations.
-Service setup instructions remain in each service's README. Unless stated otherwise,
-run commands in these guides from the repository root.
+| Guide | What it covers |
+| --- | --- |
+| [Architecture](documentation/ARCHITECTURE.md) | Service responsibilities and data boundaries |
+| [AI service setup](ai-service/README.md) | Search, models, indexing, and configuration |
+| [Training and evaluation](ai-service/training/README.md) | Dataset generation, QLoRA, evaluation, and export |
+| [Search orchestration](documentation/AGENT_ORCHESTRATION.md) | Read-only tools and deterministic answers |
+| [Recommendations](documentation/RECOMMENDATIONS.md) | Ranking, eligibility, and privacy |
+| [VIN compatibility](documentation/VIN_COMPATIBILITY.md) | Vehicle decoding and limitations |
+| [Image and voice search](documentation/IMAGE_AND_VOICE_SEARCH.md) | Optional inputs and setup |
+| [DevOps](documentation/DEVOPS.md) | CI, containers, monitoring, and troubleshooting |
 
-## DevOps and observability
+## Project scope
 
-The repository includes an academic local DevOps stack with Jenkins,
-SonarQube, Prometheus, Grafana, Alertmanager, Blackbox Exporter, and reproducible
-Docker images for all three applications. Start with [DevOps guide](documentation/DEVOPS.md).
-The pipeline tests every service, enforces a SonarQube quality gate, builds
-images, and leaves registry publication disabled unless explicitly selected.
+E-biessa connects buyers and sellers; it does not process payments or orders.
+Compatibility must be confirmed with the seller using the exact vehicle and OEM reference.
+External providers need their own credentials or availability. Production deployment and fully validated
+multi-instance high availability are outside the current demonstrated baseline.
 
-## Local setup
-
-1. Create the MySQL database: `CREATE DATABASE marketplace;`
-2. Copy `marketplace-api/.env.example` into your preferred local environment
-   setup and provide a random `JWT_SECRET` of at least 32 bytes.
-3. Start the API with the `dev` Spring profile if you want sample categories,
-   vehicles, listings, and development accounts.
-4. Run `npm install` and `npm start` from `marketplace-frontend`; Angular serves
-   the app at `http://localhost:4200` and calls `http://localhost:8080/api`.
-
-## Phase 2 semantic search
-
-The `ai-service` directory contains the isolated FastAPI semantic retrieval service. It uses a multilingual local embedding model and Qdrant's persistent local mode, so development does not require Docker or an OpenAI API key.
-
-Follow `ai-service/README.md` to create its Python environment. Put the same long random `AI_SERVICE_TOKEN` in `ai-service/.env` and `marketplace-api/.env`, then set `AI_SERVICE_ENABLED=true` in the Spring environment. Start FastAPI on port 8001 before Spring Boot.
-
-After both APIs are running, log in as an administrator and make one request to `POST /api/admin/ai/reindex` with the administrator JWT. This creates embeddings for every active listing. New listing creation, edits, status changes, moderation, and deletion are synchronized automatically after the MySQL transaction commits. Indexing failures never prevent the marketplace operation from completing.
-
-The Spring endpoint for semantic retrieval is `GET /api/ai/search?query=your natural language request&limit=12`. Angular's AI fitment search consumes this endpoint and displays normalized constraints, match reasons and an answer built deterministically from current listings.
-
-For a signed-in buyer, the same Angular search uses `GET /api/ai/assistant`. Spring supplies only sanitized recommendation candidates (listing ID, score, and explanation), while FastAPI coordinates LangChain search, compatibility, and recommendation tools. Spring rehydrates every returned ID from MySQL and rebuilds the final answer deterministically. See [AGENT ORCHESTRATION](documentation/AGENT_ORCHESTRATION.md).
-
-The development seed preserves existing records and creates 60
-listings. It creates three reusable sellers, from `seller01@e-biessa.tn` through
-`seller03@e-biessa.tn`, all with password `Seller123!`. It also creates
-`buyer01@e-biessa.tn` through `buyer03@e-biessa.tn` with password `Buyer123!` and `admin@e-biessa.tn` with
-password `Admin123!`. Each seeded seller owns multiple
-listings with full descriptions, vehicle fitment, OEM references, prices,
-locations, conditions, and primary images. Restarting the API does not duplicate
-the seed data. Never use these credentials in production.
-
-## Personalized recommendations
-
-Restart Spring Boot after updating the code (the existing `ddl-auto=update` setting adds the buyer preference and interaction tables/columns). Restart Angular or let its development server rebuild. No model download, retraining, reindex, or additional environment variables are needed for this milestone.
-
-Sign in as a **buyer**. On the unfiltered keyword marketplace, open **Recommended for you → My preferences**, or use **Profile → Vehicles & recommendations**. Select up to five existing catalog vehicle definitions and save. View parts, save parts, run searches, or contact/message sellers; refresh the feed to see updated suggestions. Preferred vehicles strictly constrain the feed, not ordinary marketplace search.
-
-The first implementation is a deterministic content-based recommendation baseline, not a new trained recommendation model. It uses category interests, seller interactions, declared vehicle compatibility, saves and recency. Explanations are derived from the same evidence as the scores. Sold/inactive listings, suspended sellers, own listings and already-saved exact listings are excluded. Recent conversation-start listings are excluded when activity personalization is enabled.
-
-Buyers can disable activity personalization or clear recommendation history without deleting saved parts or conversations. Only identifiers and timestamps are stored in recommendation history, not raw queries, messages or contact details. Read [RECOMMENDATIONS](documentation/RECOMMENDATIONS.md) for ranking, privacy, limitations and evaluation cases.
-
-### VIN-assisted vehicle preferences
-
-Signed-in buyers can decode a 17-character VIN from **Profile → Vehicles & recommendations**. Spring maps the decoded make, model, year and fuel type to existing catalog rows, and Angular adds exact matches to the unsaved preference selection. The VIN is not stored and the result is never presented as a part-fitment guarantee. See [VIN COMPATIBILITY](documentation/VIN_COMPATIBILITY.md).
-
-### Grounded seller price guidance
-
-Sellers can request **Price guidance** while creating or editing a listing. Spring compares the draft only with similar active local listings and returns a median, interquartile range, sample size, confidence label, and reasons. The estimate is optional and never overwrites the seller's price unless **Use suggested price** is selected.
-
-### Image-assisted identification and voice search
-
-Signed-in users can upload a part photo from **AI fitment search** to receive bounded CLIP part-type suggestions. Image analysis is optional and disabled by default; it never claims vehicle fitment. The search bar also supports browser speech recognition in French, Arabic, and English, with editable transcription before submission. See [IMAGE AND VOICE SEARCH](documentation/IMAGE_AND_VOICE_SEARCH.md) for setup, privacy, and limitations.
-
-## Configuration reference (deployment deferred)
-
-Set `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, and
-`CORS_ALLOWED_ORIGINS`. For Cloudinary-backed images, also set
-`CLOUDINARY_ENABLED=true`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and
-`CLOUDINARY_API_SECRET`.
-
-For production, replace the Angular API base URL with the public HTTPS URL of
-the deployed Spring API and set `CORS_ALLOWED_ORIGINS` to the frontend origin.
-
-## Social sign-in and account recovery
-
-The account dialog supports password login/registration, Google, Facebook, and
-Microsoft sign-in, plus password recovery by registered email or phone number.
-Social accounts are linked to an existing E-biessa account when the provider
-returns the same verified email address. Provider redirects exchange a
-short-lived, single-use code for the normal E-biessa JWT; the JWT is never placed
-in a redirect URL.
-
-Create OAuth applications with the providers you want to enable, add the
-credentials listed in `marketplace-api/.env.example`, and set
-`OAUTH_ENABLED=true`. Register these local callback URLs with the providers:
-
-- `http://localhost:8080/login/oauth2/code/google`
-- `http://localhost:8080/login/oauth2/code/facebook`
-- `http://localhost:8080/login/oauth2/code/microsoft`
-
-Use the equivalent HTTPS API URLs in production. Google credentials come from
-Google Cloud, Facebook credentials from Meta for Developers, and Microsoft
-credentials from a Microsoft Entra app registration configured for personal
-Microsoft accounts if Outlook.com users should be accepted.
-
-Recovery codes expire after ten minutes, allow five attempts, and can only be
-used once. In the `dev` profile the code is shown in the local recovery dialog.
-For production email delivery, configure the `SMTP_*` values and set
-`RECOVERY_EMAIL_ENABLED=true`. For phone delivery, configure the `TWILIO_*`
-values and set `RECOVERY_SMS_ENABLED=true`. Production responses never expose
-the recovery code and do not reveal whether an email or phone number exists.
+Academic reports, presentation drafts, caches, secrets, and model binaries stay outside Git.
+Only a small selection of documentation screenshots is included here.

@@ -14,11 +14,18 @@ administrators manage roles and moderate inventory.
 - Explainable buyer recommendations with vehicle preferences and private activity controls
 - Read-only LangChain orchestration across search, compatibility, and personalized recommendation tools
 
+## Documentation
+
+Supporting guides are grouped in [documentation/](documentation/), including
+[architecture](documentation/ARCHITECTURE.md), DevOps, search, and recommendations.
+Service setup instructions remain in each service's README. Unless stated otherwise,
+run commands in these guides from the repository root.
+
 ## DevOps and observability
 
 The repository includes an academic local DevOps stack with Jenkins,
 SonarQube, Prometheus, Grafana, Alertmanager, Blackbox Exporter, and reproducible
-Docker images for all three applications. Start with [DEVOPS.md](DEVOPS.md).
+Docker images for all three applications. Start with [DevOps guide](documentation/DEVOPS.md).
 The pipeline tests every service, enforces a SonarQube quality gate, builds
 images, and leaves registry publication disabled unless explicitly selected.
 
@@ -42,7 +49,7 @@ After both APIs are running, log in as an administrator and make one request to 
 
 The Spring endpoint for semantic retrieval is `GET /api/ai/search?query=your natural language request&limit=12`. Angular's AI fitment search consumes this endpoint and displays normalized constraints, match reasons and an answer built deterministically from current listings.
 
-For a signed-in buyer, the same Angular search uses `GET /api/ai/assistant`. Spring supplies only sanitized recommendation candidates (listing ID, score, and explanation), while FastAPI coordinates LangChain search, compatibility, and recommendation tools. Spring rehydrates every returned ID from MySQL and rebuilds the final answer deterministically. See `AGENT_ORCHESTRATION.md`.
+For a signed-in buyer, the same Angular search uses `GET /api/ai/assistant`. Spring supplies only sanitized recommendation candidates (listing ID, score, and explanation), while FastAPI coordinates LangChain search, compatibility, and recommendation tools. Spring rehydrates every returned ID from MySQL and rebuilds the final answer deterministically. See [AGENT ORCHESTRATION](documentation/AGENT_ORCHESTRATION.md).
 
 The development seed preserves existing records and creates 60
 listings. It creates three reusable sellers, from `seller01@e-biessa.tn` through
@@ -61,19 +68,19 @@ Sign in as a **buyer**. On the unfiltered keyword marketplace, open **Recommende
 
 The first implementation is a deterministic content-based recommendation baseline, not a new trained recommendation model. It uses category interests, seller interactions, declared vehicle compatibility, saves and recency. Explanations are derived from the same evidence as the scores. Sold/inactive listings, suspended sellers, own listings and already-saved exact listings are excluded. Recent conversation-start listings are excluded when activity personalization is enabled.
 
-Buyers can disable activity personalization or clear recommendation history without deleting saved parts or conversations. Only identifiers and timestamps are stored in recommendation history, not raw queries, messages or contact details. Read `RECOMMENDATIONS.md` for ranking, privacy, limitations and evaluation cases.
+Buyers can disable activity personalization or clear recommendation history without deleting saved parts or conversations. Only identifiers and timestamps are stored in recommendation history, not raw queries, messages or contact details. Read [RECOMMENDATIONS](documentation/RECOMMENDATIONS.md) for ranking, privacy, limitations and evaluation cases.
 
 ### VIN-assisted vehicle preferences
 
-Signed-in buyers can decode a 17-character VIN from **Profile → Vehicles & recommendations**. Spring maps the decoded make, model, year and fuel type to existing catalog rows, and Angular adds exact matches to the unsaved preference selection. The VIN is not stored and the result is never presented as a part-fitment guarantee. See `VIN_COMPATIBILITY.md`.
+Signed-in buyers can decode a 17-character VIN from **Profile → Vehicles & recommendations**. Spring maps the decoded make, model, year and fuel type to existing catalog rows, and Angular adds exact matches to the unsaved preference selection. The VIN is not stored and the result is never presented as a part-fitment guarantee. See [VIN COMPATIBILITY](documentation/VIN_COMPATIBILITY.md).
 
 ### Grounded seller price guidance
 
-Sellers can request **Price guidance** while creating or editing a listing. Spring compares the draft only with similar active local listings and returns a median, interquartile range, sample size, confidence label, and reasons. The estimate is optional and never overwrites the seller's price unless **Use suggested price** is selected. See `PRICE_ESTIMATION.md`.
+Sellers can request **Price guidance** while creating or editing a listing. Spring compares the draft only with similar active local listings and returns a median, interquartile range, sample size, confidence label, and reasons. The estimate is optional and never overwrites the seller's price unless **Use suggested price** is selected.
 
 ### Image-assisted identification and voice search
 
-Signed-in users can upload a part photo from **AI fitment search** to receive bounded CLIP part-type suggestions. Image analysis is optional and disabled by default; it never claims vehicle fitment. The search bar also supports browser speech recognition in French, Arabic, and English, with editable transcription before submission. See `IMAGE_AND_VOICE_SEARCH.md` for setup, privacy, and limitations.
+Signed-in users can upload a part photo from **AI fitment search** to receive bounded CLIP part-type suggestions. Image analysis is optional and disabled by default; it never claims vehicle fitment. The search bar also supports browser speech recognition in French, Arabic, and English, with editable transcription before submission. See [IMAGE AND VOICE SEARCH](documentation/IMAGE_AND_VOICE_SEARCH.md) for setup, privacy, and limitations.
 
 ## Configuration reference (deployment deferred)
 

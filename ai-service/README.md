@@ -35,7 +35,7 @@ The `/health` response exposes `queryModelEnabled` and `queryModel`, which confi
 
 ## Optional image identification
 
-Install `requirements-vision.txt` and set `VISION_ENABLED=true` to enable internal `POST /v1/vision/identify`. CLIP loads lazily on the first image request and is cached under `data/vision-models`. The endpoint returns only bounded part-type/category suggestions; Spring authentication and deterministic listing compatibility remain authoritative. See `../IMAGE_AND_VOICE_SEARCH.md`.
+Install `requirements-vision.txt` and set `VISION_ENABLED=true` to enable internal `POST /v1/vision/identify`. CLIP loads lazily on the first image request and is cached under `data/vision-models`. The endpoint returns only bounded part-type/category suggestions; Spring authentication and deterministic listing compatibility remain authoritative. See [image and voice search guide](../documentation/IMAGE_AND_VOICE_SEARCH.md).
 
 ## Retrieval evaluation
 

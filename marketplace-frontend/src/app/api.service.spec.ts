@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ApiService } from './api.service';
+import { vi } from 'vitest';
 
 describe('ApiService', () => {
   let api: ApiService;
@@ -15,6 +16,21 @@ describe('ApiService', () => {
   });
 
   afterEach(() => http.verify());
+
+  it('bounds an unresponsive AI request without retrying it', () => {
+    vi.useFakeTimers();
+    try {
+      let errorName = '';
+      api.semanticSearch('brake', {}).subscribe({ error: error => errorName = error.name });
+      const request = http.expectOne(req => req.url.endsWith('/ai/search'));
+      vi.advanceTimersByTime(120_000);
+      expect(errorName).toBe('TimeoutError');
+      expect(request.cancelled).toBe(true);
+      http.expectNone(req => req.url.endsWith('/ai/search'));
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 
   it('sends all marketplace vehicle filters', () => {
     api.browse({ search: 'lamp', brand: 'Volkswagen', model: 'Golf', year: '2018', categoryId: '', condition: '', minPrice: '100', maxPrice: '500', partBrand: 'Bosch', partPosition: 'FRONT', engine: '1.6 TDI', fuelType: 'Diesel', warranty: '90 days', deliveryAvailable: 'true', collectionAvailable: 'true', negotiable: 'true' }).subscribe();

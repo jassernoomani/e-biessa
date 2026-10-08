@@ -1,0 +1,27 @@
+# Incremental resilience lab. Application replicas are intentionally not enabled
+# until shared-state adapters and an isolated database have been verified.
+name: e-biessa-ha-lab
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction"]
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.5
+    volumes:
+      - ha_redis_data:/data
+    networks: [ha]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    security_opt: ["no-new-privileges:true"]
+
+networks:
+  ha:
+    internal: true
+
+volumes:
+  ha_redis_data:

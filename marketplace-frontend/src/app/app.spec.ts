@@ -4,6 +4,55 @@ import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 
 describe('E-biessa Angular application', () => {
+  it('reconciles missed messages without erasing a draft or a newer message', () => {
+    const app = TestBed.createComponent(App).componentInstance;
+    localStorage.setItem('e_bieca_token', 'test-token');
+    app.user.set({ id: 1, userId: 1, email: 'buyer@test.local', fullName: 'Buyer', role: 'BUYER' });
+    app.view.set('inbox');
+    const conversation = { id: 7 } as any;
+    app.activeConversation.set({ conversation, messages: [] });
+    app.replyDraft = 'Unsent text';
+    (app as any).reconcileInbox();
+    const http = TestBed.inject(HttpTestingController);
+    const list = http.expectOne(req => req.url.endsWith('/messages/conversations'));
+    const detail = http.expectOne(req => req.url.endsWith('/messages/conversations/7'));
+    app.activeConversation.set({ conversation, messages: [{ id: 2, createdAt: '2026-09-26T10:01:00' } as any] });
+    list.flush([conversation]);
+    detail.flush({ conversation, messages: [{ id: 1, createdAt: '2026-09-26T10:00:00' }] });
+    expect(app.activeConversation()?.messages.map(message => message.id)).toEqual([1, 2]);
+    expect(app.replyDraft).toBe('Unsent text');
+    http.verify();
+  });
+
+  it('clears stale AI answers on failure, preserves input, and can recover', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    const http = TestBed.inject(HttpTestingController);
+    app.aiQuery = 'front brake Golf';
+    const response = {
+      query: app.aiQuery, results: [], tookMs: 1, extractedConstraints: {},
+      answer: { summary: 'Earlier answer', recommendedListingIds: [], cautions: [], generatedBy: 'deterministic' }
+    };
+    app.runAiSearch(false);
+    http.expectOne(req => req.url.endsWith('/ai/search')).flush(response);
+    expect(app.aiSearchResponse()?.answer?.summary).toBe('Earlier answer');
+    app.runAiSearch(false);
+    expect(app.aiSearchResponse()).toBeNull();
+    http.expectOne(req => req.url.endsWith('/ai/search')).flush(
+      { message: 'Temporarily unavailable' }, { status: 503, statusText: 'Unavailable' });
+    expect(app.loading()).toBe(false);
+    expect(app.aiQuery).toBe('front brake Golf');
+    expect(app.aiSearchResponse()).toBeNull();
+    expect(app.aiMatches()).toEqual({});
+    expect(app.aiError()).toBe('Temporarily unavailable');
+    app.runAiSearch(false);
+    http.expectOne(req => req.url.endsWith('/ai/search')).flush(response);
+    expect(app.aiError()).toBe('');
+    expect(app.loading()).toBe(false);
+    expect(app.aiSearchResponse()).not.toBeNull();
+    http.verify();
+  });
+
   beforeEach(async () => {
     localStorage.clear();
     window.scrollTo = () => undefined;

@@ -18,6 +18,16 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler({org.springframework.dao.DataAccessResourceFailureException.class,
+            org.springframework.transaction.CannotCreateTransactionException.class})
+    public ResponseEntity<ErrorResponse> handleDatabaseUnavailable(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .header("Retry-After", "5")
+                .body(new ErrorResponse(503,
+                        "The database is temporarily unavailable. Please try again shortly.",
+                        null, LocalDateTime.now(), "DATABASE_UNAVAILABLE", true));
+    }
+
     @ExceptionHandler({jakarta.validation.ConstraintViolationException.class,
             org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorResponse> handleInvalidParameter(Exception ex) {
@@ -78,7 +88,12 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> response(HttpStatus status, String message, Map<String, String> errors) {
-        return ResponseEntity.status(status)
-                .body(new ErrorResponse(status.value(), message, errors, LocalDateTime.now()));
+        boolean retryable = status == HttpStatus.SERVICE_UNAVAILABLE
+                || status == HttpStatus.GATEWAY_TIMEOUT || status == HttpStatus.TOO_MANY_REQUESTS;
+        ResponseEntity.BodyBuilder builder = ResponseEntity.status(status);
+        if (retryable) builder.header("Retry-After", "5");
+        // Advisory only: clients must not automatically replay non-idempotent operations.
+        return builder.body(new ErrorResponse(status.value(), message, errors, LocalDateTime.now(),
+                status.name(), retryable));
     }
 }

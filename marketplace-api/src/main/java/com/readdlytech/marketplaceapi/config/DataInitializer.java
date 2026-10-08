@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@Profile({"dev", "local"})
+@Profile("(dev | local) & !ha")
 public class DataInitializer implements CommandLineRunner {
     private static final int TARGET_PART_COUNT = 60;
     private static final String SELLER_PASSWORD = "Seller123!";

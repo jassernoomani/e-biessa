@@ -1,0 +1,10 @@
+# Temporary loopback-only access for opt-in Java integration tests.
+# Restore the base Compose definition after testing to remove the host binding.
+services:
+  redis:
+    networks: [test-access]
+    ports:
+      - "127.0.0.1:16379:6379"
+
+networks:
+  test-access: {}

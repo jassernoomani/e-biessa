@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 import { MarketplaceAssistantResponse, PriceEstimate, RecommendationFeed, RecommendationSettings, VisionIdentification } from './models';
 import { AdminAuditLog, AuthUser, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, OAuthProviders, Page, Part, PartPayload, PartStatus, ProfilePayload, RecoveryStartResponse, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake, VinDecodeResult } from './models';
 
@@ -39,17 +39,17 @@ export class ApiService {
       .set('limit', '12')
       .set('minimumScore', String(minimumScore));
     Object.entries(filters).forEach(([key, value]) => { if (value) params = params.set(key, value); });
-    return this.http.get<SemanticSearchResponse>(`${this.baseUrl}/ai/search`, { params });
+    return this.http.get<SemanticSearchResponse>(`${this.baseUrl}/ai/search`, { params }).pipe(timeout(120_000));
   }
   marketplaceAssistant(query: string, filters: Record<string, string>, minimumScore = 0.5): Observable<MarketplaceAssistantResponse> {
     let params = new HttpParams().set('query', query).set('limit', '12').set('minimumScore', String(minimumScore));
     Object.entries(filters).forEach(([key, value]) => { if (value) params = params.set(key, value); });
-    return this.http.get<MarketplaceAssistantResponse>(`${this.baseUrl}/ai/assistant`, { params });
+    return this.http.get<MarketplaceAssistantResponse>(`${this.baseUrl}/ai/assistant`, { params }).pipe(timeout(120_000));
   }
   identifyPartImage(file: File): Observable<VisionIdentification> {
     const body = new FormData();
     body.append('file', file);
-    return this.http.post<VisionIdentification>(`${this.baseUrl}/ai/identify`, body);
+    return this.http.post<VisionIdentification>(`${this.baseUrl}/ai/identify`, body).pipe(timeout(120_000));
   }
   part(id: number): Observable<Part> { return this.http.get<Part>(`${this.baseUrl}/parts/${id}`); }
   categories(): Observable<Category[]> { return this.http.get<Category[]>(`${this.baseUrl}/categories`); }
@@ -86,7 +86,7 @@ export class ApiService {
   }
   conversations(): Observable<Conversation[]> { return this.http.get<Conversation[]>(`${this.baseUrl}/messages/conversations`); }
   realtimeTicket(): Observable<{ ticket: string; expiresInSeconds: number }> {
-    return this.http.post<{ ticket: string; expiresInSeconds: number }>(`${this.baseUrl}/messages/conversations/realtime-ticket`, {});
+    return this.http.post<{ ticket: string; expiresInSeconds: number }>(`${this.baseUrl}/messages/conversations/realtime-ticket`, {}).pipe(timeout(5000));
   }
   realtimeSocketUrl(ticket: string): string {
     const server = this.baseUrl.replace(/\/api$/, '').replace(/^http:/, 'ws:').replace(/^https:/, 'wss:');

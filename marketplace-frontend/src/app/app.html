@@ -156,7 +156,7 @@
     <section class="page inbox-page">
       <div class="page-head inbox-page-head">
         <div><span class="eyebrow">Private marketplace messages</span><h1>Your inbox</h1><p>Ask questions, share photos, and agree on the details safely.</p></div>
-        <span class="realtime-status" [class.offline]="!realtimeConnected()"><i></i>{{ realtimeConnected() ? 'Live updates' : 'Reconnecting…' }}</span>
+        <span class="realtime-status" [class.offline]="!realtimeConnected()"><i></i>{{ realtimeConnected() ? 'Live updates · periodic sync' : 'Live updates reconnecting · periodic sync enabled' }}</span>
       </div>
       <div class="inbox-layout">
         <aside class="conversation-sidebar">

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -43,7 +41,6 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
         if (session.isOpen()) session.close(CloseStatus.SERVER_ERROR);
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void deliver(RealtimeMessageEvent event) {
         try {
             String payload = objectMapper.writeValueAsString(new SocketEnvelope(

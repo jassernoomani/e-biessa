@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostBinding, HostListener, NgZone, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, switchMap } from 'rxjs';
+import { forkJoin, switchMap, timeout, finalize, of } from 'rxjs';
 import { ApiService } from './api.service';
 import { ThemeService } from './core/theme.service';
 import { AdminAuditLog, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, Part, PartPayload, PartStatus, PriceEstimate, ProfilePayload, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticPartResult, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake, VisionCandidate, VisionIdentification } from './models';
@@ -159,6 +159,9 @@ export class App implements OnInit, OnDestroy {
   private messageSocket?: WebSocket;
   private voiceRecognition?: BrowserSpeechRecognition;
   private socketReconnectTimer?: ReturnType<typeof setTimeout>;
+  private inboxReconcileTimer?: ReturnType<typeof setInterval>;
+  private inboxReconcileBusy = false;
+  private realtimeReconnectAttempts = 0;
   private socketGeneration = 0;
   suspensionReasonDraft = '';
   sellerDecisionNotes: Record<number, string> = {};
@@ -259,6 +262,9 @@ export class App implements OnInit, OnDestroy {
 
   runAiSearch(syncUrl = true): void {
     const query = this.aiQuery.trim();
+    // Never show an earlier answer as evidence for this query, even if this request fails.
+    this.aiSearchResponse.set(null);
+    this.aiMatches.set({});
     if (query.length < 2) {
       this.aiError.set('Describe the part you need using at least 2 characters.');
       this.parts.set([]);
@@ -1245,6 +1251,9 @@ export class App implements OnInit, OnDestroy {
 
   private connectRealtimeMessaging(): void {
     if (!this.user() || !this.api.token) return;
+    if (!this.inboxReconcileTimer) {
+      this.inboxReconcileTimer = setInterval(() => this.reconcileInbox(), 10_000);
+    }
     this.disconnectRealtimeMessaging(false);
     const generation = ++this.socketGeneration;
     this.api.realtimeTicket().subscribe({
@@ -1253,7 +1262,11 @@ export class App implements OnInit, OnDestroy {
         const socket = new WebSocket(this.api.realtimeSocketUrl(response.ticket));
         this.messageSocket = socket;
         socket.onopen = () => {
-          if (generation === this.socketGeneration) this.realtimeConnected.set(true);
+          if (generation === this.socketGeneration) {
+            this.realtimeConnected.set(true);
+            this.realtimeReconnectAttempts = 0;
+            this.reconcileInbox();
+          }
         };
         socket.onmessage = event => {
           if (generation !== this.socketGeneration) return;
@@ -1346,13 +1359,46 @@ export class App implements OnInit, OnDestroy {
   private scheduleRealtimeReconnect(generation: number): void {
     if (!this.user() || generation !== this.socketGeneration) return;
     clearTimeout(this.socketReconnectTimer);
+    const delay = Math.min(30_000, 1000 * 2 ** Math.min(this.realtimeReconnectAttempts++, 5)) + Math.random() * 500;
     this.socketReconnectTimer = setTimeout(() => {
       if (generation === this.socketGeneration && this.user()) this.connectRealtimeMessaging();
-    }, 3000);
+    }, delay);
+  }
+
+  private reconcileInbox(): void {
+    if (!this.user() || this.view() !== 'inbox' || this.inboxReconcileBusy) return;
+    const token = this.api.token;
+    const id = this.activeConversation()?.conversation.id;
+    this.inboxReconcileBusy = true;
+    const refresh = forkJoin({ conversations: this.api.conversations(),
+      detail: id ? this.api.conversation(id) : of(null) });
+    refresh.pipe(timeout(8000), finalize(() => this.inboxReconcileBusy = false)).subscribe({
+      next: result => {
+        if (this.api.token !== token || !this.user() || this.view() !== 'inbox') return;
+        this.conversations.set(result.conversations);
+        if (result.detail && this.activeConversation()?.conversation.id === id) {
+          const nearLatest = this.isConversationNearLatest();
+          const scrollTop = this.messageStream?.nativeElement.scrollTop ?? 0;
+          // Merge by ID so an in-flight refresh cannot erase a newer socket/send response.
+          const current = this.activeConversation()!;
+          const messages = new Map(current.messages.map(message => [message.id, message]));
+          result.detail.messages.forEach(message => messages.set(message.id, message));
+          this.activeConversation.set(this.withChronologicalMessages({ ...result.detail, messages: [...messages.values()] }));
+          if (nearLatest) this.scrollConversationToLatest();
+          else this.restoreConversationScroll(scrollTop);
+        }
+      },
+      error: () => { /* Keep persisted UI/drafts; the next bounded refresh retries reads only. */ }
+    });
   }
 
   private disconnectRealtimeMessaging(invalidate = true): void {
-    if (invalidate) this.socketGeneration++;
+    if (invalidate) {
+      this.socketGeneration++;
+      clearInterval(this.inboxReconcileTimer);
+      this.inboxReconcileTimer = undefined;
+      this.realtimeReconnectAttempts = 0;
+    }
     clearTimeout(this.socketReconnectTimer);
     this.socketReconnectTimer = undefined;
     const socket = this.messageSocket;

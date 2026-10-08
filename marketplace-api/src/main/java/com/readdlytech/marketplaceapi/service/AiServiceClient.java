@@ -29,6 +29,7 @@ public class AiServiceClient {
     private final long cacheSeconds;
     private final long acquireTimeoutMillis;
     private final Semaphore searchSlots;
+    private final AiCircuitBreakers circuits;
     private final Map<SearchKey, CachedSearch> searchCache = new ConcurrentHashMap<>();
 
     public AiServiceClient(RestClient.Builder builder,
@@ -39,7 +40,9 @@ public class AiServiceClient {
                            @Value("${app.ai.search.max-concurrent:2}") int maxConcurrent,
                            @Value("${app.ai.search.acquire-timeout-ms:500}") long acquireTimeoutMillis,
                            @Value("${app.ai.connect-timeout-seconds:3}") int connectTimeoutSeconds,
-                           @Value("${app.ai.read-timeout-seconds:95}") int readTimeoutSeconds) {
+                           @Value("${app.ai.read-timeout-seconds:95}") int readTimeoutSeconds,
+                           AiCircuitBreakers circuits) {
+        this.circuits = circuits;
         this.enabled = enabled;
         this.cacheSeconds = Math.max(0, cacheSeconds);
         this.acquireTimeoutMillis = Math.max(0, acquireTimeoutMillis);
@@ -84,7 +87,8 @@ public class AiServiceClient {
                     .body(Map.of("listings", documents))
                     .retrieve().body(IndexResponse.class);
             searchCache.clear();
-            return response == null ? 0 : response.indexed();
+            if (response == null) throw emptyResponse();
+            return response.indexed();
         } catch (RestClientException exception) {
             throw unavailable(exception);
         }
@@ -105,13 +109,12 @@ public class AiServiceClient {
             }
             cached = searchCache.get(key);
             if (cached != null && !cached.expired()) return cached.response();
-            AiServiceSearchResponse response = client.post().uri("/v1/search")
+            AiServiceSearchResponse response = circuits.execute("search", () -> client.post().uri("/v1/search")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of("query", query, "limit", limit, "minimumScore", minimumScore, "filters", filters))
-                    .retrieve().body(AiServiceSearchResponse.class);
-            AiServiceSearchResponse safeResponse = response == null
-                    ? new AiServiceSearchResponse(query, List.of(), 0, Map.of(), GroundedAnswerResponse.empty())
-                    : response;
+                    .retrieve().body(AiServiceSearchResponse.class));
+            if (response == null) throw emptyResponse();
+            AiServiceSearchResponse safeResponse = response;
             if (cacheSeconds > 0) {
                 searchCache.put(key, new CachedSearch(safeResponse, Instant.now().plusSeconds(cacheSeconds)));
                 if (searchCache.size() > 1_000) searchCache.entrySet().removeIf(entry -> entry.getValue().expired());
@@ -137,14 +140,13 @@ public class AiServiceClient {
             acquired = searchSlots.tryAcquire(acquireTimeoutMillis, TimeUnit.MILLISECONDS);
             if (!acquired) throw new ResponseStatusException(TOO_MANY_REQUESTS,
                     "AI assistant is busy. Wait a moment and try again.");
-            AiServiceAssistantResponse response = client.post().uri("/v1/assistant")
+            AiServiceAssistantResponse response = circuits.execute("assistant", () -> client.post().uri("/v1/assistant")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of("query", query, "limit", limit, "minimumScore", minimumScore,
                             "filters", filters, "recommendationCandidates", recommendationCandidates))
-                    .retrieve().body(AiServiceAssistantResponse.class);
-            return response == null
-                    ? new AiServiceAssistantResponse(query, "SEARCH", List.of(), 0, Map.of(), List.of(), GroundedAnswerResponse.empty())
-                    : response;
+                    .retrieve().body(AiServiceAssistantResponse.class));
+            if (response == null) throw emptyResponse();
+            return response;
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
             throw new ResponseStatusException(SERVICE_UNAVAILABLE, "AI assistant was interrupted.");
@@ -166,10 +168,10 @@ public class AiServiceClient {
                 throw new ResponseStatusException(TOO_MANY_REQUESTS,
                         "AI image identification is busy. Wait a moment and try again.");
             }
-            AiVisionResponse response = client.post().uri("/v1/vision/identify")
+            AiVisionResponse response = circuits.execute("vision", () -> client.post().uri("/v1/vision/identify")
                     .contentType(mediaType)
                     .body(image)
-                    .retrieve().body(AiVisionResponse.class);
+                    .retrieve().body(AiVisionResponse.class));
             if (response == null) {
                 throw new ResponseStatusException(SERVICE_UNAVAILABLE,
                         "AI image identification returned no result.");
@@ -194,9 +196,15 @@ public class AiServiceClient {
     }
 
     private ResponseStatusException unavailable(RestClientException exception) {
-        log.warn("AI service request failed: {}", exception.getMessage());
+        // Do not include upstream response bodies, query contents, or credentials in logs.
+        log.warn("AI service request failed ({})", exception.getClass().getSimpleName());
         return new ResponseStatusException(SERVICE_UNAVAILABLE,
-                "AI search is temporarily unavailable. Verify that the FastAPI service is running.");
+                "AI features are temporarily unavailable. You can still browse listings or use keyword search.");
+    }
+
+    private ResponseStatusException emptyResponse() {
+        return new ResponseStatusException(SERVICE_UNAVAILABLE,
+                "AI returned no response. Please try again later or use keyword search.");
     }
 
     private record IndexResponse(int indexed, int deleted) {}

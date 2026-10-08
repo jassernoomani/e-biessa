@@ -51,3 +51,22 @@ tmp_reference_report_pages/
 *.iml
 .DS_Store
 Thumbs.db
+
+# Local academic deliverables and document-generation workspace
+/.chart-data-*/
+/deliverables/
+/report_assets/
+/output/
+/Rapport_de_stage_*.docx
+/tools/create_e_biessa_report.py
+/tools/create_overleaf_report.py
+/tools/review_e_biessa_report.py
+/marketplace-frontend/tools/capture-report-screenshots.mjs
+
+# Local working notes
+/PROJECT_HANDOFF.md
+/HA_RESILIENCE_PLAN.md
+
+# Reproducible training outputs (keep scripts and datasets tracked)
+/ai-service/e-biessa-training.zip
+/ai-service/training/*results*.json

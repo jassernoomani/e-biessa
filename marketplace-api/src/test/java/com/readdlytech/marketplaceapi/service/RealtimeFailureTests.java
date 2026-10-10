@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readdlytech.marketplaceapi.realtime.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.socket.WebSocketSession;
@@ -14,7 +15,8 @@ import static org.mockito.Mockito.*;
 class RealtimeFailureTests {
     @Test void publishFailureDoesNotTurnCommittedMessageIntoAnError() throws Exception {
         var redis = mock(StringRedisTemplate.class);
-        when(redis.getRequiredConnectionFactory()).thenReturn(mock(org.springframework.data.redis.connection.RedisConnectionFactory.class));
+        var connectionFactory = mock(RedisConnectionFactory.class);
+        when(redis.getRequiredConnectionFactory()).thenReturn(connectionFactory);
         when(redis.convertAndSend(anyString(), any())).thenThrow(new RedisConnectionFailureException("offline"));
         var sockets = mock(MessageWebSocketHandler.class);
         var relay = new RedisMessageRelay(redis, new ObjectMapper(), sockets);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
                 .header("Retry-After", "5")
                 .body(new ErrorResponse(503,
                         "The database is temporarily unavailable. Please try again shortly.",
-                        null, LocalDateTime.now(), "DATABASE_UNAVAILABLE", true));
+                        null, LocalDateTime.now(ZoneOffset.UTC), "DATABASE_UNAVAILABLE", true));
     }
 
     @ExceptionHandler({jakarta.validation.ConstraintViolationException.class,
@@ -93,7 +94,7 @@ public class GlobalExceptionHandler {
         ResponseEntity.BodyBuilder builder = ResponseEntity.status(status);
         if (retryable) builder.header("Retry-After", "5");
         // Advisory only: clients must not automatically replay non-idempotent operations.
-        return builder.body(new ErrorResponse(status.value(), message, errors, LocalDateTime.now(),
+        return builder.body(new ErrorResponse(status.value(), message, errors, LocalDateTime.now(ZoneOffset.UTC),
                 status.name(), retryable));
     }
 }

@@ -133,6 +133,42 @@ SonarQube, Prometheus, and Grafana state.
 
 ## 8. Troubleshooting
 
+### Backend coverage and Redis integration tests
+
+The Spring stage runs `devops/jenkins/test-backend.sh` from `marketplace-api`.
+It starts a disposable Redis 7.4 container on `e-biessa-devops`, waits for it
+to be ready, and runs `mvn clean verify` with the Redis integration tests
+enabled. No application database, persistent Redis volume, or host port is
+used. A shell trap removes only that test container when the stage exits.
+For a differently named agent network, set `JENKINS_TEST_NETWORK`.
+
+The script also copies Maven dependencies to `target/sonar-libraries` for
+the standalone SonarScanner. Java main/test binaries, dependencies, and
+Surefire reports are configured in `sonar-project.properties`. Keep the
+new-code coverage requirement at 80%; add tests rather than excluding code.
+
+If Jenkins reports `Docker CLI missing`, ensure its Dockerfile explicitly
+installs `docker-cli` and `docker-buildx`. Debian Trixie separates the client
+from `docker.io`, and `--no-install-recommends` omits the client otherwise.
+The Dockerfile checks both binaries during the build. When no build is
+running, rebuild and recreate only Jenkins:
+
+```powershell
+docker compose --env-file devops/.env -f devops/docker-compose.devops.yml up -d --build --force-recreate jenkins
+docker exec e-biessa-jenkins docker --version
+docker exec e-biessa-jenkins docker info
+```
+
+This retains the named Jenkins home volume, including jobs and credentials.
+Do not use `down --volumes`. The Docker socket grants powerful host access;
+this setup is intended only for this trusted local academic environment.
+
+Outside CI, Redis integration tests remain opt-in: point `HA_REDIS_TEST_HOST`
+and `HA_REDIS_TEST_PORT` at a dedicated, disposable test Redis, then run
+`mvn clean verify`. Never point these tests at application Redis. Without
+`HA_REDIS_TEST_PORT`, the Redis integration tests are skipped; unit tests
+still run.
+
 - **SonarQube restarts:** increase Docker Desktop memory. On some WSL setups,
   run `wsl -d docker-desktop sysctl -w vm.max_map_count=524288` as an
   administrator, then restart the stack.

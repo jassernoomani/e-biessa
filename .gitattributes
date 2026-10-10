@@ -1,0 +1,2 @@
+# Jenkins executes shell scripts on Linux even when developed on Windows.
+*.sh text eol=lf

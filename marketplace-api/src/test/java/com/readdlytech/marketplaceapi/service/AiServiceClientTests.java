@@ -66,4 +66,35 @@ class AiServiceClientTests {
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, error.getStatusCode());
         return error;
     }
+
+    @Test
+    void interruptedRequestsPreserveInterruptAndDoNotCallUpstream() {
+        List<org.junit.jupiter.api.function.Executable> requests = List.of(
+                () -> client.search("brake", 12, .5, filters),
+                () -> client.assist("brake", 12, .5, filters, List.of()),
+                () -> client.identifyPartImage(new byte[]{1}, MediaType.IMAGE_JPEG));
+        for (var request : requests) {
+            Thread.currentThread().interrupt();
+            try {
+                assertUnavailable(request);
+                assertTrue(Thread.currentThread().isInterrupted());
+            } finally {
+                Thread.interrupted(); // Do not leak interrupt state into subsequent tests.
+            }
+        }
+        server.verify();
+    }
+
+    @Test
+    void assistantAndVisionFailuresHideUpstreamDetails() {
+        server.expect(requestTo("http://ai.test/v1/assistant"))
+                .andRespond(withServerError().body("private upstream details"));
+        server.expect(requestTo("http://ai.test/v1/vision/identify"))
+                .andRespond(withServerError().body("private upstream details"));
+        var assistant = assertUnavailable(() -> client.assist("brake", 12, .5, filters, List.of()));
+        var vision = assertUnavailable(() -> client.identifyPartImage(new byte[]{1}, MediaType.IMAGE_JPEG));
+        assertFalse(assistant.getReason().contains("private upstream"));
+        assertFalse(vision.getReason().contains("private upstream"));
+        server.verify();
+    }
 }

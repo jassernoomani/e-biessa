@@ -38,7 +38,7 @@ pipeline {
                 stage('Spring Boot') {
                     steps {
                         dir('marketplace-api') {
-                            sh 'mvn -B clean verify'
+                            sh 'sh ../devops/jenkins/test-backend.sh'
                         }
                     }
                 }

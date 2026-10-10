@@ -18,4 +18,10 @@ RUN npx --yes playwright@1.56.1 install --with-deps chromium \
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
 
+# Debian Trixie splits the client from docker.io; --no-install-recommends
+# does not install it implicitly. Keep this late to reuse the tooling cache.
+RUN apt-get update && apt-get install -y --no-install-recommends docker-cli docker-buildx \
+    && docker --version && docker buildx version \
+    && rm -rf /var/lib/apt/lists/*
+
 USER jenkins

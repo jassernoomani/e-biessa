@@ -18,12 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /** Opt-in, dedicated lab Redis only; no Spring application or database is started. */
-@EnabledIfEnvironmentVariable(named = "HA_REDIS_TEST_PORT", matches = "16379")
+@EnabledIfEnvironmentVariable(named = "HA_REDIS_TEST_PORT", matches = "[0-9]+")
 class RedisRealtimeTests {
     private LettuceConnectionFactory factory;
     private StringRedisTemplate redis;
     @BeforeEach void setup() {
-        factory = new LettuceConnectionFactory("127.0.0.1", 16379);
+        factory = new LettuceConnectionFactory(
+                System.getenv().getOrDefault("HA_REDIS_TEST_HOST", "127.0.0.1"),
+                Integer.parseInt(System.getenv("HA_REDIS_TEST_PORT")));
         factory.afterPropertiesSet(); factory.start();
         redis = new StringRedisTemplate(factory);
         try (var connection = factory.getConnection()) { assertEquals("PONG", connection.ping()); }
@@ -57,11 +59,25 @@ class RedisRealtimeTests {
         var second = new RedisMessageRelay(redis, mapper, secondSockets);
         try {
             first.ensureSubscribed(); second.ensureSubscribed();
+            first.ensureSubscribed(); // A repeated scheduled check must not duplicate subscriptions.
             var event = new RealtimeMessageEvent(123L,
                     new MessageResponse(456L, 1L, "Test buyer", "Test message", LocalDateTime.now(), null, List.of()), 1L, 2L);
             first.publish(event);
             verify(firstSockets, timeout(5000)).deliver(event);
             verify(secondSockets, timeout(5000)).deliver(event);
         } finally { first.destroy(); second.destroy(); }
+    }
+
+    @Test void invalidNotificationDoesNotStopLaterDelivery() throws Exception {
+        var sockets = mock(MessageWebSocketHandler.class);
+        var relay = new RedisMessageRelay(redis, new ObjectMapper().findAndRegisterModules(), sockets);
+        try {
+            relay.ensureSubscribed();
+            redis.convertAndSend("e-biessa:realtime:messages", "not-json");
+            var event = new RealtimeMessageEvent(789L, null, 4L, 5L);
+            relay.publish(event);
+            verify(sockets, timeout(5000)).deliver(event);
+            verifyNoMoreInteractions(sockets);
+        } finally { relay.destroy(); }
     }
 }

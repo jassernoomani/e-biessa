@@ -238,6 +238,7 @@ See the [Spring environment template](marketplace-api/.env.example) and [AI envi
 | [VIN compatibility](documentation/VIN_COMPATIBILITY.md) | Vehicle decoding and limitations |
 | [Image and voice search](documentation/IMAGE_AND_VOICE_SEARCH.md) | Optional inputs and setup |
 | [DevOps](documentation/DEVOPS.md) | CI, containers, monitoring, and troubleshooting |
+| [GHCR local demo](documentation/GHCR_DEMO.md) | Isolated image deployment, two API replicas, monitoring, and verification gates |
 
 ## Project scope
 

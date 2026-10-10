@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { apiBaseUrl } from './runtime-config';
 import { Observable, timeout } from 'rxjs';
 import { MarketplaceAssistantResponse, PriceEstimate, RecommendationFeed, RecommendationSettings, VisionIdentification } from './models';
 import { AdminAuditLog, AuthUser, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, OAuthProviders, Page, Part, PartPayload, PartStatus, ProfilePayload, RecoveryStartResponse, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake, VinDecodeResult } from './models';
@@ -8,7 +9,7 @@ interface AuthResponse extends AuthUser { token: string; }
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private readonly baseUrl = 'http://localhost:8080/api';
+  private readonly baseUrl = apiBaseUrl();
 
   constructor(private readonly http: HttpClient) {}
 

@@ -1175,10 +1175,10 @@ export class App implements OnInit, OnDestroy {
   imageUrl(part: Part): string {
     const url = part.imageUrls?.[0];
     if (!url) return 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=900&q=75';
-    return url.startsWith('http') ? url : `http://localhost:8080${url}`;
+    return this.api.assetUrl(url);
   }
 
-  assetUrl(url: string): string { return url.startsWith('http') || url.startsWith('data:') ? url : `http://localhost:8080${url}`; }
+  assetUrl(url: string): string { return this.api.assetUrl(url); }
 
   money(value: number): string { return new Intl.NumberFormat('fr-TN').format(value) + ' TND'; }
   initials(): string { return this.user()?.fullName.split(' ').map(word => word[0]).slice(0, 2).join('').toUpperCase() ?? ''; }

@@ -98,7 +98,7 @@
     }
     <section class="market-shell" [class.filters-open]="filtersOpen()">
       <button class="mobile-filter-toggle" (click)="filtersOpen.set(!filtersOpen())" [attr.aria-expanded]="filtersOpen()" aria-controls="market-filters">{{ filtersOpen() ? 'Hide filters −' : 'Vehicle & part filters +' }}</button>
-      <aside class="filters" id="market-filters">
+      <aside class="filters" id="market-filters" aria-label="Vehicle and part filters">
         <div class="section-title"><span>Refine results</span><button (click)="resetFilters()">Reset</button></div>
         <label>Category<select [(ngModel)]="filters.categoryId" (change)="applyFilters()"><option value="">All categories</option>@for (category of categories(); track category.id) {<option [value]="category.id">{{ category.name }}</option>}</select></label>
         <label>Year<select [(ngModel)]="filters.year" (change)="yearChanged()"><option value="">All years</option>@for (year of catalogYears(); track year) {<option [value]="year">{{ year }}</option>}</select></label>

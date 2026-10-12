@@ -34,6 +34,21 @@ test('workshop catalogue keeps theme geometry and supports mobile category filte
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
   await expect(page.locator('.part-card').first()).toBeVisible();
+  await expect(page.getByRole('complementary', { name: 'Vehicle and part filters' })).toBeVisible();
+  const contrast = await page.locator('.topbar .primary').evaluate(element => {
+    const style = getComputedStyle(element);
+    const luminance = (color: string) => {
+      const channels = color.match(/\d+/g)!.slice(0, 3).map(value => {
+        const channel = Number(value) / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+      });
+      return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+    };
+    const foreground = luminance(style.color);
+    const background = luminance(style.backgroundColor);
+    return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+  });
+  expect(contrast).toBeGreaterThanOrEqual(4.5);
   await page.locator('.hero').evaluate(async element => { await Promise.all(element.getAnimations().map(animation => animation.finished)); });
   const light = await page.locator('.hero').boundingBox();
   await page.screenshot({ path: testInfo.outputPath('workshop-light.png'), fullPage: true });

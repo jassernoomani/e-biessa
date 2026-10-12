@@ -90,7 +90,7 @@ function Ensure-Service($Name, $Url, [int]$Port) {
 if ($Service) {
     switch ($Service) {
         'Api' { Set-Java; Set-Location $apiDir; & .\mvnw.cmd spring-boot:run }
-        'Web' { Set-Location $webDir; & node .\node_modules\@angular\cli\bin\ng.js serve --host localhost --port 4200 }
+        'Web' { Set-Location $webDir; & node .\node_modules\@angular\cli\bin\ng.js serve --port 4200 }
         'Ai' { Set-Location $aiDir; & $python -m uvicorn app.main:app --host 127.0.0.1 --port $env:EBIESSA_LAUNCH_AI_PORT }
         'Ollama' { & $ollama serve }
         'Mysql' { & $mysql "--defaults-file=$mysqlConfig" --console }

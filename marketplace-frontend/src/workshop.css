@@ -14,8 +14,8 @@
 #workshop-app :is(input,select,textarea) { background: var(--field); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; }
 #workshop-app :is(button,a,input,select,textarea):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 #workshop-app .eyebrow { color: var(--accent); font: 700 11px/1.5 'Courier New', monospace; letter-spacing: .12em; text-transform: uppercase; }
-#workshop-app :is(.primary,.dark) { background: #db4823; border: 1px solid #db4823; color: #fff; border-radius: 6px; box-shadow: none; font-weight: 700; }
-#workshop-app :is(.primary,.dark):hover:not(:disabled) { background: #bd3818; border-color: #bd3818; }
+#workshop-app :is(.primary,.dark) { background: #bd3818; border: 1px solid #bd3818; color: #fff; border-radius: 6px; box-shadow: none; font-weight: 700; }
+#workshop-app :is(.primary,.dark):hover:not(:disabled) { background: #a62f12; border-color: #a62f12; }
 #workshop-app .topbar { background: var(--surface); border-bottom: 1px solid var(--line); padding: 14px 4vw; gap: 24px; box-shadow: none; }
 #workshop-app .brand { background: transparent; border: 0; padding: 0; border-radius: 0; }
 #workshop-app .topbar nav { gap: 4px; }
@@ -28,7 +28,7 @@
 #workshop-app .hero-copy { min-width: 0; }
 #workshop-app .catalogue-dot { display: inline-block; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; margin-right: 8px; }
 #workshop-app .hero h1 { font-size: clamp(42px,5.8vw,84px); font-weight: 800; line-height: .99; letter-spacing: -.065em; margin: 24px 0; }
-#workshop-app .hero h1 em { color: var(--accent); font-style: normal; }
+#workshop-app .hero h1 em { color: var(--accent); font-style: normal; font-weight: 800; }
 #workshop-app .hero p { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 530px; }
 #workshop-app .search-mode-toggle { margin-top: 24px; padding: 4px; border: 1px solid var(--line); background: var(--soft); border-radius: 7px; }
 #workshop-app .search-mode-toggle button { border-radius: 4px; color: var(--muted); }
@@ -55,12 +55,11 @@
 #workshop-app .filters label { color: var(--muted); }
 #workshop-app .filters :is(.filter-note,.seller-promo) { background: var(--soft); color: var(--ink); border-radius: 6px; }
 #workshop-app .results { border: 0; padding: 0; background: transparent; box-shadow: none; border-radius: 0; }
-#workshop-app .part-body { background: var(--surface); }
+#workshop-app .part-body { background: var(--surface); padding: 17px; }
 #workshop-app :is(.catalog-note,.sell-card,.results-tools > span,.ai-constraints,.match-reasons span,.ai-score) { background: var(--soft); color: var(--ink); border-color: var(--line); border-radius: 6px; }
 #workshop-app .sell-card p { color: var(--muted); }
 #workshop-app :is(.message-stream,.message-composer) { background: var(--field); border-color: var(--line); }
 #workshop-app .brand-logo { background: transparent; border: 0; box-shadow: none; }
-#workshop-app .hero h1 em { font-weight: 800; }
 #workshop-app .ai-search-hint { color: var(--muted) !important; }
 #workshop-app .results-head { border-bottom: 1px solid var(--line); margin-bottom: 22px; padding-bottom: 18px; }
 #workshop-app .results-head::after { display: none; }
@@ -70,7 +69,6 @@
 #workshop-app .part-card:hover { transform: none; border-color: var(--accent); box-shadow: var(--shadow); }
 #workshop-app .image-wrap { background: var(--soft); height: 210px; width: 100%; overflow: hidden; }
 #workshop-app .image-wrap img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-#workshop-app .part-body { padding: 17px; }
 #workshop-app .part-body h3 { font-size: 16px; line-height: 1.4; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 45px; }
 #workshop-app .meta { color: var(--muted); font: 700 10px/1.5 'Courier New',monospace; letter-spacing: .04em; }
 #workshop-app .fit { color: var(--muted); font-size: 12px; }
@@ -148,8 +146,7 @@
   #workshop-app .mobile-filter-toggle { display: block; background: var(--surface); color: var(--ink); padding: 13px 16px; border: 1px solid var(--line); border-radius: 6px; text-align: left; }
   #workshop-app .market-shell .filters { display: none; position: static; max-height: none; }
   #workshop-app .market-shell.filters-open .filters { display: block; }
-  #workshop-app .searchbar { flex-wrap: wrap; }
-  #workshop-app .searchbar { display: flex; }
+  #workshop-app .searchbar { flex-wrap: wrap; display: flex; }
   #workshop-app .topbar .ghost { display: inline-flex; padding: 9px; }
   #workshop-app .topbar .account { gap: 6px; }
   #workshop-app .topbar .primary.small { padding: 10px; font-size: 11px; }

@@ -35,6 +35,7 @@ export class App implements OnInit, OnDestroy {
   private readonly theme = inject(ThemeService);
   private readonly zone = inject(NgZone);
   readonly view = signal<View>('market');
+  readonly filtersOpen = signal(false);
   readonly user = signal<User | null>(null);
   readonly parts = signal<Part[]>([]);
   readonly favorites = signal<Part[]>([]);
@@ -417,7 +418,7 @@ export class App implements OnInit, OnDestroy {
     if (page < 0 || page >= this.totalPages() || page === this.currentPage()) return;
     this.currentPage.set(page);
     this.loadParts();
-    requestAnimationFrame(() => document.querySelector('.results')?.scrollIntoView({ behavior: 'smooth' }));
+    requestAnimationFrame(() => document.querySelector('.results')?.scrollIntoView({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
   }
 
   pageNumbers(): number[] {
@@ -1174,7 +1175,7 @@ export class App implements OnInit, OnDestroy {
 
   imageUrl(part: Part): string {
     const url = part.imageUrls?.[0];
-    if (!url) return 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=900&q=75';
+    if (!url) return '/part-placeholder.svg';
     return this.api.assetUrl(url);
   }
 
@@ -1336,7 +1337,7 @@ export class App implements OnInit, OnDestroy {
       const stream = this.messageStream?.nativeElement;
       if (!stream) return;
       if (typeof stream.scrollTo === 'function') {
-        stream.scrollTo({ top: stream.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+        stream.scrollTo({ top: stream.scrollHeight, behavior: smooth && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto' });
       } else {
         stream.scrollTop = stream.scrollHeight;
       }

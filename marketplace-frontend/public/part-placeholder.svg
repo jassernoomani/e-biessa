@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440">
+  <rect width="640" height="440" fill="#e8e5dd"/>
+  <g fill="none" stroke="#92968f" stroke-width="3">
+    <path d="M242 156l78-42 78 42v100l-78 44-78-44zM242 156l78 44 78-44M320 200v100M281 135l78 44v40"/>
+    <path d="M196 114v-24h24m200 0h24v24m0 186v24h-24m-200 0h-24v-24" stroke-width="2"/>
+  </g>
+  <text x="320" y="364" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" letter-spacing="3" fill="#555e58">SELLER PHOTO NOT PROVIDED</text>
+</svg>

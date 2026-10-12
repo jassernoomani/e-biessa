@@ -70,7 +70,7 @@ describe('E-biessa Angular application', () => {
   it('renders the E-biessa value proposition', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('The right part.');
+    expect(fixture.nativeElement.textContent).toContain('Good parts.');
     expect(fixture.nativeElement.textContent).toContain('Marketplace');
     expect(fixture.nativeElement.textContent).toContain('E-biessa');
   });
@@ -208,12 +208,12 @@ describe('E-biessa Angular application', () => {
     });
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain('AI-ranked matches');
+    expect(fixture.nativeElement.textContent).toContain('Matching parts');
     expect(fixture.nativeElement.textContent).toContain('Golf compatible');
     expect(fixture.nativeElement.textContent).toContain('Diesel');
     expect(fixture.nativeElement.textContent).toContain('Brake system');
     expect(fixture.nativeElement.textContent).toContain('91% match');
-    expect(fixture.nativeElement.textContent).toContain('E-biessa AI answer');
+    expect(fixture.nativeElement.textContent).toContain('Search summary');
     expect(fixture.nativeElement.textContent).toContain('Inventory search');
     expect(fixture.nativeElement.textContent).toContain('Compatibility check');
     expect(fixture.nativeElement.textContent).toContain('Listing #7 is the strongest current match.');

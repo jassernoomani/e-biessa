@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 410" fill="none">
+  <defs>
+    <linearGradient id="steel" x1="110" y1="70" x2="450" y2="370" gradientUnits="userSpaceOnUse"><stop stop-color="#f1f0e8"/><stop offset=".38" stop-color="#969e9b"/><stop offset=".56" stop-color="#d8ded9"/><stop offset="1" stop-color="#545f60"/></linearGradient>
+    <linearGradient id="edge" x1="150" y1="80" x2="430" y2="320" gradientUnits="userSpaceOnUse"><stop stop-color="#657475"/><stop offset="1" stop-color="#202a2e"/></linearGradient>
+    <linearGradient id="orange" x1="325" y1="70" x2="470" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#ff9b55"/><stop offset=".55" stop-color="#ed5a2d"/><stop offset="1" stop-color="#ad361f"/></linearGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" stroke="#8e9a91" stroke-opacity=".13"/></pattern>
+  </defs>
+  <rect width="560" height="410" fill="url(#grid)"/>
+  <g stroke="#b8c5bb" stroke-opacity=".35" stroke-width="1"><path d="M36 205h488M280 28v350" stroke-dasharray="4 6"/><path d="M73 336h408M73 330v12m408-12v12"/></g>
+  <ellipse cx="295" cy="316" rx="170" ry="24" fill="#000" opacity=".2"/>
+  <g transform="translate(275 200) rotate(-28)">
+    <ellipse cx="0" cy="14" rx="145" ry="126" fill="url(#edge)" stroke="#8b9897"/>
+    <ellipse rx="145" ry="126" fill="url(#steel)" stroke="#e6ede5" stroke-width="2"/>
+    <ellipse rx="130" ry="113" stroke="#667371" stroke-width="2"/>
+    <ellipse rx="104" ry="89" stroke="#eff1e9" stroke-opacity=".7"/>
+    <g stroke="#334342" stroke-width="5" stroke-linecap="round">
+      <path d="M-83-80l-12 12m-18 24l-8 14m-2 40l3 14m23 39l12 10m40 22l15 3m46 0l15-3m39-20l12-10m22-39l4-14m-2-41l-6-13m-29-29l-12-8m-38-16l-15-1m-43 1l-14 4"/>
+    </g>
+    <ellipse cy="-7" rx="66" ry="57" fill="url(#edge)" stroke="#536461" stroke-width="3"/>
+    <ellipse cy="-16" rx="62" ry="53" fill="url(#steel)" stroke="#d2ddd7"/>
+    <ellipse cy="-18" rx="27" ry="23" fill="#1c292b" stroke="#566b69" stroke-width="5"/>
+    <g fill="#293b3b" stroke="#b1c0b8" stroke-width="2"><ellipse cx="0" cy="-57" rx="7" ry="6"/><ellipse cx="42" cy="-29" rx="7" ry="6"/><ellipse cx="28" cy="16" rx="7" ry="6"/><ellipse cx="-29" cy="16" rx="7" ry="6"/><ellipse cx="-43" cy="-29" rx="7" ry="6"/></g>
+  </g>
+  <g transform="rotate(-28 395 146)">
+    <path d="M354 68h62l31 28v106l-22 25h-65l-19-24V94z" fill="#712b21" stroke="#1c292c" stroke-width="4"/>
+    <path d="M343 59h62l30 28v106l-22 24h-65l-18-23V86z" fill="url(#orange)" stroke="#f2a175" stroke-width="2"/>
+    <path d="M352 95h62v71h-62z" fill="#1f3031"/><path d="M345 177h77v17h-77z" fill="#b83e25"/>
+    <path d="M356 74h42M348 202h58" stroke="#ffbd86" stroke-width="3"/>
+    <circle cx="343" cy="91" r="6" fill="#bac5bd"/><circle cx="424" cy="187" r="6" fill="#bac5bd"/>
+  </g>
+  <g stroke="#f99b67" stroke-width="1.2"><path d="M400 91l45-43h63M164 221l-57 57H43"/><circle cx="400" cy="91" r="3" fill="#f99b67"/><circle cx="164" cy="221" r="3" fill="#f99b67"/></g>
+  <g fill="#d8e0d7" font-family="monospace" font-size="10" letter-spacing="1"><text x="447" y="40">CALIPER</text><text x="43" y="294">VENTED DISC</text><text x="213" y="358" fill="#9fafa7">FITMENT FIRST. ALWAYS.</text></g>
+</svg>

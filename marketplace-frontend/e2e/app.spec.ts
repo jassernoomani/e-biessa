@@ -9,6 +9,50 @@ const listing = {
   imageUrls: [], images: [], favoriteCount: 0, favorited: false,
 };
 
+test('dialogs animate out and reduced motion disables navigation effects', async ({ page }) => {
+  await mockApi(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Log in', exact: true }).click();
+  await expect(page.locator('.auth-modal')).toBeVisible();
+  await page.locator('.auth-modal .close').click();
+  await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: 'Log in', exact: true }).click();
+  expect(await page.locator('.modal-backdrop').evaluate(element => getComputedStyle(element).animationName)).toBe('none');
+  await page.locator('.auth-modal .close').click();
+  await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+  await signIn(page, 'BUYER');
+  await page.getByRole('button', { name: 'Saved', exact: true }).click();
+  expect(await page.locator('main > .page').evaluate(element => getComputedStyle(element).animationName)).toBe('none');
+});
+
+test('workshop catalogue keeps theme geometry and supports mobile category filters', async ({ page }, testInfo) => {
+  await page.addInitScript(() => localStorage.setItem('e_bieca_theme', 'light'));
+  await mockApi(page);
+  await page.route('**/api/categories', route => route.fulfill({ json: [{ id: 1, name: 'Brake Systems' }, { id: 2, name: 'Electrical Parts' }] }));
+  await page.route('**/api/parts?*', route => route.fulfill({ json: { ...emptyPage, content: [listing, { ...listing, id: 8, title: 'Bosch alternator', categoryName: 'Electrical Parts' }], totalElements: 2, totalPages: 1 } }));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/');
+  await expect(page.locator('.part-card').first()).toBeVisible();
+  await page.locator('.hero').evaluate(async element => { await Promise.all(element.getAnimations().map(animation => animation.finished)); });
+  const light = await page.locator('.hero').boundingBox();
+  await page.screenshot({ path: testInfo.outputPath('workshop-light.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Switch to dark mode' }).click();
+  const dark = await page.locator('.hero').boundingBox();
+  expect(dark).toEqual(light);
+  await page.screenshot({ path: testInfo.outputPath('workshop-dark.png'), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole('button', { name: 'Marketplace', exact: true })).toBeInViewport();
+  await expect(page.locator('.mobile-filter-toggle')).toBeVisible();
+  await page.locator('.mobile-filter-toggle').click();
+  await expect(page.locator('#market-filters')).toBeVisible();
+  await page.getByRole('region', { name: 'Browse part categories' }).getByRole('button', { name: 'Brake Systems' }).click();
+  await expect(page.locator('#market-filters select').first()).toHaveValue('1');
+  await page.locator('.mobile-filter-toggle').click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.screenshot({ path: testInfo.outputPath('workshop-mobile.png'), fullPage: true });
+});
+
 async function mockApi(page: Page, role: 'BUYER' | 'SELLER' | 'ADMIN' = 'BUYER') {
   let recommendationSettings = { personalizationEnabled: true, vehicles: [] as typeof listing.compatibleVehicles };
   const profile = {
@@ -102,7 +146,7 @@ async function signIn(page: Page, role: 'BUYER' | 'SELLER' | 'ADMIN') {
   await expect(page.getByText(`${role} Test User`, { exact: true })).toBeVisible();
 }
 
-test('AI search renders only the deterministic, active-listing answer', async ({ page }) => {
+test('AI search renders only the deterministic, active-listing answer', async ({ page }, testInfo) => {
   await mockApi(page);
   await page.goto('/');
   await page.getByTestId('ai-search-mode').click();
@@ -112,6 +156,11 @@ test('AI search renders only the deterministic, active-listing answer', async ({
   const answer = page.getByTestId('ai-answer');
   await expect(answer).toContainText('Verified from active listings');
   await expect(answer).toContainText('Listing #7');
+  await expect(answer).toContainText('Search summary');
+  await expect(answer.locator('.ai-answer-icon')).toHaveCount(0);
+  await page.locator('.results').screenshot({ path: testInfo.outputPath('search-summary-light.png') });
+  await page.getByRole('button', { name: 'Switch to dark mode' }).click();
+  await page.locator('.results').screenshot({ path: testInfo.outputPath('search-summary-dark.png') });
   await expect(page.getByText('Volkswagen Golf front brake caliper', { exact: true })).toBeVisible();
   await expect(page.getByText('Golf compatible', { exact: false })).toBeVisible();
 });
@@ -156,7 +205,7 @@ test('voice search transcribes locally into the editable query field', async ({ 
 });
 
 for (const role of ['BUYER', 'SELLER', 'ADMIN'] as const) {
-  test(`${role.toLowerCase()} receives the correct workspace`, async ({ page }) => {
+  test(`${role.toLowerCase()} receives the correct workspace`, async ({ page }, testInfo) => {
     await signIn(page, role);
     if (role === 'BUYER') {
       await expect(page.getByRole('button', { name: 'Seller studio' })).toHaveCount(0);
@@ -172,5 +221,6 @@ for (const role of ['BUYER', 'SELLER', 'ADMIN'] as const) {
       await expect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
       await expect(page.getByText('Marketplace at a glance')).toBeVisible();
     }
+    await page.screenshot({ path: testInfo.outputPath(`${role.toLowerCase()}-workspace.png`), fullPage: true });
   });
 }

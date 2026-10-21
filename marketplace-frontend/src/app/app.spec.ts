@@ -12,6 +12,7 @@ describe('E-biessa Angular application', () => {
     const conversation = { id: 7 } as any;
     app.activeConversation.set({ conversation, messages: [] });
     app.replyDraft = 'Unsent text';
+    app.conversationListOpen.set(true);
     (app as any).reconcileInbox();
     const http = TestBed.inject(HttpTestingController);
     const list = http.expectOne(req => req.url.endsWith('/messages/conversations'));
@@ -21,6 +22,7 @@ describe('E-biessa Angular application', () => {
     detail.flush({ conversation, messages: [{ id: 1, createdAt: '2026-09-26T10:00:00' }] });
     expect(app.activeConversation()?.messages.map(message => message.id)).toEqual([1, 2]);
     expect(app.replyDraft).toBe('Unsent text');
+    expect(app.conversationListOpen()).toBe(true);
     http.verify();
   });
 
@@ -65,6 +67,19 @@ describe('E-biessa Angular application', () => {
   it('creates the marketplace shell', () => {
     const fixture = TestBed.createComponent(App);
     expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('shows an uncertain photo result without a misleading candidate button', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    fixture.componentInstance.searchMode.set('ai');
+    fixture.componentInstance.visionResult.set({ candidates: [], model: 'test-vision', status: 'UNCERTAIN',
+      caution: 'Several parts look similar. Try a closer photo.' });
+    fixture.detectChanges();
+    const result = fixture.nativeElement.querySelector('.vision-suggestions');
+    expect(result.textContent).toContain('Part not confidently identified');
+    expect(result.textContent).toContain('Try a closer photo');
+    expect(result.querySelectorAll('button').length).toBe(0);
   });
 
   it('renders the E-biessa value proposition', () => {

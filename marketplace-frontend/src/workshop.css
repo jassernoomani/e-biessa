@@ -1,212 +1,2408 @@
-/* Workshop catalogue: shared dimensions; themes change tokens, never geometry. */
+/* Runtime token owner. DESIGN.md mirrors this palette; both themes share geometry. */
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('/fonts/BarlowCondensed-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-display: optional;
+}
+html {
+  --canvas: #f4f6f7;
+  background: var(--canvas);
+  scrollbar-gutter: stable;
+  scroll-padding-top: 100px;
+}
+html[data-theme='dark'] {
+  --canvas: #171d23;
+}
+html[data-theme] body {
+  background: var(--canvas);
+}
 #workshop-app {
-  --accent: #d74620; --ink: #252b2e; --green: #303b40; --muted: #626a6d;
-  --line: #d6d6cd; --surface: #fffef9; --soft: #eaeae2; --shadow: 0 8px 24px #242b3010;
-  --canvas: #f2f1e9; --field: #faf9f3; --accent-soft: #f9e4d9;
-  background: var(--canvas) !important; color: var(--ink); font-family: Arial, Helvetica, sans-serif;
+  --accent: #b83d1b;
+  --accent-strong: #9e3014;
+  --ink: #202529;
+  --green: var(--ink);
+  --muted: #59646c;
+  --line: #d5dce0;
+  --surface: #ffffff;
+  --soft: #e9edf0;
+  --shadow: 0 8px 24px #20252912;
+  --field: #f8fafb;
+  --accent-soft: #fbe9e1;
+  --action: #b83d1b;
+  --action-hover: #9e3014;
+  --on-action: #ffffff;
+  --scroll-thumb: #8a969e;
+  --scroll-track: var(--canvas);
+  --scroll-hover: #59646c;
+  --radius-control: 8px;
+  --radius-panel: 12px;
+  --font-body: 'Segoe UI', Arial, sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --page-gutter: max(clamp(16px, 4vw, 64px), calc((100vw - 1560px) / 2));
+  /* The older app-shell baseline is important; this is its single theme adapter. */
+  background: var(--canvas) !important;
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  color-scheme: light;
 }
 #workshop-app.dark-theme {
-  --accent: #ff7950; --ink: #eeeeee; --green: #ced5d7; --muted: #a8b1b4;
-  --line: #384348; --surface: #212a2e; --soft: #2c373c; --shadow: 0 8px 24px #0002;
-  --canvas: #182125; --field: #1c262b; --accent-soft: #49352d;
+  --accent: #ff916b;
+  --ink: #f0f2f3;
+  --muted: #b1bbc2;
+  --line: #39434c;
+  --surface: #222a31;
+  --soft: #303a43;
+  --shadow: 0 8px 24px #0003;
+  --field: #1c232a;
+  --accent-soft: #493127;
+  --scroll-thumb: #77858f;
+  --scroll-hover: #b1bbc2;
+  color-scheme: dark;
 }
-#workshop-app :is(h1,h2,h3,h4) { font-family: Arial, Helvetica, sans-serif; color: var(--ink); letter-spacing: -.035em; }
-#workshop-app :is(input,select,textarea) { background: var(--field); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; }
-#workshop-app :is(button,a,input,select,textarea):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-#workshop-app .eyebrow { color: var(--accent); font: 700 11px/1.5 'Courier New', monospace; letter-spacing: .12em; text-transform: uppercase; }
-#workshop-app :is(.primary,.dark) { background: #bd3818; border: 1px solid #bd3818; color: #fff; border-radius: 6px; box-shadow: none; font-weight: 700; }
-#workshop-app :is(.primary,.dark):hover:not(:disabled) { background: #a62f12; border-color: #a62f12; }
-#workshop-app .topbar { background: var(--surface); border-bottom: 1px solid var(--line); padding: 14px 4vw; gap: 24px; box-shadow: none; }
-#workshop-app .brand { background: transparent; border: 0; padding: 0; border-radius: 0; }
-#workshop-app .topbar nav { gap: 4px; }
-#workshop-app .topbar nav button { color: var(--muted); border-radius: 5px; padding: 12px 15px; }
-#workshop-app .topbar nav button.active { background: var(--soft); color: var(--ink); }
-#workshop-app .theme-toggle { background: var(--soft); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; }
-#workshop-app :is(.avatar,.profile-avatar,.thread-avatar) { background: var(--soft); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
-#workshop-app .hero { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); gap: 5vw; align-items: center; padding: 54px 5vw 44px; background: var(--canvas); border-bottom: 1px solid var(--line); min-height: 0; }
-#workshop-app .hero::before,#workshop-app .hero::after { display: none; }
-#workshop-app .hero-copy { min-width: 0; }
-#workshop-app .catalogue-dot { display: inline-block; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; margin-right: 8px; }
-#workshop-app .hero h1 { font-size: clamp(42px,5.8vw,84px); font-weight: 800; line-height: .99; letter-spacing: -.065em; margin: 24px 0; }
-#workshop-app .hero h1 em { color: var(--accent); font-style: normal; font-weight: 800; }
-#workshop-app .hero p { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 530px; }
-#workshop-app .search-mode-toggle { margin-top: 24px; padding: 4px; border: 1px solid var(--line); background: var(--soft); border-radius: 7px; }
-#workshop-app .search-mode-toggle button { border-radius: 4px; color: var(--muted); }
-#workshop-app .search-mode-toggle button.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px #0001; }
-#workshop-app .searchbar { margin-top: 16px; padding: 8px; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
-#workshop-app .searchbar input { background: transparent; border: 0; min-width: 0; font-size: 14px; }
-#workshop-app .trust { display: flex; flex-wrap: wrap; gap: 18px; color: var(--muted); font: 700 10px/1.5 'Courier New',monospace; text-transform: uppercase; letter-spacing: .04em; margin-top: 24px; }
-#workshop-app .assembly-visual { margin: 0; display: flex; flex-direction: column; height: auto; min-height: 0; background: #242e33; border: 1px solid #485257; border-radius: 10px; padding: 22px; overflow: hidden; color: #f2f1e9; }
-#workshop-app .assembly-heading { display: flex; justify-content: space-between; gap: 12px; color: #b3bfc4; font: 10px/1.5 'Courier New',monospace; letter-spacing: .08em; }
-#workshop-app .assembly-visual img { width: 100%; height: auto; display: block; aspect-ratio: 560/410; object-fit: contain; }
-#workshop-app .assembly-visual figcaption { display: flex; justify-content: space-between; align-items: end; gap: 12px; border-top: 1px solid #485257; padding-top: 18px; }
-#workshop-app .assembly-visual strong { display: block; font-size: clamp(18px,2vw,27px); line-height: 1.2; margin-top: 8px; letter-spacing: -.03em; }
-#workshop-app .assembly-visual .eyebrow { color: #ff916e; }
-#workshop-app .assembly-stamp { color: #c4cdd0; font: 10px/1.6 'Courier New',monospace; text-align: right; }
-#workshop-app .category-strip { padding: 24px 5vw; display: flex; gap: 32px; align-items: center; border-bottom: 1px solid var(--line); background: var(--surface); }
-.category-strip-title { flex: 0 0 190px; display: grid; gap: 5px; }
-.category-strip-title strong { font-size: 17px; }
-.category-shortcuts { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; }
-#workshop-app .category-shortcuts button { flex-shrink: 0; padding: 12px 16px; background: var(--field); border: 1px solid var(--line); color: var(--ink); border-radius: 6px; font-size: 12px; }
-.category-shortcuts button span { margin-right: 8px; }
-#workshop-app .category-shortcuts button.selected { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
-#workshop-app .market-shell { padding: 34px 5vw 60px; grid-template-columns: 244px minmax(0,1fr); gap: 32px; background: var(--canvas); }
-#workshop-app .filters { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; box-shadow: none; }
-#workshop-app .filters label { color: var(--muted); }
-#workshop-app .filters :is(.filter-note,.seller-promo) { background: var(--soft); color: var(--ink); border-radius: 6px; }
-#workshop-app .results { border: 0; padding: 0; background: transparent; box-shadow: none; border-radius: 0; }
-#workshop-app .part-body { background: var(--surface); padding: 17px; }
-#workshop-app :is(.catalog-note,.sell-card,.results-tools > span,.ai-constraints,.match-reasons span,.ai-score) { background: var(--soft); color: var(--ink); border-color: var(--line); border-radius: 6px; }
-#workshop-app .sell-card p { color: var(--muted); }
-#workshop-app :is(.message-stream,.message-composer) { background: var(--field); border-color: var(--line); }
-#workshop-app .brand-logo { background: transparent; border: 0; box-shadow: none; }
-#workshop-app .ai-search-hint { color: var(--muted) !important; }
-#workshop-app .results-head { border-bottom: 1px solid var(--line); margin-bottom: 22px; padding-bottom: 18px; }
-#workshop-app .results-head::after { display: none; }
-#workshop-app .results-head h2 { font-size: clamp(24px,2.5vw,34px); margin-top: 6px; }
-#workshop-app .parts-grid { gap: 18px; }
-#workshop-app .part-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: none; overflow: hidden; transition: border-color .18s, box-shadow .18s; }
-#workshop-app .part-card:hover { transform: none; border-color: var(--accent); box-shadow: var(--shadow); }
-#workshop-app .image-wrap { background: var(--soft); height: 210px; width: 100%; overflow: hidden; }
-#workshop-app .image-wrap img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-#workshop-app .part-body h3 { font-size: 16px; line-height: 1.4; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 45px; }
-#workshop-app .meta { color: var(--muted); font: 700 10px/1.5 'Courier New',monospace; letter-spacing: .04em; }
-#workshop-app .fit { color: var(--muted); font-size: 12px; }
-#workshop-app .part-foot { border-color: var(--line); margin-top: 16px; padding-top: 14px; gap: 8px; }
-#workshop-app .part-foot strong { color: var(--ink); font-size: 20px; }
-#workshop-app .seller-link { color: var(--muted); }
-#workshop-app .condition { background: #242e33; color: #fff; border-radius: 4px; font-size: 10px; }
-#workshop-app .heart { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
-#workshop-app :is(.page,.profile-page,.seller-public-page,.admin-workspace) { background: var(--canvas); }
-#workshop-app :is(.panel,.table-wrap,.profile-sidebar,.profile-content,.seller-public-hero,.seller-reputation,.modal,.conversation-sidebar,.message-thread,.admin-sidebar,.recommendations,.recommendation-card) { background: var(--surface); border-color: var(--line); border-radius: 8px; box-shadow: none; }
-#workshop-app :is(.page-head,.profile-page-head,.profile-actions,.admin-dashboard-header,.conversation-sidebar-head,.thread-header) { background: var(--surface); color: var(--ink); border-color: var(--line); }
-#workshop-app :is(.profile-section,.profile-meta div,.part-foot,td,th) { border-color: var(--line); }
-#workshop-app :is(.completion,.contact-seller,.vision-search,.thread-start,.preferences,.vin-panel,.admin-welcome) { background: var(--soft); border-color: var(--line); border-radius: 7px; color: var(--ink); }
-#workshop-app :is(.profile-overview div,.stats > div,.admin-stat-grid > button,.admin-stat-grid > div) { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; box-shadow: none; }
-#workshop-app :is(.auth-modal h2,.page-head h1) { font-size: clamp(28px,3vw,40px); }
-#workshop-app .auth-modal { border-top: 4px solid var(--accent); }
-#workshop-app :is(.conversation-list button.active,.admin-sidebar button.active) { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); }
-#workshop-app footer { background: var(--surface); border-top: 1px solid var(--line); color: var(--muted); }
-.mobile-filter-toggle { display: none; }
+#workshop-app,
+#workshop-app * {
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+  scrollbar-width: auto;
+}
+#workshop-app ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+#workshop-app ::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+#workshop-app ::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border: 3px solid var(--scroll-track);
+  border-radius: 8px;
+}
+#workshop-app ::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-hover);
+}
+#workshop-app ::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+#workshop-app :is(h1, h2, h3, h4) {
+  font-family: var(--font-body);
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+#workshop-app :is(input, select, textarea) {
+  background: var(--field);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  caret-color: var(--accent);
+}
+#workshop-app :is(input, textarea)::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+#workshop-app textarea {
+  resize: none;
+  min-height: 96px;
+}
+#workshop-app :is(button, a) {
+  touch-action: manipulation;
+}
+#workshop-app button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+#workshop-app a {
+  text-underline-offset: 0.2em;
+}
+#workshop-app :is(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+#workshop-app .eyebrow {
+  display: none;
+}
+#workshop-app :is(.primary, .dark) {
+  background: var(--action);
+  border: 1px solid var(--action);
+  color: var(--on-action);
+  border-radius: var(--radius-control);
+  box-shadow: none;
+  font-weight: 600;
+  min-height: 44px;
+}
+#workshop-app :is(.primary, .dark):hover:not(:disabled) {
+  background: var(--action-hover);
+  border-color: var(--action-hover);
+}
+#workshop-app .ghost {
+  background: var(--soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  min-height: 44px;
+}
+#workshop-app .ghost:hover:not(:disabled) {
+  background: var(--line);
+}
+#workshop-app .topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 4vw;
+  gap: 32px;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+#workshop-app .brand {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+}
+#workshop-app .topbar nav {
+  gap: 4px;
+}
+#workshop-app .topbar nav button {
+  color: var(--muted);
+  border-radius: 5px;
+  padding: 12px 15px;
+}
+#workshop-app .topbar nav button.active {
+  background: transparent;
+  color: var(--ink);
+}
+#workshop-app .topbar nav button:hover {
+  background: var(--soft);
+  color: var(--ink);
+}
+#workshop-app .topbar nav button.active::after {
+  left: 15px;
+  right: 15px;
+  bottom: 2px;
+  background: var(--accent);
+}
+#workshop-app .theme-toggle {
+  background: var(--soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+#workshop-app :is(.avatar, .profile-avatar, .thread-avatar) {
+  background: var(--soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+#workshop-app .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 5vw;
+  align-items: center;
+  padding: 48px 5vw;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--line);
+  min-height: 0;
+}
+#workshop-app .hero::before,
+#workshop-app .hero::after {
+  display: none;
+}
+#workshop-app .hero-copy {
+  min-width: 0;
+}
+#workshop-app .catalogue-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+#workshop-app .hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 7vw, 96px);
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+}
+#workshop-app .hero h1 em {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: inherit;
+}
+#workshop-app .hero p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 530px;
+}
+#workshop-app .search-mode-toggle {
+  margin-top: 24px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  border-radius: 0;
+}
+#workshop-app .search-mode-toggle button {
+  border-radius: 4px;
+  color: var(--muted);
+}
+#workshop-app .search-mode-toggle button {
+  padding: 12px 16px;
+  border-radius: 0;
+  min-height: 44px;
+  border-bottom: 2px solid transparent;
+}
+#workshop-app .search-mode-toggle button.active {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+  border-bottom-color: var(--accent);
+}
+#workshop-app .searchbar {
+  margin-top: 16px;
+  padding: 8px;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+#workshop-app .searchbar input {
+  background: transparent;
+  border: 0;
+  min-width: 0;
+  font-size: 14px;
+}
+#workshop-app .trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  color: var(--muted);
+  font: 400 13px/1.5 var(--font-body);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 24px;
+}
+#workshop-app .assembly-visual {
+  --assembly-label: var(--muted);
+  --assembly-grid: var(--line);
+  --assembly-grid-opacity: 0.55;
+  --assembly-guides: var(--muted);
+  --assembly-accent: var(--accent);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;
+  background: var(--surface);
+  border: 0;
+  border-radius: var(--radius-panel);
+  padding: 24px;
+  overflow: hidden;
+  color: var(--ink);
+}
+#workshop-app.dark-theme .assembly-visual {
+  --assembly-grid-opacity: 0.13;
+}
+#workshop-app .assembly-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font:
+    10px/1.5 'Courier New',
+    monospace;
+  letter-spacing: 0.08em;
+}
+#workshop-app .assembly-visual app-brake-assembly {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 560/410;
+}
+#workshop-app .assembly-visual figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+#workshop-app .assembly-visual strong {
+  display: block;
+  font-size: 22px;
+  line-height: 1.3;
+  margin-top: 0;
+  letter-spacing: -0.025em;
+}
+#workshop-app .assembly-visual .eyebrow {
+  color: #ff916e;
+}
+#workshop-app .assembly-stamp {
+  color: var(--muted);
+  font:
+    10px/1.6 'Courier New',
+    monospace;
+  text-align: right;
+}
+#workshop-app .category-strip {
+  padding: 20px 5vw;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.category-strip-title {
+  flex: 0 0 190px;
+  display: grid;
+  gap: 5px;
+}
+.category-strip-title strong {
+  font-size: 17px;
+}
+.category-shortcuts {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+}
+#workshop-app .category-shortcuts button {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: var(--radius-control);
+  font-size: 13px;
+  min-height: 44px;
+}
+#workshop-app .category-shortcuts button:hover {
+  background: var(--soft);
+}
+.category-shortcuts button span {
+  margin-right: 8px;
+}
+#workshop-app .category-shortcuts button.selected {
+  background: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+}
+#workshop-app .market-shell {
+  padding: 28px 24px 60px;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 24px;
+  background: var(--canvas);
+}
+#workshop-app .filters {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  padding: 20px;
+  box-shadow: none;
+}
+#workshop-app .filters label {
+  color: var(--muted);
+}
+#workshop-app .filters :is(.filter-note, .seller-promo) {
+  background: var(--soft);
+  color: var(--ink);
+  border-radius: 6px;
+}
+#workshop-app .results {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+#workshop-app .part-body {
+  background: var(--surface);
+  padding: 20px;
+}
+#workshop-app
+  :is(
+    .catalog-note,
+    .sell-card,
+    .results-tools > span,
+    .ai-constraints,
+    .match-reasons span,
+    .ai-score
+  ) {
+  background: var(--soft);
+  color: var(--ink);
+  border-color: var(--line);
+  border-radius: 6px;
+}
+#workshop-app .sell-card p {
+  color: var(--muted);
+}
+#workshop-app :is(.message-stream, .message-composer) {
+  background: var(--field);
+  border-color: var(--line);
+}
+#workshop-app .brand-logo {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+#workshop-app .ai-search-hint {
+  color: var(--muted) !important;
+}
+#workshop-app .results-head {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+}
+#workshop-app .results-head::after {
+  display: none;
+}
+#workshop-app .results-head h2 {
+  font-size: clamp(24px, 2.5vw, 34px);
+  margin-top: 6px;
+}
+#workshop-app .parts-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 18px;
+}
+#workshop-app .part-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow: none;
+  overflow: hidden;
+  transition: border-color 0.18s;
+}
+#workshop-app .part-card:hover {
+  transform: none;
+  border-color: var(--accent);
+  box-shadow: none;
+}
+#workshop-app .image-wrap {
+  background: var(--soft);
+  height: 210px;
+  width: 100%;
+  overflow: hidden;
+}
+#workshop-app .image-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+#workshop-app .part-body h3 {
+  font-size: 16px;
+  line-height: 1.4;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 45px;
+}
+#workshop-app .meta {
+  color: var(--muted);
+  font: 400 12px/1.5 var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
+}
+#workshop-app .fit {
+  color: var(--muted);
+  font-size: 13px;
+}
+#workshop-app .part-foot {
+  border-color: var(--line);
+  margin-top: 16px;
+  padding-top: 14px;
+  gap: 8px;
+}
+#workshop-app .part-foot strong {
+  color: var(--ink);
+  font-size: 20px;
+}
+#workshop-app .seller-link {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app .condition {
+  background: #242e33;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 10px;
+}
+#workshop-app .heart {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+#workshop-app :is(.page, .profile-page, .seller-public-page, .admin-workspace) {
+  background: var(--canvas);
+}
+#workshop-app
+  :is(
+    .panel,
+    .table-wrap,
+    .profile-sidebar,
+    .profile-content,
+    .seller-public-hero,
+    .seller-reputation,
+    .modal,
+    .conversation-sidebar,
+    .message-thread,
+    .admin-sidebar,
+    .recommendations,
+    .recommendation-card,
+    .listing-gallery,
+    .listing-information,
+    .listing-contact-panel
+  ) {
+  background: var(--surface);
+  border-color: var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow: none;
+}
+#workshop-app
+  :is(
+    .page-head,
+    .profile-page-head,
+    .profile-actions,
+    .admin-dashboard-header,
+    .conversation-sidebar-head,
+    .thread-header
+  ) {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+#workshop-app :is(.profile-section, .profile-meta div, .part-foot, td, th) {
+  border-color: var(--line);
+}
+#workshop-app
+  :is(
+    .completion,
+    .contact-seller,
+    .vision-search,
+    .thread-start,
+    .preferences,
+    .vin-panel,
+    .admin-welcome
+  ) {
+  background: var(--soft);
+  border-color: var(--line);
+  border-radius: 7px;
+  color: var(--ink);
+}
+#workshop-app
+  :is(.profile-overview div, .stats > div, .admin-stat-grid > button, .admin-stat-grid > div) {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: none;
+}
+#workshop-app :is(.auth-modal h2, .page-head h1) {
+  font-size: clamp(28px, 3vw, 40px);
+}
+#workshop-app .auth-modal {
+  border-top: 4px solid var(--accent);
+}
+#workshop-app :is(.conversation-list button.active, .admin-sidebar button.active) {
+  background: var(--accent-soft);
+  color: var(--ink);
+  border-color: var(--accent);
+}
+#workshop-app footer {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.mobile-filter-toggle {
+  display: none;
+}
 
 /* Search and assistance are catalogue information, not chat-style callouts. */
-#workshop-app .ai-constraints { display: flex; flex-wrap: wrap; gap: 0; padding: 12px 0; margin: 0 0 16px; background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
-#workshop-app .ai-constraints strong { width: 100%; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-#workshop-app .ai-constraints span { padding: 3px 16px 3px 0; margin: 3px 16px 3px 0; border-right: 1px solid var(--line); background: none; border-radius: 0; color: var(--ink); font-size: 13px; font-weight: 400; }
-#workshop-app .ai-constraints span:last-child { border: 0; }
-#workshop-app .ai-answer { display: block; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 18px 20px; margin: 0 0 20px; box-shadow: none; }
-#workshop-app .ai-answer-title { justify-content: space-between; gap: 8px 20px; }
-#workshop-app .ai-answer-title strong { color: var(--ink); font-size: 14px; }
-#workshop-app .ai-answer-title small { padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--muted); font-weight: 400; font-size: 11px; }
-#workshop-app .ai-answer p { color: var(--ink); font-size: 14px; margin-top: 10px; }
-#workshop-app .ai-answer ul { color: var(--muted); font-size: 12px; }
-#workshop-app .match-reasons { gap: 0; }
-#workshop-app .match-reasons span { padding: 3px 10px 3px 0; background: transparent; border-radius: 0; color: var(--muted); font-weight: 400; }
-#workshop-app .ai-score { color: var(--muted); background: transparent; border-radius: 0; padding: 0; }
-#workshop-app :is(.empty,.thread-empty,.conversation-list .empty,.empty-picks) { background: var(--field); border: 1px solid var(--line); border-radius: 4px; box-shadow: none; }
-#workshop-app .empty { min-height: 200px; }
-#workshop-app :is(.results-head,.page-head,.inbox-page-head) { border-left: 0; }
-#workshop-app :is(.results-head,.page-head,.inbox-page-head,.conversation-sidebar-head)::after { display: none; }
-#workshop-app :is(.privacy-badge,.role-pill,.status,.realtime-state,.ai-constraints b) { background: var(--soft); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
-#workshop-app :is(.vision-search,.contact-seller,.vin-panel,.price-estimator,.recommendations) { border: 1px solid var(--line); background: var(--surface); border-radius: 4px; box-shadow: none; }
-#workshop-app :is(.recommendations .save,.contact-call,.contact-whatsapp) { background: #343434; color: #fff; border-color: #343434; }
-#workshop-app :is(.switch,.table-link,.thread-listing-link,.seller-link) { color: var(--ink); }
-#workshop-app .admin-sidebar { border-radius: 0; }
-#workshop-app .admin-sidebar :is(button,a,.admin-nav-label), #workshop-app .admin-brand > span { color: var(--muted); }
-#workshop-app .admin-sidebar button.active { color: var(--ink); }
-#workshop-app :is(.admin-stat-grid > *, .admin-work-queue,.admin-recent-activity,.admin-section-page) { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: none; }
-#workshop-app :is(.admin-stat-grid strong,.admin-section-heading h2,.profile-meta dd) { color: var(--ink); }
-#workshop-app :is(.admin-stat-icon,.admin-nav-icon) { color: var(--accent); }
-#workshop-app :is(.inbox-page-head,.page-head) { border-left: 3px solid var(--accent); border-radius: 8px; box-shadow: none; }
-#workshop-app .inbox-page-head::after, #workshop-app .thread-empty::before { display: none; }
-#workshop-app .inbox-layout { border: 1px solid var(--line); border-radius: 8px; box-shadow: none; background: var(--surface); }
-#workshop-app :is(.thread-empty,.conversation-list .empty) { background: var(--field); border: 1px dashed var(--line); border-radius: 6px; }
-#workshop-app .conversation-sidebar-head strong { font-family: Arial,Helvetica,sans-serif; }
-#workshop-app .conversation-search { background: var(--field); border-color: var(--line); border-radius: 6px; }
-#workshop-app .conversation-search input { border: 0; }
-#workshop-app .message-bubble { background: var(--soft); color: var(--ink); border-color: var(--line); }
-#workshop-app .message-bubble.mine { background: var(--accent-soft); color: var(--ink); }
-#workshop-app .toast { background: #303b40; color: #fff; border-left: 3px solid var(--accent); border-radius: 6px; }
-@media (min-width: 1500px) { #workshop-app .parts-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
-@media (max-width: 1100px) {
-  #workshop-app .hero { gap: 28px; padding: 36px 4vw; }
-  #workshop-app .topbar { flex-wrap: wrap; gap: 12px; height: auto; position: relative; }
-  #workshop-app .topbar nav { display: flex; order: 3; width: 100%; flex: 1 0 100%; overflow-x: auto; position: static; transform: none; background: transparent; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
-  #workshop-app .topbar .account { margin-left: auto; }
-  #workshop-app .market-shell { gap: 22px; grid-template-columns: 210px minmax(0,1fr); padding: 28px 4vw; }
-  #workshop-app .parts-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+#workshop-app .ai-constraints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 12px 0;
+  margin: 0 0 16px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+#workshop-app .ai-constraints strong {
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+#workshop-app .ai-constraints span {
+  padding: 3px 16px 3px 0;
+  margin: 3px 16px 3px 0;
+  border-right: 1px solid var(--line);
+  background: none;
+  border-radius: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 400;
+}
+#workshop-app .ai-constraints span:last-child {
+  border: 0;
+}
+#workshop-app .ai-answer {
+  display: block;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 18px 20px;
+  margin: 0 0 20px;
+  box-shadow: none;
+}
+#workshop-app .ai-answer-title {
+  justify-content: space-between;
+  gap: 8px 20px;
+}
+#workshop-app .ai-answer-title strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+#workshop-app .ai-answer-title small {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 11px;
+}
+#workshop-app .ai-answer p {
+  color: var(--ink);
+  font-size: 14px;
+  margin-top: 10px;
+}
+#workshop-app .ai-answer ul {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app .match-reasons {
+  gap: 0;
+}
+#workshop-app .match-reasons span {
+  padding: 3px 10px 3px 0;
+  background: transparent;
+  border-radius: 0;
+  color: var(--muted);
+  font-weight: 400;
+}
+#workshop-app .ai-score {
+  color: var(--muted);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+#workshop-app :is(.empty, .thread-empty, .conversation-list .empty, .empty-picks) {
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: none;
+}
+#workshop-app .empty {
+  min-height: 200px;
+}
+#workshop-app :is(.results-head, .page-head, .inbox-page-head) {
+  border-left: 0;
+}
+#workshop-app :is(.results-head, .page-head, .inbox-page-head, .conversation-sidebar-head)::after {
+  display: none;
+}
+#workshop-app :is(.privacy-badge, .role-pill, .status, .realtime-state, .ai-constraints b) {
+  background: var(--soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+#workshop-app :is(.vision-search, .contact-seller, .vin-panel, .price-estimator, .recommendations) {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 4px;
+  box-shadow: none;
+}
+#workshop-app :is(.recommendations .save, .contact-call, .contact-whatsapp) {
+  background: #343434;
+  color: #fff;
+  border-color: #343434;
+}
+#workshop-app :is(.switch, .table-link, .thread-listing-link, .seller-link) {
+  color: var(--ink);
+}
+#workshop-app .admin-sidebar {
+  border-radius: 0;
+}
+#workshop-app .admin-sidebar :is(button, a, .admin-nav-label),
+#workshop-app .admin-brand > span {
+  color: var(--muted);
+}
+#workshop-app .admin-sidebar button.active {
+  color: var(--ink);
+}
+#workshop-app
+  :is(.admin-stat-grid > *, .admin-work-queue, .admin-recent-activity, .admin-section-page) {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: none;
+}
+#workshop-app :is(.admin-stat-grid strong, .admin-section-heading h2, .profile-meta dd) {
+  color: var(--ink);
+}
+#workshop-app :is(.admin-stat-icon, .admin-nav-icon) {
+  color: var(--accent);
+}
+#workshop-app :is(.inbox-page-head, .page-head) {
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 0 0 24px;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+#workshop-app .inbox-page-head::after,
+#workshop-app .thread-empty::before {
+  display: none;
+}
+#workshop-app .inbox-layout {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: none;
+  background: var(--surface);
+}
+#workshop-app :is(.thread-empty, .conversation-list .empty) {
+  background: var(--field);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+}
+#workshop-app .conversation-sidebar-head strong {
+  font-family: Arial, Helvetica, sans-serif;
+}
+#workshop-app .conversation-search {
+  background: var(--field);
+  border-color: var(--line);
+  border-radius: 6px;
+}
+#workshop-app .conversation-search input {
+  border: 0;
+}
+#workshop-app .message-bubble {
+  background: var(--soft);
+  color: var(--ink);
+  border-color: var(--line);
+}
+#workshop-app .message-bubble.mine {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+#workshop-app .toast {
+  background: #303b40;
+  color: #fff;
+  border: 0;
+  border-radius: var(--radius-control);
+}
+/* Shared product surfaces: inherit theme tokens rather than historical literal colours. */
+#workshop-app .searchbar > app-ui-icon {
+  margin-left: 12px;
+  color: var(--muted);
+}
+#workshop-app .voice-search {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  border-radius: var(--radius-control);
+}
+#workshop-app .voice-search.listening {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+#workshop-app .trust span + span {
+  border-left: 1px solid var(--line);
+  padding-left: 18px;
+}
+#workshop-app .assembly-heading {
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+#workshop-app .assembly-stamp {
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+#workshop-app .results-tools {
+  color: var(--muted);
+  font-size: 13px;
+}
+#workshop-app :is(.page, .profile-page, .seller-public-page) {
+  padding-top: 40px;
+}
+#workshop-app
+  :is(.page-head h1, .profile-page-head h2, .admin-welcome h2, .listing-information h1) {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+#workshop-app
+  :is(
+    .page-head p,
+    .inbox-page-head p,
+    .admin-welcome p,
+    .profile-page-head p,
+    .profile-section p,
+    .listing-description p
+  ) {
+  font-size: 15px;
+  color: var(--muted);
+}
+#workshop-app :is(.stats strong, .admin-stat-grid strong) {
+  color: var(--ink);
+  font-size: 32px;
+  font-variant-numeric: tabular-nums;
+}
+#workshop-app :is(.stats span, .admin-stat-grid small, .admin-stat-grid p) {
+  color: var(--muted);
+  font-size: 13px;
+}
+#workshop-app .admin-dashboard-content {
+  background: var(--canvas);
+  padding: 32px;
+}
+#workshop-app .admin-stat-grid article {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow: none;
+}
+#workshop-app .admin-stat-grid article.attention {
+  background: var(--surface);
+  border-color: var(--line);
+}
+#workshop-app .admin-welcome {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 0 24px;
+}
+#workshop-app :is(.admin-work-queue, .admin-recent-activity) {
+  border-radius: var(--radius-panel);
+}
+#workshop-app :is(.admin-stat-icon, .admin-nav-icon) {
+  display: none;
+}
+#workshop-app .admin-sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  min-height: 44px;
+  border-left: 0;
+}
+#workshop-app .admin-sidebar button > span:not(.admin-nav-icon) {
+  flex: 1;
+  text-align: left;
+}
+#workshop-app .admin-sidebar button.active {
+  border-left: 0;
+}
+#workshop-app :is(.admin-section-heading, .admin-work-queue > button, .admin-mini-audit article) {
+  border-color: var(--line);
+}
+#workshop-app
+  :is(
+    .admin-section-heading button,
+    .admin-work-queue small,
+    .admin-mini-audit small,
+    .admin-mini-audit time
+  ) {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app
+  :is(
+    .admin-work-queue strong,
+    .admin-mini-audit strong,
+    .conversation-sidebar-head strong,
+    .thread-header strong
+  ) {
+  color: var(--ink);
+  font-size: 14px;
+}
+#workshop-app .admin-work-queue > button:hover {
+  background: var(--soft);
+}
+#workshop-app :is(.admin-work-queue b, .queue-icon, .admin-mini-audit article > span) {
+  background: var(--soft);
+  color: var(--ink);
+}
+#workshop-app :is(th, td) {
+  border-color: var(--line);
+  color: var(--ink);
+  padding: 16px;
+  font-size: 14px;
+}
+#workshop-app th {
+  background: var(--field);
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app :is(td small, .table-part span, .profile-meta dt) {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app :is(.actions button, .pagination button) {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+  min-height: 40px;
+}
+#workshop-app :is(.actions button, .pagination button):hover:not(:disabled) {
+  background: var(--soft);
+}
+#workshop-app :is(.actions .danger, .danger-link, .report-link) {
+  color: var(--accent);
+}
+#workshop-app .sell-card button {
+  background: var(--action);
+  color: var(--on-action);
+  min-height: 44px;
+}
+#workshop-app .sell-card button:hover:not(:disabled) {
+  background: var(--action-hover);
+}
+#workshop-app :is(.sell-card, .searchbar, .heart) {
+  box-shadow: none;
+}
+#workshop-app .seller-link {
+  white-space: normal;
+  text-align: right;
+  max-width: 55%;
+}
+#workshop-app .listing-description {
+  border-color: var(--line);
+}
+#workshop-app :is(.listing-kicker, .listing-specs dt, .contact-safety) {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app :is(.listing-specs, .listing-specs div) {
+  border-color: var(--line);
+}
+#workshop-app .listing-specs dd {
+  color: var(--ink);
+  font-size: 14px;
+}
+#workshop-app .listing-chips span {
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 12px;
+  border-radius: 4px;
+}
+#workshop-app .listing-price {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+#workshop-app .message-bubble p {
+  color: var(--ink);
+  font-size: 14px;
+}
+#workshop-app
+  :is(.thread-header small, .conversation-list small, .message-bubble time, .realtime-status) {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app :is(.conversation-search, .admin-search) {
+  background: var(--field);
+  border-color: var(--line);
+}
+#workshop-app :is(.vision-search, .vision-intro small, .vision-suggestions small, .ai-search-hint) {
+  font-size: 13px;
+}
+#workshop-app .vision-intro {
+  gap: 12px;
+}
+#workshop-app :is(.agent-tools, .vision-suggestions button, .vision-upload) {
+  background: var(--field);
+  border-color: var(--line);
+  color: var(--ink);
+  border-radius: var(--radius-control);
+  font-size: 13px;
+}
+#workshop-app .agent-tools span {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  border-radius: 0;
+  font-size: 12px;
+}
+#workshop-app .vision-upload {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+#workshop-app .part-card:focus-within {
+  border-color: var(--accent);
+}
+#workshop-app .resize-none {
+  resize: none;
+}
+#workshop-app .part-card {
+  position: relative;
+}
+#workshop-app .listing-open {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+}
+#workshop-app .listing-open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+#workshop-app .listing-open:focus-visible {
+  outline: none;
+}
+#workshop-app .listing-open:focus-visible::after {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+  border-radius: var(--radius-panel);
+}
+#workshop-app .part-card :is(.heart, .seller-link) {
+  z-index: 2;
+}
+#workshop-app .part-card .seller-link {
+  position: relative;
+}
+/* Responsive ownership: page reflow is separate from table/chat internal scrolling. */
+#workshop-app
+  :is(
+    main,
+    .hero-copy,
+    .results,
+    .page,
+    .page-head > *,
+    .profile-layout > *,
+    .profile-fields > *,
+    .listing-layout > *,
+    .admin-workspace,
+    .admin-section-page,
+    .inbox-layout > *,
+    .thread-contact > div,
+    .reply-field,
+    .form-grid > *
+  ) {
+  min-width: 0;
+}
+#workshop-app
+  :is(
+    .hero,
+    .category-strip,
+    .market-shell,
+    .page,
+    .listing-page,
+    .profile-page,
+    .seller-public-page
+  ) {
+  max-width: none;
+  width: 100%;
+  margin-inline: 0;
+}
+#workshop-app
+  main
+  > :is(.hero, .category-strip, .page, .listing-page, .profile-page, .seller-public-page),
+#workshop-app .topbar,
+#workshop-app footer {
+  padding-inline: var(--page-gutter);
+}
+#workshop-app
+  :is(
+    .listing-layout,
+    .listing-breadcrumb,
+    .profile-layout,
+    .profile-breadcrumb,
+    .seller-public-hero,
+    .seller-reputation,
+    .seller-listings-head,
+    .seller-parts-grid
+  ) {
+  max-width: none;
+}
+#workshop-app .market-shell {
+  border-top: 0;
+}
+#workshop-app .compact-label {
+  display: none;
+}
+#workshop-app .thread-back {
+  display: none;
+}
+#workshop-app .results-head::before {
+  display: none;
+}
+#workshop-app .hero {
+  gap: 64px;
+  padding-block: 56px;
+}
+#workshop-app .category-strip {
+  gap: 24px;
+}
+#workshop-app .category-strip-title {
+  flex: 0 0 190px;
+}
+#workshop-app .category-shortcuts {
+  flex: 1;
+  min-width: 0;
+}
+#workshop-app .filters {
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  max-height: calc(100dvh - 104px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#workshop-app
+  :is(
+    .section-title,
+    .filters label,
+    .modal label,
+    .profile-fields label,
+    .topbar nav button,
+    .search-mode-toggle button,
+    .admin-sidebar button,
+    .vision-intro strong
+  ) {
+  font-weight: 600;
+}
+#workshop-app
+  :is(
+    .filters label,
+    .modal label,
+    .profile-fields label,
+    .search-mode-toggle button,
+    .vision-intro strong
+  ) {
+  font-size: 14px;
+}
+#workshop-app :is(.filters select, .filters input, .results-tools select) {
+  min-height: 44px;
+}
+#workshop-app .category-shortcuts button span {
+  display: none;
+}
+#workshop-app .searchbar {
+  min-height: 64px;
+  box-shadow: none;
+}
+#workshop-app .searchbar > .primary {
+  white-space: nowrap;
+}
+#workshop-app .vision-search {
+  padding: 16px;
+  border-radius: var(--radius-panel);
+}
+#workshop-app .vision-intro small {
+  font-size: 13px;
+  line-height: 1.5;
+}
+#workshop-app .vision-search-head {
+  gap: 16px;
+}
+#workshop-app :is(.ai-search-hint, .vision-suggestions p) {
+  line-height: 1.6;
+}
+#workshop-app .results-tools > span {
+  font-weight: 500;
+}
+#workshop-app .part-body h3 {
+  margin-block: 8px 12px;
+}
+#workshop-app .part-foot {
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#workshop-app .part-foot > strong {
+  white-space: nowrap;
+}
+#workshop-app .part-foot strong small {
+  font-size: 11px;
+  background: transparent;
+  padding: 0;
+  color: var(--muted);
+}
+#workshop-app .message-bubble {
+  box-shadow: none;
+}
+#workshop-app .inbox-layout {
+  outline: none;
+}
+#workshop-app
+  :is(
+    .page-head,
+    .inbox-page-head,
+    .results-head,
+    .profile-breadcrumb,
+    .listing-breadcrumb,
+    .admin-section-toolbar,
+    .preview-actions
+  ) {
+  flex-wrap: wrap;
+  gap: 16px;
+}
+#workshop-app
+  :is(
+    .profile-meta dd,
+    .listing-description p,
+    .message-bubble p,
+    .seller-review-card p,
+    .table-part,
+    .account-copy,
+    .vision-suggestions p
+  ) {
+  overflow-wrap: anywhere;
+}
+#workshop-app .table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-gutter: stable;
+}
+#workshop-app .table-wrap table {
+  min-width: 680px;
+}
+#workshop-app .table-wrap .actions {
+  flex-wrap: wrap;
+}
+#workshop-app .listing-main-image {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+#workshop-app .listing-contact-panel {
+  top: 96px;
+}
+#workshop-app .modal-backdrop {
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+}
+#workshop-app .modal {
+  max-width: 100%;
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+#workshop-app .modal :is(.form-grid, .photo-grid) {
+  min-width: 0;
+}
+#workshop-app .toast {
+  max-width: min(420px, calc(100vw - 32px));
+  overflow-wrap: anywhere;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+}
+#workshop-app .pagination {
+  flex-wrap: wrap;
+}
+#workshop-app .thread-contact small {
+  white-space: normal;
+  max-width: none;
+  overflow-wrap: anywhere;
+}
+#workshop-app .reply-field textarea {
+  min-height: 72px;
+}
+#workshop-app .message-composer {
+  display: block;
+}
+#workshop-app .composer-row {
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+}
+#workshop-app .composer-row .attach-photos {
+  grid-column: auto;
+  min-width: 44px;
+  min-height: 44px;
+}
+#workshop-app footer {
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+@media (max-width: 1240px) and (min-width: 761px) {
+  #workshop-app .listing-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #workshop-app .listing-gallery {
+    grid-column: 1;
+  }
+  #workshop-app .listing-information {
+    grid-column: 2;
+  }
+  #workshop-app .listing-contact-panel {
+    grid-column: 1 / -1;
+    position: static;
+  }
+  #workshop-app .profile-section {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px;
+  }
+  #workshop-app .inbox-layout {
+    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.5fr);
+  }
+}
+@media (max-width: 960px) and (min-width: 761px) {
+  #workshop-app .hero {
+    grid-template-columns: 1fr;
+  }
+  #workshop-app .hero-copy {
+    max-width: 720px;
+  }
+  #workshop-app .assembly-visual {
+    display: none;
+  }
+  #workshop-app .category-strip {
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  #workshop-app .category-strip-title {
+    flex-basis: auto;
+  }
+  #workshop-app .category-shortcuts {
+    max-width: 100%;
+  }
+  #workshop-app .listing-information {
+    padding: 20px;
+  }
+  #workshop-app .listing-information h1 {
+    font-size: 36px;
+  }
 }
 @media (max-width: 760px) {
-  #workshop-app .hero { grid-template-columns: 1fr; padding: 30px 5vw; }
-  #workshop-app .hero h1 { font-size: 56px; }
-  #workshop-app .assembly-visual { display: none; }
-  #workshop-app .category-strip { display: block; padding: 20px 5vw 12px; }
-  .category-strip-title { margin-bottom: 12px; }
-  #workshop-app .market-shell { display: grid; grid-template-columns: minmax(0,1fr); padding: 24px 5vw; }
-  #workshop-app .mobile-filter-toggle { display: block; background: var(--surface); color: var(--ink); padding: 13px 16px; border: 1px solid var(--line); border-radius: 6px; text-align: left; }
-  #workshop-app .market-shell .filters { display: none; position: static; max-height: none; }
-  #workshop-app .market-shell.filters-open .filters { display: block; }
-  #workshop-app .searchbar { flex-wrap: wrap; display: flex; }
-  #workshop-app .topbar .ghost { display: inline-flex; padding: 9px; }
-  #workshop-app .topbar .account { gap: 6px; }
-  #workshop-app .topbar .primary.small { padding: 10px; font-size: 11px; }
-  #workshop-app .brand-logo-header { width: 108px; }
-  #workshop-app .searchbar input { flex: 1 1 150px; width: auto; }
-  #workshop-app .searchbar .primary { min-height: 44px; }
-  #workshop-app .results-head { flex-wrap: wrap; gap: 12px; }
-  #workshop-app .topbar nav button { white-space: nowrap; padding: 10px 12px; }
-  #workshop-app .image-wrap { height: 170px; }
-  #workshop-app .part-body { padding: 12px; }
-  #workshop-app .part-foot { flex-wrap: wrap; }
+  #workshop-app :is(.page, .profile-page, .seller-public-page, .listing-page) {
+    padding: 24px 16px 40px;
+  }
+  #workshop-app :is(.page-head h1, .profile-page-head h2, .listing-information h1) {
+    font-size: 36px;
+  }
+  #workshop-app .account-copy {
+    display: none;
+  }
+  #workshop-app .profile-trigger {
+    padding: 0;
+  }
+  #workshop-app
+    :is(
+      .profile-layout,
+      .profile-section,
+      .listing-layout,
+      .listing-loading,
+      .admin-overview-grid,
+      .seller-review-form,
+      .seller-review-list
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #workshop-app .listing-layout > * {
+    grid-column: auto;
+  }
+  #workshop-app .listing-contact-panel {
+    position: static;
+  }
+  #workshop-app
+    :is(
+      .profile-page-head,
+      .profile-section,
+      .profile-sidebar,
+      .listing-information,
+      .listing-contact-panel,
+      .admin-section-page
+    ) {
+    padding: 20px;
+  }
+  #workshop-app .profile-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #workshop-app .profile-fields .wide {
+    grid-column: auto;
+  }
+  #workshop-app .inbox-layout {
+    height: auto;
+    max-height: none;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    overflow: visible;
+  }
+  #workshop-app .conversation-sidebar {
+    max-height: 280px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  #workshop-app .message-thread {
+    min-height: 450px;
+    grid-template-rows: auto minmax(180px, 45dvh) auto;
+  }
+  #workshop-app .message-thread .thread-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  #workshop-app .inbox-layout.thread-selected .conversation-sidebar,
+  #workshop-app .inbox-layout:not(.thread-selected) .message-thread {
+    display: none;
+  }
+  #workshop-app .conversation-sidebar {
+    max-height: none;
+    min-height: 240px;
+  }
+  #workshop-app .thread-back {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 8px;
+  }
+  #workshop-app .thread-header .thread-contact {
+    flex: 1 1 100%;
+    order: 2;
+  }
+  #workshop-app .thread-header .thread-listing-link {
+    margin-left: auto;
+  }
+  #workshop-app .thread-listing-link {
+    font-size: 13px !important; /* Restore the labelled action hidden by legacy mobile CSS. */
+  }
+  #workshop-app .message-composer {
+    display: block;
+    padding: 12px;
+  }
+  #workshop-app .composer-row {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    gap: 8px;
+  }
+  #workshop-app .attach-photos {
+    grid-column: auto;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  #workshop-app .send-message {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+  }
+  #workshop-app .message-stream {
+    min-height: 180px;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  #workshop-app .message-stream article {
+    max-width: 90%;
+  }
+  #workshop-app .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  #workshop-app .stats > div {
+    padding: 12px;
+  }
+  #workshop-app .stats strong {
+    font-size: 28px;
+  }
+  #workshop-app .admin-dashboard {
+    display: block;
+  }
+  #workshop-app .admin-sidebar {
+    position: static;
+    height: auto;
+    width: 100%;
+  }
+  #workshop-app .admin-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow-x: visible;
+    gap: 8px;
+    max-width: 100%;
+  }
+  #workshop-app .admin-sidebar nav button {
+    flex: 0 0 auto;
+    white-space: normal;
+    padding: 12px 16px;
+  }
+  #workshop-app .admin-nav-label {
+    display: none;
+  }
+  #workshop-app .admin-dashboard-content {
+    padding: 20px 16px;
+  }
+  #workshop-app .admin-dashboard-header {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+  }
+  #workshop-app .admin-account {
+    margin-left: auto;
+  }
+  #workshop-app .admin-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #workshop-app .admin-stat-grid article {
+    padding: 16px;
+    min-width: 0;
+  }
+  #workshop-app .modal {
+    padding: 24px 16px;
+  }
+  #workshop-app .modal .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #workshop-app .modal .form-grid .wide {
+    grid-column: auto;
+  }
+  #workshop-app
+    :is(
+      .filters input,
+      .filters select,
+      .searchbar input,
+      .conversation-search input,
+      .admin-search input,
+      .vin-controls input
+    ) {
+    font-size: 16px;
+  }
+  #workshop-app
+    :is(
+      .modal input:not([type='checkbox']):not([type='file']),
+      .modal select,
+      .modal textarea,
+      .profile-fields input,
+      .profile-fields textarea,
+      .reply-field textarea
+    ) {
+    font-size: 16px;
+  }
+}
+@media (max-width: 480px) {
+  #workshop-app .topbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px 16px;
+  }
+  #workshop-app .topbar .account {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+  #workshop-app .topbar nav {
+    grid-column: 1 / -1;
+    order: 3;
+    width: 100%;
+    gap: 4px;
+  }
+  #workshop-app .topbar nav button {
+    flex-shrink: 0;
+  }
+  #workshop-app .topbar .primary.small {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  #workshop-app :is(.page-head, .profile-actions, .preview-actions) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  #workshop-app :is(.page-head > button, .preview-actions > button) {
+    width: 100%;
+  }
+  #workshop-app .contact-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #workshop-app .modal .photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #workshop-app
+    :is(
+      .vehicle-picker > div,
+      .compatibility-list,
+      .listing-specs,
+      .preview-vehicles,
+      .seller-listing-preview dl
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #workshop-app .reply-photo-previews {
+    flex-wrap: wrap;
+  }
+}
+@media (pointer: coarse) {
+  #workshop-app :is(button, select, summary, .vision-upload) {
+    min-height: 44px;
+  }
+  #workshop-app :is(.heart, .close) {
+    min-width: 44px;
+  }
+}
+@media (forced-colors: active) {
+  #workshop-app,
+  #workshop-app * {
+    scrollbar-color: auto;
+  }
+  #workshop-app :is(button, a, input, select, textarea):focus-visible {
+    outline-color: Highlight;
+  }
+}
+@media (max-width: 1100px) {
+  #workshop-app .hero {
+    gap: 28px;
+    padding: 36px 4vw;
+  }
+  #workshop-app .topbar {
+    flex-wrap: wrap;
+    gap: 12px;
+    height: auto;
+    position: relative;
+  }
+  #workshop-app .topbar nav {
+    display: flex;
+    order: 3;
+    width: 100%;
+    flex: 1 0 100%;
+    overflow-x: auto;
+    position: static;
+    transform: none;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  #workshop-app .topbar .account {
+    margin-left: auto;
+  }
+  #workshop-app .market-shell {
+    gap: 16px;
+    grid-template-columns: 200px minmax(0, 1fr);
+    padding: 24px 16px;
+  }
+  #workshop-app .parts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+  #workshop-app .filters {
+    top: 16px;
+    max-height: calc(100dvh - 32px);
+    padding: 16px;
+  }
+}
+@media (max-width: 760px) {
+  #workshop-app .hero {
+    grid-template-columns: 1fr;
+    padding: 30px 5vw;
+  }
+  #workshop-app .hero h1 {
+    font-size: clamp(48px, 10vw, 64px);
+  }
+  #workshop-app .assembly-visual {
+    display: none;
+  }
+  #workshop-app .category-strip {
+    display: block;
+    padding: 20px 5vw 12px;
+  }
+  .category-strip-title {
+    margin-bottom: 12px;
+  }
+  #workshop-app .market-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px 16px 40px;
+  }
+  #workshop-app .mobile-filter-toggle {
+    display: block;
+    background: var(--surface);
+    color: var(--ink);
+    padding: 13px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-align: left;
+  }
+  #workshop-app .market-shell .filters {
+    display: none;
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+  #workshop-app .market-shell.filters-open .filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  #workshop-app .filters > :not(label) {
+    grid-column: 1 / -1;
+  }
+  #workshop-app .filters > label {
+    margin: 0;
+  }
+  #workshop-app .searchbar {
+    flex-wrap: wrap;
+    display: flex;
+  }
+  #workshop-app .topbar .ghost {
+    display: inline-flex;
+    padding: 9px;
+  }
+  #workshop-app .topbar .account {
+    gap: 6px;
+  }
+  #workshop-app .topbar .primary.small {
+    padding: 10px;
+    font-size: 11px;
+  }
+  #workshop-app .topbar .full-label {
+    display: none;
+  }
+  #workshop-app .topbar .compact-label {
+    display: inline;
+  }
+  #workshop-app .topbar .theme-toggle b {
+    display: none;
+  }
+  #workshop-app .topbar .theme-toggle {
+    min-width: 40px;
+    min-height: 44px;
+    padding: 8px;
+  }
+  #workshop-app .topbar .account > .link {
+    padding: 8px;
+    font-size: 13px;
+  }
+  #workshop-app .brand-logo-header {
+    width: 92px;
+  }
+  #workshop-app .searchbar input {
+    flex: 1 1 150px;
+    width: auto;
+  }
+  #workshop-app .searchbar .primary {
+    min-height: 44px;
+  }
+  #workshop-app .results-head {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  #workshop-app .topbar nav button {
+    white-space: nowrap;
+    padding: 10px 12px;
+  }
+  #workshop-app .image-wrap {
+    height: 170px;
+  }
+  #workshop-app .part-body {
+    padding: 12px;
+  }
+  #workshop-app .part-foot {
+    flex-wrap: wrap;
+  }
+  #workshop-app .studio-page .table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+  #workshop-app .studio-page table {
+    min-width: 0;
+    width: 100%;
+  }
+  #workshop-app .studio-page thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  #workshop-app .studio-page tbody {
+    display: grid;
+    gap: 16px;
+  }
+  #workshop-app .studio-page tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--line);
+    border-radius: var(--radius-panel);
+    background: var(--surface);
+    padding: 4px;
+  }
+  #workshop-app .studio-page td {
+    display: block;
+    min-width: 0;
+    padding: 12px;
+    border: 0;
+    overflow-wrap: anywhere;
+  }
+  #workshop-app .studio-page td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  #workshop-app .studio-page td:first-child,
+  #workshop-app .studio-page td:last-child {
+    grid-column: 1 / -1;
+  }
+  #workshop-app .studio-page td:first-child::before {
+    display: none;
+  }
+  #workshop-app .studio-page .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #workshop-app .studio-page .actions :is(button, select) {
+    min-height: 44px;
+    flex: 1 1 auto;
+  }
 }
 @media (max-width: 440px) {
-  #workshop-app .parts-grid { grid-template-columns: minmax(0,1fr); }
-  #workshop-app .image-wrap { height: 230px; }
-  #workshop-app .hero h1 { font-size: 48px; }
+  #workshop-app .image-wrap {
+    height: 230px;
+  }
+  #workshop-app .hero h1 {
+    font-size: 48px;
+  }
+  #workshop-app :is(.page-head h1, .listing-information h1, .admin-welcome h2) {
+    font-size: 36px;
+  }
+  #workshop-app .admin-dashboard-content {
+    padding: 20px;
+  }
+  #workshop-app .searchbar .primary {
+    flex: 1 1 100%;
+  }
+  #workshop-app .trust {
+    gap: 10px;
+    font-size: 12px;
+  }
+  #workshop-app .trust span + span {
+    padding-left: 10px;
+  }
 }
-@media (prefers-reduced-motion: reduce) { #workshop-app * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  #workshop-app * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
 
 /* Motion uses transforms/opacity, with no changes to theme geometry. */
-@keyframes workshop-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-@keyframes workshop-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes workshop-dialog { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
-@keyframes workshop-depart { to { opacity: 0; } }
-@keyframes workshop-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: no-preference) {
-  #workshop-app, #workshop-app :is(.topbar,.hero,.category-strip,.market-shell,.filters,.part-card,.part-body,.page,.panel,.profile-content,.profile-sidebar,.message-thread,.message-stream,.message-composer,.admin-sidebar,.admin-workspace,.modal,footer,input,select,textarea) {
-    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+@keyframes workshop-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-  #workshop-app main > :is(.page,.hero,.profile-page,.seller-public-page,.admin-dashboard,.listing-page), #workshop-app .admin-section-page { animation: workshop-arrive 220ms ease-out; }
-  #workshop-app .part-card { animation: workshop-arrive 240ms ease-out backwards; transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 200ms ease; }
-  #workshop-app .part-card:nth-child(2) { animation-delay: 30ms; }
-  #workshop-app .part-card:nth-child(3) { animation-delay: 60ms; }
-  #workshop-app .part-card:nth-child(n+4) { animation-delay: 90ms; }
-  #workshop-app .image-wrap img { transition: transform 250ms ease-out; }
-  #workshop-app button { transition: transform 150ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease; }
-  #workshop-app button:active:not(:disabled) { transform: scale(.97); }
-  #workshop-app .dialog-arrive { animation: workshop-fade 180ms ease-out; }
-  #workshop-app .dialog-arrive .modal { animation: workshop-dialog 220ms ease-out; }
-  #workshop-app .dialog-depart { animation: workshop-depart 160ms ease-in forwards; pointer-events: none; }
-  #workshop-app .dialog-depart .modal { transition: transform 160ms ease-in; transform: translateY(6px) scale(.985); }
-  #workshop-app .message-arrive { animation: workshop-arrive 180ms ease-out; }
-  #workshop-app .gallery-arrive { animation: workshop-fade 220ms ease-out; }
-  #workshop-app .listing-thumbnails button { transition: opacity 180ms ease, border-color 180ms ease, transform 180ms ease; }
-  #workshop-app .listing-thumbnails button.active { transform: translateY(-2px); }
-  #workshop-app details[open] .advanced-filter-grid { animation: workshop-arrive 180ms ease-out; }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes workshop-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes workshop-dialog {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes workshop-depart {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes workshop-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #workshop-app,
+  #workshop-app
+    :is(
+      .topbar,
+      .hero,
+      .category-strip,
+      .market-shell,
+      .filters,
+      .part-card,
+      .part-body,
+      .page,
+      .panel,
+      .profile-content,
+      .profile-sidebar,
+      .message-thread,
+      .message-stream,
+      .message-composer,
+      .admin-sidebar,
+      .admin-workspace,
+      .modal,
+      footer,
+      input,
+      select,
+      textarea
+    ) {
+    transition:
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+  #workshop-app
+    main
+    > :is(.page, .hero, .profile-page, .seller-public-page, .admin-dashboard, .listing-page),
+  #workshop-app .admin-section-page {
+    animation: workshop-arrive 220ms ease-out;
+  }
+  #workshop-app .part-card {
+    animation: workshop-arrive 240ms ease-out backwards;
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      border-color 180ms ease,
+      background-color 200ms ease;
+  }
+  #workshop-app .part-card:nth-child(2) {
+    animation-delay: 30ms;
+  }
+  #workshop-app .part-card:nth-child(3) {
+    animation-delay: 60ms;
+  }
+  #workshop-app .part-card:nth-child(n + 4) {
+    animation-delay: 90ms;
+  }
+  #workshop-app .image-wrap img {
+    transition: transform 250ms ease-out;
+  }
+  #workshop-app button {
+    transition:
+      transform 150ms ease,
+      background-color 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease;
+  }
+  #workshop-app button:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  #workshop-app .dialog-arrive {
+    animation: workshop-fade 180ms ease-out;
+  }
+  #workshop-app .dialog-arrive .modal {
+    animation: workshop-dialog 220ms ease-out;
+  }
+  #workshop-app .dialog-depart {
+    animation: workshop-depart 160ms ease-in forwards;
+    pointer-events: none;
+  }
+  #workshop-app .dialog-depart .modal {
+    transition: transform 160ms ease-in;
+    transform: translateY(6px) scale(0.985);
+  }
+  #workshop-app .message-arrive {
+    animation: workshop-arrive 180ms ease-out;
+  }
+  #workshop-app .gallery-arrive {
+    animation: workshop-fade 220ms ease-out;
+  }
+  #workshop-app .listing-thumbnails button {
+    transition:
+      opacity 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+  #workshop-app .listing-thumbnails button.active {
+    transform: translateY(-2px);
+  }
+  #workshop-app details[open] .advanced-filter-grid {
+    animation: workshop-arrive 180ms ease-out;
+  }
   @supports (interpolate-size: allow-keywords) {
-    #workshop-app .advanced-filters { interpolate-size: allow-keywords; }
-    #workshop-app .advanced-filters::details-content { height: 0; overflow: clip; transition: height 220ms ease, content-visibility 220ms allow-discrete; }
-    #workshop-app .advanced-filters[open]::details-content { height: auto; }
+    #workshop-app .advanced-filters {
+      interpolate-size: allow-keywords;
+    }
+    #workshop-app .advanced-filters::details-content {
+      height: 0;
+      overflow: clip;
+      transition:
+        height 220ms ease,
+        content-visibility 220ms allow-discrete;
+    }
+    #workshop-app .advanced-filters[open]::details-content {
+      height: auto;
+    }
     @media (max-width: 760px) {
-      #workshop-app .market-shell .filters { interpolate-size: allow-keywords; height: 0; overflow: clip; transition: height 220ms ease, display 220ms allow-discrete, opacity 180ms ease; opacity: 0; }
-      #workshop-app .market-shell.filters-open .filters { height: auto; opacity: 1; }
-      @starting-style { #workshop-app .market-shell.filters-open .filters { height: 0; opacity: 0; } }
+      #workshop-app .market-shell .filters {
+        interpolate-size: allow-keywords;
+        height: 0;
+        overflow: clip;
+        transition:
+          height 220ms ease,
+          display 220ms allow-discrete,
+          opacity 180ms ease;
+        opacity: 0;
+      }
+      #workshop-app .market-shell.filters-open .filters {
+        height: auto;
+        opacity: 1;
+      }
+      @starting-style {
+        #workshop-app .market-shell.filters-open .filters {
+          height: 0;
+          opacity: 0;
+        }
+      }
     }
   }
   @media (hover: hover) and (pointer: fine) {
-    #workshop-app .part-card:hover { transform: translateY(-3px); }
-    #workshop-app .part-card:hover .image-wrap img { transform: scale(1.035); }
+    #workshop-app .part-card:hover {
+      transform: translateY(-3px);
+    }
+    #workshop-app .part-card:hover .image-wrap img {
+      transform: scale(1.035);
+    }
   }
 }
-#workshop-app button[aria-busy="true"]::after { content: ''; display: inline-block; width: 12px; height: 12px; margin-left: 8px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; vertical-align: middle; animation: workshop-spin 700ms linear infinite; }
-@media (prefers-reduced-motion: reduce) { #workshop-app *, #workshop-app *::before, #workshop-app *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+#workshop-app button[aria-busy='true']::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: workshop-spin 700ms linear infinite;
+}
+/* Listing page: photo, key facts and details on the left; summary and contact on the right. */
+#workshop-app .listing-page {
+  background: var(--canvas);
+}
+#workshop-app .listing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
+  grid-template-areas:
+    'gallery summary'
+    'gallery side'
+    'facts side'
+    'details side';
+  grid-template-rows: auto 1fr auto auto;
+  gap: 20px 24px;
+  align-items: start;
+}
+#workshop-app .listing-gallery {
+  grid-area: gallery;
+  padding: 12px;
+}
+#workshop-app .listing-main-image {
+  aspect-ratio: 16 / 10;
+  border-radius: calc(var(--radius-panel) - 4px);
+}
+#workshop-app .listing-summary {
+  grid-area: summary;
+}
+#workshop-app .listing-facts {
+  grid-area: facts;
+}
+#workshop-app .listing-information {
+  grid-area: details;
+  padding: 32px;
+}
+#workshop-app .listing-side {
+  grid-area: side;
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+@media (min-width: 761px) and (min-height: 860px) {
+  #workshop-app .listing-side {
+    position: sticky;
+    top: 96px;
+  }
+}
+#workshop-app :is(.listing-summary, .listing-safety, .listing-facts > div) {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+}
+#workshop-app .listing-summary {
+  padding: 28px;
+}
+#workshop-app .listing-summary h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(32px, 2.6vw, 44px);
+  line-height: 1.05;
+}
+#workshop-app .listing-summary .listing-price {
+  margin-bottom: 16px;
+  font-size: 34px;
+}
+#workshop-app .listing-trust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+#workshop-app .listing-trust app-ui-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+}
+#workshop-app .listing-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+#workshop-app .listing-facts > div {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+}
+#workshop-app .listing-facts app-ui-icon {
+  grid-row: span 2;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: var(--radius-control);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+#workshop-app .listing-facts dt {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+#workshop-app .listing-facts dd {
+  margin: 2px 0 0;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+#workshop-app .listing-information h2 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font: 700 26px/1.1 var(--font-display);
+  letter-spacing: 0;
+}
+#workshop-app .listing-description {
+  margin: 0 0 28px;
+  padding: 0;
+  border: 0;
+}
+#workshop-app .listing-description p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+#workshop-app .compatibility-section {
+  margin: 0 0 28px;
+  padding: 20px;
+  border-color: var(--line);
+  background: var(--field);
+}
+#workshop-app .compatibility-heading h2 {
+  margin-top: 4px;
+}
+#workshop-app .compatibility-heading > span {
+  background: var(--soft);
+  color: var(--ink);
+}
+#workshop-app .compatibility-list article {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+#workshop-app :is(.compatibility-list article span, .compatibility-section > small) {
+  color: var(--muted);
+  font-size: 13px;
+}
+#workshop-app .listing-tech .listing-specs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  border: 0;
+  border-radius: 0;
+}
+#workshop-app .listing-tech .listing-specs div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+}
+#workshop-app .listing-tech .listing-specs dt {
+  font-size: 13px;
+}
+#workshop-app .listing-tech .listing-specs dd {
+  max-width: 60%;
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+#workshop-app .listing-contact-panel {
+  position: static;
+  padding: 24px;
+}
+#workshop-app .listing-seller-card {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  color: var(--ink);
+  transition: border-color 160ms ease;
+}
+#workshop-app .listing-seller-card:hover {
+  border-color: var(--accent);
+}
+#workshop-app .listing-seller-card small {
+  color: var(--muted);
+  font-size: 12px;
+}
+#workshop-app .listing-seller-avatar {
+  background: var(--action);
+  color: var(--on-action);
+}
+#workshop-app .listing-safety {
+  padding: 20px 24px;
+}
+#workshop-app .listing-safety h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+}
+#workshop-app .listing-safety ul {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+#workshop-app .listing-safety li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+#workshop-app .listing-safety app-ui-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+}
+#workshop-app .listing-related {
+  margin-top: 40px;
+}
+#workshop-app .listing-related-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+#workshop-app .listing-related-head h2 {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font: 700 32px/1.05 var(--font-display);
+}
+#workshop-app .listing-related-head button {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+#workshop-app .listing-related .listing-related-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 1240px) {
+  #workshop-app .listing-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  }
+  #workshop-app .listing-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #workshop-app .listing-related .listing-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  #workshop-app .listing-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'gallery' 'summary' 'side' 'facts' 'details';
+    grid-template-rows: none;
+  }
+  #workshop-app :is(.listing-summary, .listing-information) {
+    padding: 20px;
+  }
+  #workshop-app .listing-tech .listing-specs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  #workshop-app :is(.listing-facts, .listing-related .listing-related-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #workshop-app *,
+  #workshop-app *::before,
+  #workshop-app *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

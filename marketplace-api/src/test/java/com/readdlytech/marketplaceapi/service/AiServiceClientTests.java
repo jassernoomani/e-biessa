@@ -97,4 +97,15 @@ class AiServiceClientTests {
         assertFalse(vision.getReason().contains("private upstream"));
         server.verify();
     }
+
+    @Test
+    void uncertainVisionResponseKeepsItsStatusAndEmptyCandidates() {
+        server.expect(requestTo("http://ai.test/v1/vision/identify"))
+                .andRespond(withSuccess("{\"candidates\":[],\"model\":\"test-vision\",\"status\":\"UNCERTAIN\",\"caution\":\"Try a closer photo.\"}", MediaType.APPLICATION_JSON));
+        var response = client.identifyPartImage(new byte[]{1}, MediaType.IMAGE_JPEG);
+        assertEquals("UNCERTAIN", response.status());
+        assertTrue(response.candidates().isEmpty());
+        assertEquals("Try a closer photo.", response.caution());
+        server.verify();
+    }
 }

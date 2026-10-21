@@ -6,6 +6,8 @@ import { ApiService } from './api.service';
 import { ThemeService } from './core/theme.service';
 import { AdminAuditLog, Category, Conversation, ConversationDetail, ImageAsset, ListingReport, MarketplaceMessage, Part, PartPayload, PartStatus, PriceEstimate, ProfilePayload, ReportReason, ReportStatus, SellerContact, SellerProfile, SellerReport, SellerReportReason, SellerReviewSummary, SemanticPartResult, SemanticSearchResponse, User, UserRole, Vehicle, VehicleCatalogMake, VisionCandidate, VisionIdentification } from './models';
 import { BrandLogoComponent } from './shared/brand-logo.component';
+import { UiIconComponent } from './shared/ui-icon.component';
+import { BrakeAssemblyComponent } from './shared/brake-assembly.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
 
 type View = 'market' | 'favorites' | 'inbox' | 'studio' | 'admin' | 'profile' | 'admin-profile' | 'seller-profile' | 'listing-detail';
@@ -26,7 +28,7 @@ type BrowserSpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule, BrandLogoComponent, RecommendationsComponent],
+  imports: [CommonModule, FormsModule, BrandLogoComponent, UiIconComponent, BrakeAssemblyComponent, RecommendationsComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css', './features.css', './theme.css']
 })
@@ -36,6 +38,7 @@ export class App implements OnInit, OnDestroy {
   private readonly zone = inject(NgZone);
   readonly view = signal<View>('market');
   readonly filtersOpen = signal(false);
+  readonly conversationListOpen = signal(false);
   readonly user = signal<User | null>(null);
   readonly parts = signal<Part[]>([]);
   readonly favorites = signal<Part[]>([]);
@@ -104,6 +107,14 @@ export class App implements OnInit, OnDestroy {
   readonly replyImagePreviews = signal<{ name: string; url: string }[]>([]);
   readonly realtimeConnected = signal(false);
   readonly favoriteIds = computed(() => new Set(this.favorites().map(part => part.id)));
+  // Same-category listings first, drawn from the catalogue page already loaded; no extra request.
+  readonly relatedParts = computed(() => {
+    const current = this.selected();
+    if (!current) return [];
+    const others = this.parts().filter(part => part.id !== current.id && part.status !== 'SOLD');
+    const sameCategory = others.filter(part => part.categoryName === current.categoryName);
+    return [...sameCategory, ...others.filter(part => part.categoryName !== current.categoryName)].slice(0, 4);
+  });
   readonly unreadMessages = computed(() => this.conversations().reduce((total, conversation) => total + conversation.unreadCount, 0));
   readonly filteredConversations = computed(() => {
     const query = this.conversationSearch().trim().toLowerCase();
@@ -1065,6 +1076,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   openConversation(conversation: Conversation): void {
+    this.conversationListOpen.set(false);
     this.clearReplyImages();
     this.replyDraft = '';
     this.api.conversation(conversation.id).subscribe({

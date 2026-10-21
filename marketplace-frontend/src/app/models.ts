@@ -228,6 +228,7 @@ export interface VisionIdentification {
   candidates: VisionCandidate[];
   model: string;
   caution: string;
+  status?: 'SUGGESTED' | 'UNCERTAIN';
 }
 
 export type ReportReason = 'SCAM' | 'WRONG_INFORMATION' | 'PROHIBITED_ITEM' | 'DUPLICATE' | 'ALREADY_SOLD' | 'OTHER';

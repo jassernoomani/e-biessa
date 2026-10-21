@@ -173,3 +173,4 @@ class VisionIdentificationResponse(BaseModel):
     candidates: list[VisionCandidate]
     model: str
     caution: str
+    status: Literal["SUGGESTED", "UNCERTAIN"] = "SUGGESTED"

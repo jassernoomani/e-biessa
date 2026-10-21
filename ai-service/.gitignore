@@ -11,3 +11,5 @@ training/out/
 training/export/*.gguf
 training/export/e-biessa-qwen25-7b-v2-lora/
 training/tools/
+training/vision/data/
+training/vision/runs/

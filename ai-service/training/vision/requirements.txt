@@ -1,0 +1,5 @@
+# Independent vision-training environment; does not change the FastAPI dependencies.
+# Install matching torch/torchvision CUDA wheels using the official PyTorch selector.
+torch>=2.6,<3
+torchvision>=0.21,<1
+Pillow>=10,<13

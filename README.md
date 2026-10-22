@@ -34,8 +34,10 @@
 - **Find compatible parts:** keyword and natural-language search, vehicle filters, OEM references, sorting, and pagination.
 - **Discover relevant listings:** explainable recommendations based on vehicle preferences, saved listings, and optional activity history.
 - **Talk to sellers:** real-time conversations with image attachments, plus protected phone, WhatsApp, and email contact options.
+- **Read a listing at a glance:** a redesigned listing page with a photo gallery, a key-facts strip (position, OEM reference, engine and fuel, warranty, delivery, city), a sticky contact panel with the seller card and safety tips, and similar parts from the same category.
 - **Buy with more context:** public seller profiles, star ratings, reviews, and reporting tools.
-- **Search your way:** optional photo-based part identification, browser voice input, and VIN-assisted vehicle selection.
+- **Identify a part from a photo:** upload a picture in fitment search to get a suggested part type from a 74-label vocabulary (CLIP). Low-confidence results are shown as a "possible match" instead of a firm answer, and a photo never decides vehicle compatibility.
+- **Search your way:** browser voice input and VIN-assisted vehicle selection.
 
 ### For sellers
 
@@ -50,16 +52,22 @@
 - Moderate reported listings and sellers, suspend accounts, and review audit logs.
 - Manage the marketplace through a dedicated dashboard.
 
-Across all roles: editable profiles, light/dark themes, JWT authentication, and optional social sign-in and account recovery integrations.
+Across all roles: editable profiles, light/dark themes, a responsive mobile layout, JWT authentication, and optional social sign-in and account recovery integrations.
 
 ## Screenshots
 
 Selected demonstration captures. Listings, photos, and account names shown are sample data;
 these images are not evidence of actual part fitment or seller response times.
 
-| Compatibility-aware search | Seller workspace |
+| Compatibility-aware search | Photo identification |
 | --- | --- |
-| [![Search with extracted constraints and match explanations](documentation/images/ai-search.png)](documentation/images/ai-search.png) | [![Seller studio inventory and listing actions](documentation/images/seller-studio.png)](documentation/images/seller-studio.png) |
+| [![Search with extracted constraints and match explanations](documentation/images/ai-search.png)](documentation/images/ai-search.png) | [![Brake caliper photo identified as a possible match](documentation/images/photo-identification.png)](documentation/images/photo-identification.png) |
+| **Listing page** | **Real-time messaging** |
+| [![Listing page with gallery, key facts, and seller contact panel](documentation/images/listing-detail.png)](documentation/images/listing-detail.png) | [![Seller inbox receiving a buyer message](documentation/images/messaging.png)](documentation/images/messaging.png) |
+| **Seller workspace** | **Administration** |
+| [![Seller studio inventory and listing actions](documentation/images/seller-studio.png)](documentation/images/seller-studio.png) | [![Administrator dashboard with seller applications and moderation](documentation/images/admin-dashboard.png)](documentation/images/admin-dashboard.png) |
+| **Dark mode** | **Mobile** |
+| [![Marketplace homepage in dark mode](documentation/images/dark-mode.png)](documentation/images/dark-mode.png) | [![Marketplace on a phone-sized screen](documentation/images/mobile.png)](documentation/images/mobile.png) |
 
 ## Architecture
 
@@ -81,13 +89,20 @@ flowchart LR
 | Core API | Spring Boot 3, Java 21, Spring Security, JPA | Authorization, business rules, persistence, WebSocket messaging |
 | Database | MySQL | Accounts, listings, conversations, reviews, and moderation |
 | Search service | FastAPI, FastEmbed, Qdrant, LangChain | Semantic retrieval and read-only tool orchestration |
-| Models | Qwen 2.5 via Ollama, optional CLIP | Query extraction and image-based part-type suggestions |
+| Models | Qwen 2.5 7B (QLoRA) via Ollama, optional CLIP, experimental ResNet18 | Query extraction and image-based part-type suggestions |
 | Quality & operations | Docker, Jenkins, SonarQube, Prometheus, Grafana | Build pipeline, analysis, metrics, and alerting |
 
 ### Search with explicit boundaries
 
 Natural-language queries can be interpreted in English, French, and Tunisian transliteration.
 The local Qwen model was adapted with Unsloth and QLoRA; training and evaluation scripts are included.
+On the 120 held-out examples of the generated dataset, the v2 adapter produced valid JSON for 99.2% of queries
+and fully correct records for 96.7%. This is a small, synthetic test set, not a general accuracy claim;
+without Ollama, a deterministic parser takes over.
+
+Photo identification uses CLIP with a 74-label vocabulary. An experimental ResNet18 classifier
+(50 part classes) is documented in the [vision-training guide](ai-service/training/vision/README.md)
+and remains a comparison pilot until it is evaluated on real E-biessa photos.
 
 Model output does **not** establish compatibility. Deterministic checks validate constraints,
 and Spring rechecks returned listings against MySQL before constructing the displayed answer.
@@ -203,6 +218,9 @@ Run from the indicated service directory:
 | Angular unit tests and build | `npm run verify` |
 | Browser tests | `npx playwright install chromium`, then `npm run test:e2e` |
 
+The suites total about 200 automated tests across JUnit, Pytest, Vitest, and Playwright.
+On the last SonarQube analysis, the quality gate passed with 81.3% coverage on new code.
+
 Live-stack browser tests require running services and configured test accounts;
 ordinary browser tests use controlled API responses. A passing mocked test is not a live-stack validation.
 
@@ -237,6 +255,7 @@ See the [Spring environment template](marketplace-api/.env.example) and [AI envi
 | [Recommendations](documentation/RECOMMENDATIONS.md) | Ranking, eligibility, and privacy |
 | [VIN compatibility](documentation/VIN_COMPATIBILITY.md) | Vehicle decoding and limitations |
 | [Image and voice search](documentation/IMAGE_AND_VOICE_SEARCH.md) | Optional inputs and setup |
+| [Vision training](ai-service/training/vision/README.md) | ResNet18 part-classifier experiment and dataset |
 | [DevOps](documentation/DEVOPS.md) | CI, containers, monitoring, and troubleshooting |
 | [GHCR local demo](documentation/GHCR_DEMO.md) | Isolated image deployment, two API replicas, monitoring, and verification gates |
 
@@ -248,4 +267,4 @@ External providers need their own credentials or availability. Production deploy
 multi-instance high availability are outside the current demonstrated baseline.
 
 Academic reports, presentation drafts, caches, secrets, and model binaries stay outside Git.
-Only a small selection of documentation screenshots is included here.
+Screenshots in `documentation/images` show seeded demonstration data.
